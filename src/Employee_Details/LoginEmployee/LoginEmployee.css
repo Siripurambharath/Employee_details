@@ -1,0 +1,137 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+  padding: 1rem;
+}
+
+.login-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 360px;
+}
+
+/* ✅ Image + Text Row */
+.login-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.login-image {
+  width: 90px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.login-header h3 {
+  font-size: 1.4rem;
+  color: #333;
+  margin: 0;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1.2rem;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px 40px 10px 35px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #555;
+}
+
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #0056b3;
+}
+
+.login-status {
+  margin-top: 10px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.login-status.success {
+  color: green;
+}
+
+.login-status.error {
+  color: red;
+}
+
+/* Mobile */
+@media screen and (max-width: 740px) {
+  .login-form {
+    max-width: 300px;
+    padding: 1.5rem;
+  }
+
+  .login-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .login-image {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Tablet */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .login-form {
+    max-width: 420px;
+  }
+
+  .login-header h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Desktop */
+@media screen and (min-width: 1025px) {
+  .login-form {
+    max-width: 440px;
+  }
+
+  .login-header h3 {
+    font-size: 1.6rem;
+  }
+}

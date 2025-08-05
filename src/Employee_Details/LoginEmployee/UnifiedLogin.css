@@ -1,0 +1,167 @@
+/* Base Styles */
+.ul-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+}
+
+.ul-form {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.ul-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.ul-logo {
+  width: 140px;
+  height: 90px;
+  object-fit: contain;
+}
+
+.ul-input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.ul-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #555;
+}
+
+.ul-input {
+  width: 100%;
+  padding: 10px 40px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.ul-eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #555;
+  cursor: pointer;
+}
+
+.ul-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.ul-button:hover {
+  background-color: #0056b3;
+}
+
+.ul-or {
+  text-align: center;
+  margin: 15px 0;
+  font-weight: bold;
+  color: #666;
+}
+
+/* Google Sign-In Button */
+.ul-google-login {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.ul-google-login:hover {
+  background-color: #f1f1f1;
+}
+
+.ul-google-icon {
+  font-size: 20px;
+}
+
+.ul-status {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.ul-success {
+  color: green;
+}
+
+.ul-error {
+  color: red;
+}
+
+/* Mobile: 360px–740px */
+@media (max-width: 740px) {
+  .ul-form {
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .ul-input {
+    font-size: 14px;
+  }
+
+  .ul-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* iPad Mini: 768px–1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .ul-form {
+    padding: 30px;
+  }
+
+  .ul-input {
+    font-size: 15px;
+  }
+
+  .ul-button {
+    font-size: 15px;
+  }
+}
+
+/* Desktop: 1025px and above */
+@media (min-width: 1025px) {
+  .ul-form {
+    max-width: 450px;
+  }
+
+  .ul-input {
+    font-size: 16px;
+  }
+
+  .ul-button {
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,261 @@
+/* Editworkdetail.css - Professional UI */
+
+/* Base Styles */
+.edit-workdetail-container {
+  max-width: 100%;
+  padding: 1rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #2d3748;
+  background-color: #f7fafc;
+}
+
+/* Header Tabs */
+.edit-workdetail-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+}
+
+.edit-workdetail-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.edit-workdetail-tab {
+  padding: 0.75rem 1.25rem;
+  text-decoration: none;
+  color: #4a5568;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  background: #edf2f7;
+  border: 1px solid #e2e8f0;
+}
+
+.edit-workdetail-tab:hover {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
+.edit-workdetail-tab.active {
+  background: #2b6cb0;
+  color: white;
+  border-color: #2b6cb0;
+}
+
+/* Form Card */
+.edit-workdetail-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.edit-workdetail-title {
+  color: #1a365d;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Form Elements */
+.edit-workdetail-form .form-label {
+  display: block;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.edit-workdetail-form .form-control,
+.edit-workdetail-form .form-select {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  background-color: white;
+  transition: all 0.2s ease;
+  color: #2d3748;
+}
+
+.edit-workdetail-form .form-control:focus,
+.edit-workdetail-form .form-select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}
+
+.edit-workdetail-form .form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%234a5568' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+/* Add New Button */
+.edit-workdetail-add-new {
+  color: #3182ce;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.edit-workdetail-add-new:hover {
+  color: #2b6cb0;
+  text-decoration: underline;
+}
+
+/* Submit Button */
+.edit-workdetail-submit-btn {
+  background-color: #3182ce;
+  color: white;
+  font-weight: 500;
+  padding: 0.625rem 1.25rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.edit-workdetail-submit-btn:hover {
+  background-color: #2b6cb0;
+  transform: translateY(-1px);
+}
+
+.edit-workdetail-submit-btn:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Modal Styles */
+.edit-workdetail-modal .modal-content {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+}
+
+.edit-workdetail-modal .modal-header {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 1rem 1.5rem;
+  background-color: #f7fafc;
+}
+
+.edit-workdetail-modal .modal-title {
+  font-weight: 600;
+  color: #1a365d;
+}
+
+.edit-workdetail-modal .modal-body {
+  padding: 1.5rem;
+}
+
+.edit-workdetail-modal .modal-footer {
+  border-top: 1px solid #e2e8f0;
+  padding: 1rem 1.5rem;
+  background-color: #f7fafc;
+}
+
+.edit-workdetail-modal .btn-secondary {
+  background-color: #e2e8f0;
+  color: #4a5568;
+}
+
+.edit-workdetail-modal .btn-primary {
+  background-color: #3182ce;
+}
+
+/* Responsive Breakpoints */
+@media (min-width: 640px) {
+  .edit-workdetail-container {
+    padding: 1.5rem;
+  }
+  
+  .edit-workdetail-tab {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
+  }
+  
+  .edit-workdetail-card {
+    padding: 2rem;
+  }
+  
+  .edit-workdetail-title {
+    font-size: 1.5rem;
+  }
+  
+  .edit-workdetail-form .form-label {
+    font-size: 0.9375rem;
+  }
+  
+  .edit-workdetail-form .form-control,
+  .edit-workdetail-form .form-select {
+    font-size: 0.9375rem;
+    padding: 0.75rem 1rem;
+  }
+  
+  .edit-workdetail-submit-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .edit-workdetail-container {
+    max-width: 768px;
+  margin-left: 180px;
+  }
+  
+  .edit-workdetail-tabs {
+    gap: 0.75rem;
+  }
+  
+  .edit-workdetail-card {
+    padding: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .edit-workdetail-container {
+      margin-left: 180px;
+    max-width: 1024px;
+    padding: 2rem;
+  }
+  
+  .edit-workdetail-tabs {
+    gap: 1rem;
+  }
+  
+  .edit-workdetail-card {
+    padding: 3rem;
+  }
+  
+  .edit-workdetail-title {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+  }
+  
+  .edit-workdetail-submit-btn {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+  }
+}

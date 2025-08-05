@@ -1,0 +1,238 @@
+/* ================ Base Styles ================ */
+.db-container {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.db-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+
+/* ================ Stats Grid ================ */
+.db-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.db-stat-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.db-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.db-stat-icon {
+  font-size: 1.75rem;
+  margin-right: 1rem;
+  color: #4b7bec;
+}
+
+.db-today .db-stat-icon { color: #e74c3c; }
+.db-week .db-stat-icon { color: #f39c12; }
+.db-total .db-stat-icon { color: #2ecc71; }
+.db-dept .db-stat-icon { color: #9b59b6; }
+
+.db-stat-content h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.95rem;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.db-stat-content p {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.db-gender-count {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.db-male-count, .db-female-count {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.db-male-count { color: #3498db; }
+.db-female-count { color: #e91e63; }
+
+/* ================ Charts Section ================ */
+.db-charts-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.db-chart-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 1.25rem;
+}
+
+.db-chart-title {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.db-chart-wrapper {
+  width: 100%;
+  height: 300px;
+}
+
+/* ================ Events Section ================ */
+.db-events-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.db-event-section {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 1.25rem;
+}
+
+.db-event-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.db-event-icon {
+  font-size: 1.25rem;
+}
+
+.db-birthdays .db-event-icon { color: #e91e63; }
+.db-anniversaries .db-event-icon { color: #2ecc71; }
+
+.db-event-section h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.db-event-users {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.db-user-card {
+  background-color: #f8f9fa;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  border-left: 3px solid #4b7bec;
+}
+
+.db-birthdays .db-user-card { border-left-color: #e91e63; }
+.db-anniversaries .db-user-card { border-left-color: #2ecc71; }
+
+.db-user-badge {
+  background-color: #4b7bec;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.db-birthdays .db-user-badge { background-color: #e91e63; }
+.db-anniversaries .db-user-badge { background-color: #2ecc71; }
+
+.db-user-name {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.db-user-date {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+}
+
+.db-view-more {
+  background: none;
+  border: none;
+  color: #4b7bec;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.db-birthdays .db-view-more { color: #e91e63; }
+.db-anniversaries .db-view-more { color: #2ecc71; }
+
+.db-no-events {
+  color: #95a5a6;
+  font-style: italic;
+  margin: 0.5rem 0 0;
+}
+
+/* ================ Responsive Breakpoints ================ */
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
+  .db-charts-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .db-events-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .db-container {
+    margin-left: 180px;
+    padding: 2rem;
+  }
+  
+  .db-title {
+    font-size: 2rem;
+  }
+  
+  .db-stat-content h3 {
+    font-size: 1rem;
+  }
+  
+  .db-stat-content p {
+    font-size: 1.75rem;
+  }
+}
+

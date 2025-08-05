@@ -1,0 +1,204 @@
+/* ============== MAIN CONTAINER ============== */
+.work-detail-container {
+  margin-left: 200px;
+  padding: 2rem;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+  transition: all 0.3s ease;
+}
+
+/* ============== CARD STYLING ============== */
+.work-detail-container .card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  background: #ffffff;
+  margin-bottom: 2rem;
+}
+
+.card h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #eaeff2;
+  position: relative;
+}
+
+.card h4::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: #4361ee;
+  border-radius: 3px;
+}
+
+/* ============== TAB NAVIGATION ============== */
+.edit-tabs {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: flex-end;
+  border-bottom: 1px solid #e0e6ed;
+  padding-bottom: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.edit-tab-link {
+  text-decoration: none;
+  font-weight: 500;
+  color: #6b7280;
+  padding: 0.5rem 0;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+}
+
+.edit-tab-link:hover {
+  color: #4361ee;
+}
+
+.edit-tab-link.active {
+  color: #4361ee;
+  font-weight: 600;
+}
+
+.edit-tab-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #4361ee;
+  border-radius: 3px 3px 0 0;
+}
+
+/* ============== FORM ELEMENTS ============== */
+.work-detail-container .form-label {
+  font-weight: 500;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.work-detail-container .form-control,
+.work-detail-container .form-select {
+  border-radius: 8px;
+  font-size: 0.95rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid #e0e6ed;
+  transition: all 0.3s ease;
+}
+
+.work-detail-container .form-control:focus,
+.work-detail-container .form-select:focus {
+  border-color: #4361ee;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+/* ============== BUTTONS ============== */
+.work-detail-container .btn-primary {
+  font-weight: 600;
+  padding: 0.65rem 2.25rem;
+  border-radius: 8px;
+  background-color: #4361ee;
+  border: none;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.work-detail-container .btn-primary:hover {
+  background-color: #3a56d4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+}
+
+/* ============== MODAL STYLING ============== */
+.modal .form-label {
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.modal .form-control {
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  border: 1px solid #e0e6ed;
+}
+
+.modal .form-control:focus {
+  border-color: #4361ee;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+/* ============== RESPONSIVE DESIGN ============== */
+
+/* 📱 Mobile: 360px–740px */
+@media (max-width: 740px) {
+  .work-detail-container {
+    margin-left: 0;
+    padding: 1.25rem;
+  }
+
+  .edit-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .edit-tab-link {
+    font-size: 0.9rem;
+    padding: 0.25rem 0;
+  }
+
+  .card h4 {
+    font-size: 1.3rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .work-detail-container .form-control,
+  .work-detail-container .form-select {
+    font-size: 0.9rem;
+    padding: 0.6rem 0.9rem;
+  }
+}
+
+/* 💻 Tablet: 768px–1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .work-detail-container {
+    margin-left: 180px;
+    padding: 1.75rem;
+  }
+
+  .card h4 {
+    font-size: 1.4rem;
+  }
+
+  .edit-tab-link {
+    font-size: 0.95rem;
+  }
+}
+
+/* 🖥️ Desktop: 1025px and above */
+@media (min-width: 1025px) {
+  .work-detail-container {
+    max-width: 1050px;
+    margin-left: 190px;
+    padding: 2.5rem;
+  }
+
+  .card h4 {
+    font-size: 1.6rem;
+  }
+
+  .edit-tab-link {
+    font-size: 1rem;
+  }
+}

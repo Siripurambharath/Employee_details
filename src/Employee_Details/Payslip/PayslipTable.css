@@ -1,0 +1,231 @@
+/* Payslip.css */
+
+/* 🎯 Base Layout */
+.payslip-table-wrapper {
+  padding: 24px;
+  max-width: 1400px;
+  margin: auto;
+  background-color: #f9f9f9;
+}
+
+.payslip-table-wrapper h2 {
+  font-weight: 700;
+  color: #3b3f5c;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* 📦 Table Container */
+.table-container {
+  overflow-x: auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 📋 Table */
+.payslip-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1000px;
+}
+
+.payslip-table th,
+.payslip-table td {
+  padding: 14px 10px;
+  text-align: center;
+  border-bottom: 1px solid #e4e6ef;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.payslip-table th {
+  background-color: #4361ee;
+  color: #ffffff;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.payslip-table tbody tr:hover {
+  background-color: #f1f5ff;
+}
+
+/* ✅ Status Badge */
+.status-badge {
+  display: inline-block;
+  white-space: nowrap;   /* Prevent text wrapping */
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  min-width: 100px;      /* Optional: keep size consistent */
+  text-align: center;    /* Center text horizontally */
+}
+
+
+.status-badge.paid {
+  background-color: #00c851; /* Green */
+}
+
+.status-badge.unpaid {
+  background-color: #ff6b6b; /* Red */
+}
+
+/* 🎯 Action Icons */
+.action-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.icon-btn:hover {
+  transform: scale(1.1);
+  background-color: #e9ecef;
+}
+
+/* ✨ Text Colors */
+.text-primary {
+  color: #007bff;
+}
+
+.text-warning {
+  color: #f0ad4e;
+}
+
+.text-danger {
+  color: #dc3545;
+}
+
+.text-success {
+  color: #28a745;
+}
+
+/* Add these styles to your existing CSS */
+.selected-row {
+  background-color: rgba(0, 123, 255, 0.1) !important;
+}
+
+.payslip-table input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.payslip-table th:first-child,
+.payslip-table td:first-child {
+  width: 40px;
+  text-align: center;
+}
+.pagination-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.pagination-text {
+  color: #333;
+}
+
+.pagination-arrow {
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  color: #007bff;
+  transition: color 0.2s;
+}
+
+.pagination-arrow:hover {
+  color: #0056b3;
+}
+
+.pagination-arrow.disabled {
+  color: #ccc;
+  pointer-events: none;
+  cursor: default;
+}
+
+
+
+/* 📱 Mobile (360px–740px) */
+@media (max-width: 740px) {
+  .payslip-table-wrapper {
+    padding: 12px;
+  }
+
+  .payslip-table {
+    font-size: 0.75rem;
+    min-width: 800px;
+  }
+
+  .payslip-table th,
+  .payslip-table td {
+    padding: 6px;
+  }
+
+  .payslip-table-wrapper h2 {
+    font-size: 1.2rem;
+  }
+
+  .icon-btn {
+    font-size: 1rem;
+    padding: 4px;
+  }
+}
+
+/* 📲 iPad Mini / Tablet (768px–1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .payslip-table-wrapper {
+    padding: 20px;
+    margin-left: 140px;
+  }
+
+  .payslip-table th,
+  .payslip-table td {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  .icon-btn {
+    font-size: 1.05rem;
+  }
+
+  .payslip-table-wrapper h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* 💻 Desktop (≥1025px) */
+@media (min-width: 1025px) {
+  .payslip-table-wrapper {
+    padding: 24px;
+    margin-left: 190px;
+  }
+
+  .payslip-table th,
+  .payslip-table td {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+
+  .payslip-table-wrapper h2 {
+    font-size: 1.8rem;
+  }
+
+  .icon-btn {
+    font-size: 1.2rem;
+  }
+}

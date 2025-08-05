@@ -1,0 +1,162 @@
+/* Base styles */
+.payroll-container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.payroll-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  border: none;
+}
+
+.payroll-title {
+  text-align: center;
+  color: #007bff;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.payroll-label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.payroll-input,
+.payroll-select,
+.payroll-textarea {
+  width: 100%;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease-in-out;
+}
+
+.payroll-input:focus,
+.payroll-select:focus,
+.payroll-textarea:focus {
+  border-color: #007bff;
+  outline: none;
+  background-color: #fff;
+}
+
+.payroll-section-title {
+  font-size: 18px;
+  color: #28a745;
+  font-weight: 600;
+  margin-bottom: 15px;
+  margin-top: 25px;
+}
+
+.payroll-btn {
+  background-color: #007bff;
+  border: none;
+  padding: 10px 40px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  margin-top: 20px;
+  transition: 0.2s;
+}
+
+.payroll-btn:hover {
+  background-color: #0056b3;
+}
+
+.payroll-input-group {
+  display: flex;
+  align-items: center;
+}
+
+.payroll-calendar-icon {
+  background-color: #f0f0f0;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-right: none;
+  color: #007bff;
+}
+
+.payroll-datepicker {
+  flex: 1;
+  border-radius: 0 8px 8px 0;
+  border-left: none;
+}
+
+.payroll-hr {
+  border-top: 2px solid #e0e0e0;
+  margin: 30px 0;
+}
+
+/* Responsive layout */
+
+/* 📱 Mobile (360px–740px) */
+@media (max-width: 740px) {
+  .payroll-input,
+  .payroll-select,
+  .payroll-textarea {
+    font-size: 14px;
+  }
+
+  .payroll-btn {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .payroll-input-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .payroll-calendar-icon,
+  .payroll-datepicker {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+}
+
+/* 📲 iPad Mini / Tablet (768px–1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .payroll-btn {
+    width: auto;
+    font-size: 16px;
+  }
+
+  .payroll-card {
+    padding: 25px;
+  }
+  .container{
+    margin-left: 190px;
+    padding: 10px;
+  }
+}
+
+/* 💻 Desktop (1025px and up) */
+@media (min-width: 1025px) {
+  .payroll-input,
+  .payroll-select,
+  .payroll-textarea {
+    font-size: 16px;
+  }
+
+  .payroll-btn {
+    font-size: 16px;
+    padding: 12px 50px;
+  }
+
+  .container{
+    padding: 20px;
+    margin-left: 190px;
+    width: 1000px;
+  }
+}

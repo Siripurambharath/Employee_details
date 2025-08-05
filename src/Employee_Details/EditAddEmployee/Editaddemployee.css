@@ -1,0 +1,249 @@
+/* Editaddemployee.css - Specific styles for the employee edit form */
+
+/* Base Styles */
+.edit-employee-container {
+  max-width: 100%;
+  padding: 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.edit-employee-back-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4a6baf;
+  text-decoration: none;
+  margin: 10px 0 15px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.edit-employee-back-link:hover {
+  text-decoration: underline;
+}
+
+.edit-employee-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.edit-employee-title {
+  color: #2c3e50;
+  font-size: 22px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.edit-employee-form .form-label {
+  font-weight: 500;
+  color: #4a6baf;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.edit-employee-form .form-control,
+.edit-employee-form .form-select {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.edit-employee-form .form-control:focus,
+.edit-employee-form .form-select:focus {
+  border-color: #4a6baf;
+  box-shadow: 0 0 0 0.2rem rgba(74, 107, 175, 0.25);
+}
+
+.edit-employee-submit-btn {
+  background-color: #4a6baf;
+  border: none;
+  padding: 8px 20px;
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.edit-employee-submit-btn:hover {
+  background-color: #3a5a9f;
+}
+
+.edit-employee-submit-btn:disabled {
+  background-color: #7f8c8d;
+  cursor: not-allowed;
+}
+
+/* Tabs Navigation */
+.edit-employee-tabs {
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+  gap: 5px;
+}
+
+.edit-employee-tab-link {
+  padding: 8px 15px;
+  text-decoration: none;
+  color: #7f8c8d;
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 5px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.edit-employee-tab-link:hover {
+  color: #4a6baf;
+  background: #f0f4f8;
+}
+
+.edit-employee-tab-link.active {
+  color: #fff;
+  background: #4a6baf;
+  box-shadow: 0 2px 5px rgba(74, 107, 175, 0.3);
+}
+
+/* Mobile (360px - 740px) */
+@media (min-width: 360px) and (max-width: 740px) {
+  .edit-employee-container {
+    padding: 10px;
+  }
+
+  .edit-employee-back-link {
+    font-size: 14px;
+    margin: 8px 0 12px;
+  }
+
+  .edit-employee-card {
+    padding: 15px;
+  }
+
+  .edit-employee-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .edit-employee-form .form-label {
+    font-size: 13px;
+  }
+
+  .edit-employee-form .form-control,
+  .edit-employee-form .form-select {
+    padding: 7px 10px;
+    font-size: 13px;
+  }
+
+  .edit-employee-tab-link {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+
+  .edit-employee-submit-btn {
+    padding: 7px 15px;
+    font-size: 14px;
+  }
+}
+
+/* iPad Mini (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .edit-employee-container {
+    margin-left: 180px;
+    max-width: 95%;
+ 
+    padding: 20px;
+  }
+
+  .edit-employee-back-link {
+    font-size: 16px;
+    margin: 15px 0 20px;
+  }
+
+  .edit-employee-card {
+    padding: 25px;
+  }
+
+  .edit-employee-title {
+    font-size: 24px;
+    margin-bottom: 25px;
+  }
+
+  .edit-employee-form .form-label {
+    font-size: 15px;
+  }
+
+  .edit-employee-form .form-control,
+  .edit-employee-form .form-select {
+    padding: 9px 14px;
+    font-size: 15px;
+  }
+
+  .edit-employee-tabs {
+    gap: 10px;
+    margin-bottom: 25px;
+  }
+
+  .edit-employee-tab-link {
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+
+  .edit-employee-submit-btn {
+    padding: 9px 22px;
+    font-size: 16px;
+  }
+}
+
+/* Desktop (1025px and above) */
+@media (min-width: 1025px) {
+  .edit-employee-container {
+    margin-left: 180px;
+    max-width: 1200px;
+ 
+    
+    padding: 30px;
+  }
+
+  .edit-employee-back-link {
+    font-size: 16px;
+    margin: 15px 0 25px;
+  }
+
+  .edit-employee-card {
+    padding: 30px;
+  }
+
+  .edit-employee-title {
+    font-size: 26px;
+    margin-bottom: 30px;
+  }
+
+  .edit-employee-form .form-label {
+    font-size: 15px;
+  }
+
+  .edit-employee-form .form-control,
+  .edit-employee-form .form-select {
+    padding: 10px 15px;
+    font-size: 15px;
+  }
+
+  .edit-employee-tabs {
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .edit-employee-tab-link {
+    padding: 12px 25px;
+    font-size: 16px;
+  }
+
+  .edit-employee-submit-btn {
+    padding: 10px 25px;
+    font-size: 16px;
+    min-width: 150px;
+  }
+}

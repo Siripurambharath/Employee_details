@@ -1,0 +1,351 @@
+/* Layout */
+.navtop-layout-container {
+  display: flex;
+  width: 100%;
+}
+
+/* Sidebar */
+.navtop-sidebar {
+  width: 190px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #343a40;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+}
+
+.navtop-sidebar-header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navtop-sidebar-logo {
+  width: 170px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.navtop-sidebar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.navtop-sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  flex-grow: 1;
+}
+
+.navtop-sidebar-link {
+  color: #ccc;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.navtop-sidebar-link:hover {
+  background: #495057;
+  color: #fff;
+}
+
+.navtop-sidebar-link.active {
+  background: #fff;
+  color: #000 !important;
+}
+
+/* Payroll dropdown */
+.navtop-payroll-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.navtop-payroll-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  color: #ccc;
+  padding: 10px 20px;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.navtop-payroll-btn:hover {
+  background: #495057;
+  color: #fff;
+}
+
+.navtop-payroll-link-text {
+  color: inherit;
+  text-decoration: none;
+}
+
+.navtop-payroll-icon {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.navtop-payroll-icon.open {
+  transform: rotate(180deg);
+}
+
+.navtop-payroll-dropdown {
+  display: flex;
+  flex-direction: column;
+  padding-left: 30px;
+  margin-top: 5px;
+}
+
+.navtop-payroll-dropdown .navtop-payroll-link {
+  padding: 8px 0;
+  color: #ccc;
+}
+
+.navtop-payroll-dropdown .navtop-payroll-link:hover {
+  background: #495057;
+  color: #fff;
+}
+
+/* Topbar */
+.navtop-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  margin-left: 190px;
+  width: calc(100% - 190px);
+}
+
+.navtop-center-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.navtop-check-btn {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 4px;
+  background: #4e73df;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.navtop-check-btn.active {
+  background: #e74a3b;
+}
+
+.navtop-right-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: relative;
+}
+
+.navtop-avatar-icon {
+  font-size: 42px;
+  color: #4e73df;
+  cursor: pointer;
+}
+
+.navtop-user-name {
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.navtop-dropdown-menu {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  width: 140px;
+  z-index: 10;
+}
+
+.navtop-dropdown-item {
+  padding: 10px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.navtop-dropdown-item:hover {
+  background: #f0f0f0;
+}
+
+/* Leave dropdown */
+.navtop-leave-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.navtop-leave-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  color: #ccc;
+  padding: 10px 20px;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.navtop-leave-btn:hover {
+  background: #495057;
+  color: #fff;
+}
+
+.navtop-leave-link-text {
+  color: inherit;
+  text-decoration: none;
+}
+
+.navtop-leave-icon {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.navtop-leave-icon.open {
+  transform: rotate(180deg);
+}
+
+.navtop-leave-dropdown {
+  display: flex;
+  flex-direction: column;
+  padding-left: 30px;
+  margin-top: 5px;
+}
+
+.navtop-leave-dropdown .navtop-leave-link {
+  padding: 8px 0;
+  color: #ccc;
+}
+
+.navtop-leave-dropdown .navtop-leave-link:hover {
+  background: #495057;
+  color: #fff;
+}
+
+/* -------------------- Responsive -------------------- */
+
+/* Mobile */
+@media (max-width: 767px) {
+  .navtop-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .navtop-sidebar-toggle {
+    display: block;
+  }
+
+  .navtop-sidebar-links {
+    display: none;
+  }
+
+  .navtop-sidebar-links.open {
+    display: flex;
+    width: 100%;
+    background: #343a40;
+  }
+
+  .navtop-topbar {
+    margin-left: 0;
+    width: 100%;
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* iPad Mini */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .navtop-sidebar {
+    width: 170px;
+  }
+
+  .navtop-topbar {
+    margin-left: 170px;
+    height: 75px;
+    width: calc(100% - 170px);
+  }
+}
+
+
+@media (min-width: 1025px) {
+  .navtop-sidebar {
+    width: 190px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #343a40;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;      /* <-- Scrollable vertically */
+    overflow-x: hidden;    /* <-- Prevent horizontal scroll */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #6c757d #343a40; /* Firefox */
+  }
+
+  /* Chrome, Edge, Safari custom scrollbar */
+  .navtop-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .navtop-sidebar::-webkit-scrollbar-track {
+    background: #343a40;
+  }
+
+  .navtop-sidebar::-webkit-scrollbar-thumb {
+    background-color: #6c757d;
+    border-radius: 3px;
+  }
+
+  .navtop-topbar {
+    margin-left: 190px;
+    height: 75px;
+    width: calc(100% - 190px);
+  }
+}
+

@@ -1,0 +1,239 @@
+.emp-container {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+}
+
+.emp-header-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+/* Admin controls */
+.emp-header-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.emp-search-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.emp-search-input {
+  width: 100%;
+  max-width: 300px;
+}
+
+.emp-action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Cards */
+.emp-card {
+  text-decoration: none;
+  color: #212529;
+}
+
+.emp-card .card {
+  transition: all 0.2s ease;
+}
+/* Employees.css */
+.dropdown-menu {
+  z-index: 1050;
+  min-width: 140px;
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
+
+
+.emp-card:hover .card {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.emp-card .card-body {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.emp-avatar {
+  background-color: #343a40;
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.emp-status-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.notification-dropdown {
+  width: 280px;
+  max-height: 300px;
+  overflow-y: auto;
+  right: 0;
+}
+
+.emp-container {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.emp-header-title {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0;
+}
+
+.filter-controls {
+  border: 1px solid #dee2e6;
+}
+
+.emp-card {
+  transition: all 0.2s ease;
+  border: 1px solid #dee2e6;
+}
+
+.emp-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.emp-card.inactive-employee {
+  opacity: 0.7;
+  background-color: #f8f9fa;
+}
+
+.emp-avatar {
+  color: #6c757d;
+}
+
+.emp-status-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+
+
+.dropdown-item {
+  padding: 0.25rem 1rem; /* Smaller padding */
+  font-size: 0.875rem; /* Smaller font size */
+}
+
+/* If you're using Bootstrap, you can also add btn-sm class */
+.actions-button.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .emp-container {
+    padding: 1rem;
+  }
+  
+  .filter-controls .col-md-4,
+  .filter-controls .col-md-3,
+  .filter-controls .col-md-2 {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Animation for dropdown */
+.dropdown-menu {
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Notification badge */
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile */
+@media (max-width: 740px) {
+  .emp-header-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .emp-search-wrapper {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .emp-action-buttons {
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .emp-action-buttons .btn {
+    width: 100%;
+  }
+}
+
+/* iPad Mini */
+@media (min-width: 768px) and (max-width: 1024px) {
+
+  .emp-container {
+    margin-left: 180px;
+  }
+
+  .emp-header-controls {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+  .emp-container {
+    margin-left: 190px;
+    max-width: 1080px;
+  }
+  .dropdown-item {
+  padding: 0.25rem 1rem; /* Smaller padding */
+  font-size: 0.875rem; /* Smaller font size */
+}
+
+
+  .emp-header-controls {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

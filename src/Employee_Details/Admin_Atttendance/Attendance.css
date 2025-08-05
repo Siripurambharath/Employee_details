@@ -1,0 +1,109 @@
+
+
+.attendance-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+
+
+}
+
+
+.attendance-table-container {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  background: #fff;
+  width: 1200px;
+ 
+}
+
+/* Blue header */
+.attendance-head th {
+  background-color: #4e73df !important;
+  color: #fff !important;
+}
+
+.attendance-table th,
+.attendance-table td {
+  vertical-align: middle;
+}
+/* Increase table width */
+.attendance-table {
+  min-width: 1200px;
+  width: 100%;
+}
+
+/* Dropdowns styling */
+.attendance-container .form-select {
+  width: auto;
+  min-width: 130px;
+}
+
+/* Pagination buttons */
+.attendance-container .btn {
+  min-width: 40px;
+}
+
+.attendance-datepicker-wrapper {
+  min-width: 200px;
+  text-align: right;
+}
+
+/* Center popup below input */
+.attendance-datepicker-popper {
+  transform: translateX(-50%) !important;
+  left: 50% !important;
+}
+
+/* Center text inside input */
+.attendance-datepicker {
+  text-align: center;
+}
+
+
+/* ====== Mobile (360px - 740px) ====== */
+@media (max-width: 740px) {
+  .attendance-title {
+    font-size: 1.2rem;
+  }
+
+  .attendance-table th,
+  .attendance-table td {
+    font-size: 0.75rem;
+    padding: 0.4rem;
+  }
+}
+
+/* ====== iPad Mini (768px - 1024px) ====== */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .attendance-title {
+    font-size: 1.5rem;
+  }
+
+  .attendance-table th,
+  .attendance-table td {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+}
+
+/* ====== Desktop (min-width: 1025px) ====== */
+@media (min-width: 1025px) {
+  .attendance-title {
+    font-size: 1.75rem;
+
+  }
+
+  .attendance-table th,
+  .attendance-table td {
+    font-size: 0.95rem;
+    padding: 0.75rem;
+  }
+
+ .attendance-table-container{
+  margin-left: 200px;
+  width: 1050px;
+ }
+
+}

@@ -1,0 +1,128 @@
+/* Base container */
+.payslip-edit-container {
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Back button */
+.payslip-edit-back-button {
+  background-color: transparent;
+  border: none;
+  color: #4361ee;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+.payslip-edit-back-icon {
+  margin-right: 8px;
+}
+
+.payslip-edit-back-button:hover {
+  text-decoration: underline;
+}
+
+/* Heading */
+.payslip-edit-heading {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #4361ee;
+  margin-bottom: 24px;
+}
+
+/* Form */
+.payslip-edit-form .payslip-edit-form-group {
+  margin-bottom: 18px;
+}
+
+.payslip-edit-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+}
+
+.payslip-edit-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  background-color: #f9f9f9;
+}
+
+.payslip-edit-save-button {
+  background-color: #4361ee;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.payslip-edit-save-button:hover {
+  background-color: #364fc7;
+}
+
+/* Responsive Layouts */
+
+/* Mobile: 360px–740px */
+@media (max-width: 740px) {
+  .payslip-edit-container {
+    padding: 16px;
+    margin: 10px;
+    border-radius: 10px;
+  }
+
+  .payslip-edit-heading {
+    font-size: 20px;
+  }
+
+  .payslip-edit-form input {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  .payslip-edit-save-button {
+    padding: 10px;
+    font-size: 15px;
+  }
+}
+
+/* Tablet: 768px–1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .payslip-edit-container {
+    max-width: 600px;
+    padding: 20px;
+  }
+
+  .payslip-edit-heading {
+    font-size: 22px;
+  }
+
+  .payslip-edit-form input {
+    font-size: 15px;
+  }
+}
+
+/* Desktop: min-width 1025px */
+@media (min-width: 1025px) {
+  .payslip-edit-container {
+    max-width: 700px;
+  }
+
+  .payslip-edit-heading {
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,159 @@
+/* 🌐 General Layout */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* 🧾 Container */
+.leave-container {
+  margin-left: 200px;
+  padding: 20px;
+}
+
+/* 🏷️ Heading */
+.leave-heading {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* 📋 Table Styling */
+.leave-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.leave-table {
+  width: 100%;
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+.leave-table thead th {
+  background-color: #4e73df !important;
+  color: white;
+}
+
+/* 📄 Controls Row */
+.leave-controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.leave-status-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+.leave-add-btn {
+  min-width: 150px;
+}
+
+/* 📑 Pagination */
+.leave-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.leave-pagination select {
+  padding: 5px;
+}
+
+.leave-form-select {
+  min-width: 40px;
+}
+
+/* 📱 Mobile: 360px–740px */
+@media (max-width: 740px) and (min-width: 360px) {
+  .leave-container {
+    margin-left: 0;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .leave-controls-row {
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    gap: 10px;
+  }
+
+  .leave-status-input-wrapper {
+    width: 100%;
+    text-align: center;
+  }
+
+  .leave-form-control {
+    width: 160px;
+    margin-bottom: 10px;
+  }
+
+  .leave-add-btn {
+    width: auto;
+    white-space: nowrap;
+  }
+
+  .leave-table {
+    font-size: 13px;
+  }
+
+  .leave-pagination {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* 📱 iPad Mini: 768px–1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .leave-container {
+    margin-left: 150px;
+    padding: 20px;
+  }
+
+  .leave-pagination {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .leave-form-control {
+    width: 250px !important;
+  }
+
+  .leave-table-responsive {
+    overflow-x: auto;
+  }
+
+  .leave-table {
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+/* 💻 Desktop: min-width 1025px */
+@media (min-width: 1025px) {
+  .leave-container {
+    margin-left: 190px;
+    padding: 20px;
+  }
+
+  .leave-status-input-wrapper {
+    width: 300px;
+  }
+
+  .leave-pagination {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

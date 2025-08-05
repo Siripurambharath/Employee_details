@@ -1,0 +1,251 @@
+.leaves-types-container {
+  padding: 20px;
+  margin-left: 190px;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Header */
+.leaves-types-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+.leaves-types-search {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+.leaves-types-search input {
+  width: 40%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.leaves-types-create {
+  position: absolute;
+  right: 0;
+  padding: 8px 14px;
+  background: #4e73df;
+  color: #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.leaves-types-create:hover {
+  background: #375ab7;
+}
+
+/* Cards */
+.leaves-types-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.leave-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  border-left: 2px solid transparent;
+}
+.leave-card:hover {
+  transform: translateY(-4px);
+}
+.leave-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.leave-card-menu {
+  position: relative;
+  cursor: pointer;
+}
+.leave-card-dropdown {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  z-index: 10;
+}
+.leave-card-dropdown button {
+  background: none;
+  border: none;
+  padding: 8px;
+  text-align: left;
+  cursor: pointer;
+}
+.leave-card-dropdown button:hover {
+  background: #f0f0f0;
+}
+
+/* Footer */
+.leave-card-footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+}
+
+.footer-value {
+  font-size: 14px;
+  margin-top: 4px;
+  color: #000;
+}
+
+.leave-type-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.leave-type-tag.paid {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+.leave-type-tag.unpaid {
+  background: #ffebee;
+  color: #c62828;
+}
+.leave-days {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.leave-types-headername{
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.paid-border {
+  border-left: 2px solid #388e3c;
+}
+.unpaid-border {
+  border-left: 2px solid #c62828;
+}
+
+.leave-card-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #375ab7; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  color:#fff;
+  margin: 10px 0;
+}
+
+/* -------------------- Responsive -------------------- */
+
+/* Mobile (360px – 740px) */
+@media (max-width: 740px) {
+  .leaves-types-container {
+    margin-left: 0;
+    padding: 10px;
+  }
+
+  .leaves-types-search input {
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .leaves-types-create {
+    position: relative;
+    right: auto;
+    margin-left: 10px;
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .leaves-types-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .leaves-types-cards {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .leave-card {
+    padding: 15px;
+  }
+
+  .leave-card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}
+
+/* iPad Mini (768px – 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .leaves-types-container {
+    margin-left: 170px;
+    padding: 15px;
+  }
+
+  .leaves-types-search input {
+    width: 60%;
+  }
+
+  .leaves-types-create {
+    font-size: 15px;
+    padding: 7px 13px;
+  }
+
+  .leaves-types-cards {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 18px;
+  }
+
+  .leave-card {
+    padding: 18px;
+  }
+}
+
+/* Desktop (≥1025px) */
+@media (min-width: 1025px) {
+  .leaves-types-container {
+    margin-left: 190px;
+    padding: 20px;
+  }
+
+  .leaves-types-cards {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+}

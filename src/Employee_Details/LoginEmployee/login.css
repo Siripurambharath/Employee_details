@@ -1,0 +1,167 @@
+/* 🌐 Global/Desktop Styles (Default >1025px) */
+.customer-login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f4f4;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.customer-login-form-wrapper {
+  background-color: #fff;
+  padding: 2rem;
+  max-width: 400px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.customer-login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.customer-login-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.customer-login-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.customer-login-field {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1.2rem;
+}
+
+.customer-login-input {
+  width: 100%;
+  padding: 0.8rem 2.5rem 0.8rem 2.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.customer-login-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 1.2rem;
+}
+
+.customer-toggle-password-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.customer-login-submit {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #4f46e5;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.customer-login-submit:hover {
+  background-color: #3730a3;
+}
+
+.customer-google-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.customer-google-button:hover {
+  background-color: #f5f5f5;
+}
+
+.customer-login-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.customer-login-link {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.customer-login-link:hover {
+  text-decoration: underline;
+}
+@media screen and (max-width: 740px) {
+  .customer-login-form-wrapper {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+
+  .customer-login-title {
+    font-size: 1.5rem;
+  }
+
+  .customer-login-input {
+    font-size: 0.95rem;
+    padding: 0.75rem 2rem 0.75rem 2.5rem;
+  }
+
+  .customer-login-submit,
+  .customer-google-button {
+    font-size: 0.95rem;
+    padding: 0.65rem;
+  }
+
+  .customer-login-logo {
+    width: 60px;
+    height: 60px;
+  }
+}
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+  .customer-login-form-wrapper {
+    max-width: 450px;
+    padding: 2rem;
+  }
+
+  .customer-login-title {
+    font-size: 1.8rem;
+  }
+
+  .customer-login-input {
+    font-size: 1rem;
+  }
+
+  .customer-login-submit,
+  .customer-google-button {
+    font-size: 1rem;
+  }
+}

@@ -1,0 +1,130 @@
+/* Container */
+.add-leave-type-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Push form to top */
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding: 20px;
+}
+
+/* Form */
+.add-leave-form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 40px; /* Add top margin for spacing */
+}
+
+/* Heading */
+.add-leave-textalign-center {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Form Fields */
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-input,
+select,
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  background: #4e73df;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.submit-btn:hover {
+  background: #375ab7;
+}
+
+/* -------------------- Responsive -------------------- */
+
+/* Mobile (360px – 740px) */
+@media (max-width: 740px) {
+  .add-leave-type-container {
+    margin-left: 0;
+    padding: 10px;
+    align-items: flex-start;
+  }
+
+  .add-leave-form {
+    width: 100%;
+    max-width: 100%;
+    padding: 15px;
+    border-radius: 0;
+    box-shadow: none;
+    margin-top: 20px;
+  }
+
+  .add-leave-textalign-center {
+    font-size: 20px;
+  }
+
+  .submit-btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+/* iPad Mini (768px – 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .add-leave-type-container {
+    margin-left: 170px;
+    padding: 15px;
+    align-items: flex-start;
+  }
+
+  .add-leave-form {
+    max-width: 450px;
+    padding: 18px;
+    margin-top: 40px;
+  }
+
+  .add-leave-textalign-center {
+    font-size: 22px;
+  }
+
+  .submit-btn {
+    font-size: 15px;
+  }
+}
+
+/* Desktop (≥1025px) */
+@media (min-width: 1025px) {
+  .add-leave-type-container {
+    margin-left: 190px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Top align */
+    padding: 20px;
+  }
+
+  .add-leave-form {
+    max-width: 500px;
+    width: 100%;
+    margin-top: 60px; /* Adjust for spacing below navbar */
+  }
+}

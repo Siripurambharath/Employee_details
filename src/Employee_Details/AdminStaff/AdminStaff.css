@@ -1,0 +1,186 @@
+/* AdminStaff.css - Base Styles */
+.admin-staff-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.header-section {
+  margin-bottom: 30px;
+}
+
+.page-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.manager-group {
+  margin-bottom: 30px;
+}
+
+.manager-header {
+  margin-bottom: 15px;
+}
+
+.manager-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.manager-name {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.manager-badge {
+  color: #666;
+  font-size: 14px;
+}
+
+.staff-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.staff-table th {
+  background-color: #f5f5f5;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #ddd;
+}
+
+.staff-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  color: #555;
+}
+
+.staff-table tr:last-child td {
+  border-bottom: none;
+}
+
+.staff-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.badge-id {
+  font-family: monospace;
+  color: #444;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  gap: 15px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0,0,0,0.1);
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.staff-table-head th{
+  background-color: #4e73df !important;
+  color: #fff;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Mobile Styles (up to 767px) */
+@media (max-width: 767px) {
+  .admin-staff-container {
+    padding: 15px;
+  }
+  
+  .staff-table {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .staff-table th,
+  .staff-table td {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+}
+
+/* iPad Mini Styles (768px to 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .admin-staff-container {
+    padding: 25px;
+    max-width: 90%;
+  }
+
+  .page-title {
+    font-size: 28px;
+  }
+
+  .manager-group {
+    margin-bottom: 35px;
+  }
+
+  .staff-table th,
+  .staff-table td {
+    padding: 14px 18px;
+    font-size: 15px;
+  }
+
+  .manager-header {
+    font-size: 17px;
+  }
+}
+
+/* Desktop Styles (1024px and up) */
+@media (min-width: 1024px) {
+  .admin-staff-container {
+    padding: 30px;
+    max-width: 1200px;
+    margin-left: 190px; /* For sidebar */
+    transition: margin-left 0.3s ease;
+  }
+
+  .page-title {
+    font-size: 32px;
+    margin-bottom: 25px;
+  }
+
+  .manager-group {
+    margin-bottom: 40px;
+  }
+
+  .staff-table {
+    font-size: 16px;
+  }
+
+  .staff-table th,
+  .staff-table td {
+    padding: 16px 20px;
+  }
+
+  .manager-header {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  /* If you have a collapsible sidebar */
+  .sidebar-collapsed .admin-staff-container {
+    margin-left: 70px;
+  }
+}
+
