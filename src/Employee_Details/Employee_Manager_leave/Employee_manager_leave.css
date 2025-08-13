@@ -1,0 +1,202 @@
+.Employee_manager_leave_container {
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 98%;
+}
+
+.Employee_manager_leave_container h3 {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.employeemanagerleave_table {
+  overflow-x: auto;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  background: #fff;
+}
+
+/* ========================
+   Table Styles
+======================== */
+.employeemanagerleave-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: none !important; 
+}
+
+.employeemanagerleave-table-head th {
+  background-color: #4e73df !important;
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+  padding: 12px 8px;
+  position: sticky;
+  top: 0;
+  
+}
+
+.employeemanagerleave-outline-danger{
+    color: red;
+    font-size: medium;
+}
+
+.employeemanagerleave-outline-danger:hover{
+    color: red;
+    font-size: medium;
+}
+
+.employeemanagerleave-table th,
+.employeemanagerleave-table td {
+  padding: 10px 8px;
+  text-align: center;
+  vertical-align: middle;
+  border: none !important;
+}
+
+.employeemanagerleave-table tbody tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+.employeemanagerleave-table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* ========================
+   Status Badges
+======================== */
+.status-badge-employee-manager-leave {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-badge-employee-manager-leave.pending {
+    font-size: medium;
+  color: #856404;
+}
+
+.status-badge-employee-manager-leave.accepted {
+    font-size: medium;
+  color: #155724;
+}
+
+.status-badge-employee-manager-leave.rejected {
+    font-size: medium;
+  color: #721c24;
+}
+
+/* ========================
+   Buttons
+======================== */
+.action-btn {
+  min-width: 70px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.action-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.comment-btn {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.comment-btn:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+.comment-preview {
+  font-size: 0.75rem;
+  color: #6c757d;
+  text-align: center;
+}
+
+/* ========================
+   Modal Styles
+======================== */
+.modal-content {
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 1rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+/* ========================
+   Responsive Design
+======================== */
+
+/* Mobile 360px–740px */
+@media (max-width: 740px) {
+  .Employee_manager_leave_container h3 {
+    font-size: 1.2rem;
+  }
+
+  .employeemanagerleave-table th,
+  .employeemanagerleave-table td {
+    font-size: 0.75rem;
+    padding: 8px 4px;
+  }
+
+  .action-btn, .comment-btn {
+    font-size: 0.7rem;
+    padding: 4px 6px;
+    min-width: 60px;
+  }
+}
+
+/* iPad Mini 768px–1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .Employee_manager_leave_container h3 {
+    font-size: 1.4rem;
+  }
+  
+  .employeemanagerleave-table th,
+  .employeemanagerleave-table td {
+    font-size: 0.85rem;
+    padding: 10px 6px;
+  }
+}
+
+/* Desktop min-width 1025px */
+@media (min-width: 1025px) {
+  .Employee_manager_leave_container h3 {
+    font-size: 1.5rem;
+  }
+  
+  .employeemanagerleave-table th,
+  .employeemanagerleave-table td {
+    font-size: 0.9rem;
+  }
+
+  .Employee_manager_leave_container {
+    margin-left: 190px;
+    max-width: calc(100% - 200px);
+  }
+}

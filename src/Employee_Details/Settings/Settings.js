@@ -174,7 +174,7 @@ const Settings = () => {
   return (
     <>
       <NavbarTopbar />
-      <div className="settings-container">
+      <div className="settings-container mt-4">
         {loading ? (
           <div className="loading-container">
             <ClipLoader color="#4e73df" size={50} />

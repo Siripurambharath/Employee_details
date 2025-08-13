@@ -1,22 +1,230 @@
-.add-leave-container {
-  padding: 20px;
-  font-family: 'Segoe UI', sans-serif;
+/* ==================== */
+/* MOBILE (360px-740px) */
+/* ==================== */
+@media (min-width: 360px) and (max-width: 740px) {
+  .add-leave-container {
+    padding: 12px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .add-leave-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .leaves-types-cards-scroll {
+    gap: 12px;
+    padding: 8px 4px;
+    margin-bottom: 15px;
+  }
+
+  .leave-card {
+    min-width: 220px;
+    padding: 12px;
+  }
+
+  .leave-card-header h4 {
+    font-size: 15px;
+  }
+
+  .leave-card-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .footer-label {
+    font-size: 11px;
+  }
+
+  .footer-value {
+    font-size: 12px;
+  }
+
+  .add-leave-form {
+    padding: 15px;
+  }
+
+  .add-leave-label {
+    font-size: 13px;
+  }
+
+  .form-control, .form-select {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .btn-primary {
+    padding: 8px;
+    font-size: 14px;
+  }
 }
 
-/* Title */
-.add-leave-title {
-  font-weight: bold;
-  font-size: 22px;
-  text-align: center;
-  margin-bottom: 15px;
+/* ======================== */
+/* IPAD MINI (768px-1024px) */
+/* ======================== */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .add-leave-container {
+    padding: 20px;
+    max-width: 95%;
+  }
+
+  .add-leave-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .leaves-types-cards-scroll {
+    gap: 18px;
+    padding: 12px 6px;
+    margin-bottom: 20px;
+  }
+
+  .leave-card {
+    min-width: 280px;
+    padding: 18px;
+  }
+
+  .leave-card-header {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .leave-card-header h4 {
+    font-size: 18px;
+  }
+
+  .leave-card-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 17px;
+  }
+
+  .footer-label {
+    font-size: 13px;
+  }
+
+  .footer-value {
+    font-size: 14px;
+  }
+
+  .add-leave-form {
+    padding: 25px;
+  }
+
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -10px;
+    margin-left: -10px;
+  }
+
+  .form-row > .col {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .add-leave-label {
+    font-size: 14px;
+  }
+
+  .form-control, .form-select {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .btn-primary {
+    padding: 10px;
+    font-size: 15px;
+  }
 }
-.leave-form-page{
- 
-  display: flex;
-  justify-content: center;
-  align-items: center;
- 
+
+/* ====================== */
+/* DESKTOP (min-width: 1025px) */
+/* ====================== */
+@media (min-width: 1025px) {
+  .add-leave-container {
+    padding: 30px;
+    max-width: 1200px;
+    margin-left: 190px; /* Adjust for sidebar */
+  }
+
+  .add-leave-title {
+    font-size: 24px;
+    margin-bottom: 25px;
+  }
+
+  .leaves-types-cards-scroll {
+    gap: 25px;
+    padding: 15px 10px;
+    margin-bottom: 25px;
+  }
+
+  .leave-card {
+    min-width: 320px;
+    padding: 20px;
+  }
+
+  .leave-card-header h4 {
+    font-size: 20px;
+  }
+
+  .leave-card-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .footer-label {
+    font-size: 14px;
+  }
+
+  .footer-value {
+    font-size: 15px;
+  }
+
+  .add-leave-form {
+    padding: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+
+  .form-row > .col {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  .add-leave-label {
+    font-size: 15px;
+  }
+
+  .form-control, .form-select {
+    padding: 12px 15px;
+    font-size: 15px;
+  }
+
+  .btn-primary {
+    padding: 12px;
+    font-size: 16px;
+  }
 }
+
+/* ==================== */
+/* COMMON STYLES (All Devices) */
+/* ==================== */
+.add-leave-container {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f8f9fa;
+}
+
 .completed-badge {
   background: #28a745;
   color: #fff;
@@ -26,56 +234,54 @@
   margin-left: 10px;
 }
 
-/* Scrollable Card Row */
 .leaves-types-cards-scroll {
   display: flex;
-  gap: 20px;
   overflow-x: auto;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
   scrollbar-width: thin;
 }
 
 .leaves-types-cards-scroll::-webkit-scrollbar {
-  height: 8px;
+  height: 6px;
 }
+
 .leaves-types-cards-scroll::-webkit-scrollbar-thumb {
-  background: #ccc;
+  background: #aaa;
   border-radius: 4px;
 }
 
-/* Individual Card */
 .leave-card {
-  min-width: 300px;
   border-radius: 10px;
-  padding: 15px;
   background: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   flex-shrink: 0;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.leave-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .paid-border {
   border-left: 5px solid #28a745;
 }
+
 .unpaid-border {
   border-left: 5px solid #dc3545;
 }
 
-.leave-card-header h4 {
-  font-size: 18px;
-  font-weight: bold;
+.leave-card-header {
+  display: flex;
+  align-items: center;
 }
 
 .leave-card-footer {
   display: flex;
   align-items: center;
-  margin-top: 10px;
   justify-content: space-between;
 }
 
 .leave-card-icon {
-  width: 50px;
-  height: 50px;
   border-radius: 50%;
   background: #375ab7;
   display: flex;
@@ -83,37 +289,38 @@
   justify-content: center;
   font-weight: bold;
   color: white;
-  font-size: 18px;
 }
 
 .footer-section {
   text-align: center;
+  flex: 1;
 }
 
-.footer-label {
-  font-size: 13px;
-  color: #555;
-  margin-bottom: 3px;
+.add-leave-form {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.footer-value {
-  font-size: 14px;
-  font-weight: bold;
+.form-control, .form-select {
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.2s;
 }
 
-/* Responsive */
-@media (max-width: 740px) {
-  .add-leave-title {
-    font-size: 18px;
-  }
-  .leave-card {
-    min-width: 200px;
-  }
+.form-control:focus, .form-select:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
 }
 
-@media (min-width: 1025px) {
-  .add-leave-container {
-    margin-left: 190px;
-    padding: 30px;
-  }
+.btn-primary {
+  background-color: #375ab7;
+  border: none;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #2a4a9e;
 }

@@ -65,9 +65,9 @@ input[type="number"] {
 /* Mobile (360px – 740px) */
 @media (max-width: 740px) {
   .add-leave-type-container {
-    margin-left: 0;
-    padding: 10px;
-    align-items: flex-start;
+ display: flex;
+    justify-content:center;
+    align-items: center;
   }
 
   .add-leave-form {
@@ -92,9 +92,11 @@ input[type="number"] {
 /* iPad Mini (768px – 1024px) */
 @media (min-width: 768px) and (max-width: 1024px) {
   .add-leave-type-container {
-    margin-left: 170px;
     padding: 15px;
-    align-items: flex-start;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+
   }
 
   .add-leave-form {
@@ -115,10 +117,9 @@ input[type="number"] {
 /* Desktop (≥1025px) */
 @media (min-width: 1025px) {
   .add-leave-type-container {
-    margin-left: 190px;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Top align */
+    align-items: center; /* Top align */
     padding: 20px;
   }
 

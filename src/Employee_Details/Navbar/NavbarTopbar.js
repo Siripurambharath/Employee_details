@@ -1,219 +1,199 @@
-import React, { useState, useEffect } from "react";
+// NavbarTopbar.js
+import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
-  FaBars,
-  FaSignOutAlt,
+  FaChevronDown,
   FaUserCircle,
   FaEye,
   FaEdit,
-  FaChevronDown,
+  FaSignOutAlt,
 } from "react-icons/fa";
-import { signOut, onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "../Firebase/Firebase";
-import { doc, getDoc } from "firebase/firestore";
-import companylogo2 from "../Image/companylogo2.png";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { AuthContext } from "../../Employee_Details/Contextapi/Authcontext";
+import { signOut } from "firebase/auth";
+import { auth } from "../../Employee_Details/Firebase/Firebase";
+import companylogo2 from "../../Employee_Details/Image/companylogo2.png";
 import "./NavbarTopbar.css";
 
-
-const NavbarTopbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [payrollDropdown, setPayrollDropdown] = useState(false);
-  const [leaveDropdown, setLeaveDropdown] = useState(false);
-
-
-  const [userName, setUserName] = useState("Admin");
-  const [isAdmin, setIsAdmin] = useState(null);
-  const [badgeId, setBadgeId] = useState("");
-
+function NavbarTopbar() {
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [leaveDropdown, setLeaveDropdown] = useState(false);
+  const [payrollDropdown, setPayrollDropdown] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Fetch user details from Firestore
-  const fetchUserName = async (uid) => {
-    try {
-      const docRef = doc(db, "users", uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setUserName(data.firstName || "User");
-        if (data.badgeId) setBadgeId(data.badgeId);
-      }
-    } catch (err) {
-      console.error("Error fetching username:", err);
-    }
-  };
+  const role = currentUser?.jobRole ?? "Admin";
+const userName = (role === "Employee" || role === "Manager") 
+  ? currentUser?.firstName || "User" 
+  : "User";
 
-  // Authentication listener
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const email = (user.email || "").toLowerCase().trim();
-        if (email === "admin@gmail.com") {
-          setUserName("Admin");
-          setIsAdmin(true);
-        } else {
-          fetchUserName(user.uid);
-          setIsAdmin(false);
-        }
-      } else {
-        setIsAdmin(false);
-      }
-    });
-    return () => unsubscribe();
-  }, []);
+  const badgeId = currentUser?.badgeId ?? "001";
+  const isEmployee = role === "Employee" || role === "Manager";
+
+  const closeSidebar = () => setMobileOpen(false);
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      localStorage.clear();
+      localStorage.removeItem("user");
+      setCurrentUser(null);
       navigate("/");
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error("Logout failed:", error);
     }
   };
 
   return (
+    <div className="navtop-container">
+      <button
+        className="navtop-mobile-toggle"
+        onClick={() => setMobileOpen((prev) => !prev)}
+      >
+        ☰
+      </button>
 
-    <div className="navtop-layout-container d-flex">
-      {/* Sidebar */}
-      <div className="navtop-sidebar d-flex flex-column ">
-        <div className="navtop-sidebar-header d-flex align-items-center justify-content-between ">
-          <img src={companylogo2} alt="Logo" className="navtop-sidebar-logo" />
-          <button
-            className="navtop-sidebar-toggle d-md-none"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <FaBars />
-          </button>
-        </div>
+      <div className={`navtop-sidebar ${mobileOpen ? "mobile-open" : ""}`}>
+        <img src={companylogo2} alt="Company Logo" className="navtop-logo" />
 
-        <div
-          className={`navtop-sidebar-links flex-column ${isOpen ? "open d-flex" : "d-none"
-            } d-md-flex`}
-        >
-          <NavLink to="/dashboard" className="navtop-sidebar-link nav-link">
-            Dashboard
-          </NavLink>
-               <NavLink to="/adminstaff" className="navtop-sidebar-link nav-link">
-            Admined Staff 
-          </NavLink>
+        {role === "Employee" && (
+          <>
+           
+            <NavLink to="/employee" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Employee
+            </NavLink>
+            <NavLink to="/employeeattendance" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Employee Attendance
+            </NavLink>
+          
+             <NavLink to="/attendance" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Attendance
+            </NavLink>
+              <NavLink to="/employeeleave" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Employee Leave
+            </NavLink>
+          </>
+        )}
 
-            <NavLink to="/assignstaff" className="navtop-sidebar-link nav-link">
-            Assigned Staff 
-          </NavLink>
+        {role === "Manager" && (
+          <>
+            <NavLink to="/employee" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Employee
+            </NavLink>
+            <NavLink to="/assignstaff" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Assigned Staff
+            </NavLink>
+             <NavLink to="/employee_manager_attendance" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Employee attendance
+            </NavLink>
 
-          <NavLink to="/employee" className="navtop-sidebar-link nav-link">
-            Employee
-          </NavLink>
-          <NavLink to="/attendance" className="navtop-sidebar-link nav-link">
-            Attendance
-          </NavLink>
-          <NavLink to="/employeeattendance" className="navtop-sidebar-link nav-link">
-            Employee Attendance
-          </NavLink>
-          <div className="navtop-leave-container">
-            <button
-              className="navtop-leave-btn"
-              onClick={() => setLeaveDropdown((prev) => !prev)}
-            >
-              <span className="navtop-leave-link-text">Admin Leave</span>
-              <FaChevronDown
-                className={`navtop-leave-icon ${leaveDropdown ? "open" : ""}`}
-              />
-            </button>
+                <NavLink to="/managerattendance" className="navtop-sidebar-link" onClick={closeSidebar}>
+             Attendance
+            </NavLink>
 
-            {leaveDropdown && (
-              <div className="navtop-leave-dropdown">
-                   
-                       <NavLink to="/adminleavetable" className="navtop-leave-link nav-link">
-                 Admin Leave 
-                </NavLink>
-                
-                <NavLink to="/adminleavedashboard" className="navtop-leave-link nav-link">
-                  Leaves Dashboard
-                </NavLink>
-                <NavLink to="/leavetypes" className="navtop-leave-link nav-link">
-                  Leave Types
-                </NavLink>
-              </div>
-            )}
-          </div>
+                 <NavLink to="/employeemanagaerleave" className="navtop-sidebar-link" onClick={closeSidebar}>
+             EmployeLeave
+            </NavLink>
 
+             <NavLink to="/Managerleave" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Manager Leave
+            </NavLink>
 
-          <NavLink to="/employeeleave" className="navtop-sidebar-link nav-link">
-            Employee leave
-          </NavLink>
-      
+                  <NavLink to="/managerpayroll" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Manager Payroll
+            </NavLink>
+        
+          </>
+        )}
 
+        {role === "Admin" && (
+          <>
+            <NavLink to="/dashboard" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Dashboard
+            </NavLink>
+       
+        <NavLink to="/employee" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Employee
+            </NavLink>
+          
+       
+            <NavLink to="/adminstaff" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Admined Staff
+            </NavLink>
+                   <NavLink to="/adminattendance" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Attendance
+            </NavLink>
+           
+           
 
-          {/* Payroll Dropdown */}
-          <div className="navtop-payroll-container">
-            <button
-              className="navtop-payroll-btn"
-              onClick={() => setPayrollDropdown((prev) => !prev)}
-            >
-              <span className="navtop-payroll-link-text">Payroll</span>
-              <FaChevronDown
-                className={`navtop-payroll-icon ${payrollDropdown ? "open" : ""
-                  }`}
-              />
-            </button>
-
-            {payrollDropdown && (
-              <div className="navtop-payroll-dropdown">
-                <NavLink to="/payroll" className="navtop-payroll-link nav-link">
-                  Payroll Home
-                </NavLink>
-                <NavLink to="/payslip" className="navtop-payroll-link nav-link">
-                  Payslip
-                </NavLink>
-              </div>
-            )}
-          </div>
-
-          <NavLink to="/setting" className="navtop-sidebar-link nav-link">
-            Settings
-          </NavLink>
-        </div>
+            <div className="navtop-leave-container">
+              <button className="navtop-leave-btn" onClick={() => setLeaveDropdown(!leaveDropdown)}>
+                <span>Admin </span>
+                <FaChevronDown className={`navtop-leave-icon ${leaveDropdown ? "open" : ""}`} />
+              </button>
+              {leaveDropdown && (
+                <div className="navtop-leave-dropdown">
+                  <NavLink to="/adminleavetable" className="navtop-leave-link" onClick={closeSidebar}>
+                    Admin   
+                  </NavLink>
+                  {/* <NavLink to="/adminleavedashboard" className="navtop-leave-link" onClick={closeSidebar}>
+                    Leaves Dashboard
+                  </NavLink> */}
+                  <NavLink to="/leavetypes" className="navtop-leave-link" onClick={closeSidebar}>
+                    Leave Types
+                  </NavLink>
+                </div>
+              )}
+            </div>
+            <div className="navtop-payroll-container">
+              <button className="navtop-payroll-btn" onClick={() => setPayrollDropdown(!payrollDropdown)}>
+                <span>Payroll</span>
+                <FaChevronDown className={`navtop-payroll-icon ${payrollDropdown ? "open" : ""}`} />
+              </button>
+              {payrollDropdown && (
+                <div className="navtop-payroll-dropdown">
+                  <NavLink to="/payroll" className="navtop-payroll-link" onClick={closeSidebar}>
+                    Payroll Home
+                  </NavLink>
+                  <NavLink to="/payslip" className="navtop-payroll-link" onClick={closeSidebar}>
+                    Payslip
+                  </NavLink>
+                </div>
+              )}
+            </div>
+            <NavLink to="/setting" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Settings
+            </NavLink>
+          </>
+        )}
       </div>
 
-      {/* Topbar (Right Aligned Avatar & Dropdown) */}
-      <div className="navtop-topbar flex-grow d-flex justify-content-end align-items-center ">
-        <div className="navtop-right-section d-flex align-items-center gap-2">
+      {mobileOpen && <div className="navtop-overlay" onClick={closeSidebar}></div>}
+
+      <div className="navtop-topbar">
+        <div className="navtop-right-section">
           <FaUserCircle className="navtop-avatar-icon" />
           <div className="navtop-name-dropdown">
-            <span
-              className="navtop-user-name"
-              onClick={() => setDropdownOpen((prev) => !prev)}
-            >
+            <span className="navtop-user-name" onClick={() => setDropdownOpen(!dropdownOpen)}>
               {userName} ▼
             </span>
-
             {dropdownOpen && (
               <div className="navtop-dropdown-menu">
-                {isAdmin ? (
-                  <button onClick={handleLogout} className="navtop-dropdown-item">
-                    <FaSignOutAlt /> Logout
-                  </button>
-                ) : (
+                {isEmployee ? (
                   <>
-                    <NavLink
-                      to={`/about/${badgeId}`}
-                      className="navtop-dropdown-item"
-                    >
+                    <NavLink to={`/about/${badgeId}`} className="navtop-dropdown-item" onClick={() => setDropdownOpen(false)}>
                       <FaEye /> View
                     </NavLink>
-                    <NavLink
-                      to={`/Editworkdetail/${badgeId}`}
-                      className="navtop-dropdown-item"
-                    >
+                    <NavLink to={`/Editworkdetail/${badgeId}`} className="navtop-dropdown-item" onClick={() => setDropdownOpen(false)}>
                       <FaEdit /> Edit
                     </NavLink>
                     <button onClick={handleLogout} className="navtop-dropdown-item">
                       <FaSignOutAlt /> Logout
                     </button>
                   </>
+                ) : (
+                  <button onClick={handleLogout} className="navtop-dropdown-item">
+                    <FaSignOutAlt /> Logout
+                  </button>
                 )}
               </div>
             )}
@@ -221,8 +201,7 @@ const NavbarTopbar = () => {
         </div>
       </div>
     </div>
-
   );
-};
+}
 
 export default NavbarTopbar;

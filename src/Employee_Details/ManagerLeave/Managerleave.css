@@ -1,12 +1,12 @@
 /* Base Styles */
-.employee-leave-container {
-  padding: 2rem;
-  max-width: 100%;
+.Manager-leave-container {
+  padding: 0 1rem;
+    max-width: 100%;
   margin: 0 auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.employee-leave-header {
+.Manager-leave-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,14 +15,14 @@
   gap: 1rem;
 }
 
-.employee-leave-title {
+.Manager-leave-title {
   font-size: 1.75rem;
   font-weight: 600;
   color: #2c3e50;
  text-align: center;
 }
 
-.employee-leave-add-btn {
+.Manager-leave-add-btn {
   background-color: #4e73df;
   color: white;
   padding: 0.5rem 1rem;
@@ -32,13 +32,13 @@
   transition: background-color 0.2s;
 }
 
-.employee-leave-add-btn:hover {
+.Manager-leave-add-btn:hover {
   background-color: #3a5ab6;
   color: white;
 }
 
 /* Table Styles */
-.employee-leave-table-container {
+.Manager-leave-table-container {
   width: 100%;
   overflow-x: auto;
   margin-bottom: 1.5rem;
@@ -46,19 +46,19 @@
   border-radius: 8px;
 }
 
-.employee-leave-table {
+.Manager-leave-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   background-color: white;
 }
 
-.employee-leave-table thead {
+.Manager-leave-table thead {
   background-color: #4e73df;
   color: white;
 }
 
-.employee-leave-table th {
+.Manager-leave-table th {
   padding: 1rem;
   font-weight: 600;
   text-align: center;
@@ -66,23 +66,22 @@
   top: 0;
 }
 
-.employee-leave-table tbody tr {
+.Manager-leave-table tbody tr {
   transition: background-color 0.2s;
 }
 
-.employee-leave-table tbody tr:hover {
+.Manager-leave-table tbody tr:hover {
   background-color: #f8f9fa;
 }
 
-.employee-leave-table td {
+.Manager-leave-table td {
   padding: 0.75rem 1rem;
   text-align: center;
   vertical-align: middle;
   border-bottom: 1px solid #e9ecef;
 }
 
-/* Status Badges */
-.employee-leave-status {
+.Manager-leave-status {
   padding: 0.35rem 0.75rem;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -90,31 +89,35 @@
   text-transform: capitalize;
 }
 
-.employee-leave-status-pending {
+.Manager-leave-status-pending {
+  font-size: medium;
   color: #856404;
 }
 
-.employee-leave-status-accepted {
-font-size: medium;
+.Manager-leave-status-accepted {
+    font-size: medium;
+
   color: #155724;
 }
 
-.employee-leave-status-rejected {
+.Manager-leave-status-rejected {
+    font-size: medium;
+
   color: #721c24;
 }
 
 /* Comment Cell */
-.employee-leave-comment-cell {
+.Manager-leave-comment-cell {
   cursor: pointer;
   position: relative;
   max-width: 200px;
 }
 
-.employee-leave-comment-cell:hover {
+.Manager-leave-comment-cell:hover {
   background-color: #f0f7ff;
 }
 
-.employee-leave-comment-text {
+.Manager-leave-comment-text {
   display: inline-block;
   max-width: calc(100% - 20px);
   white-space: nowrap;
@@ -123,7 +126,7 @@ font-size: medium;
   vertical-align: middle;
 }
 
-.employee-leave-view-icon {
+.Manager-leave-view-icon {
   color: #4e73df;
   margin-left: 5px;
   font-size: 0.9rem;
@@ -131,17 +134,17 @@ font-size: medium;
 }
 
 /* Action Buttons */
-.employee-leave-actions {
+.Manager-leave-actions {
   width: 120px;
 }
 
-.employee-leave-action-buttons {
+.Manager-leave-action-buttons {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
 }
 
-.employee-leave-action-btn {
+.Manager-leave-action-btn {
   border: none;
   background: none;
   cursor: pointer;
@@ -153,45 +156,45 @@ font-size: medium;
   transition: all 0.2s;
 }
 
-.employee-leave-edit-btn {
+.Manager-leave-edit-btn {
   color: #4e73df;
  
 }
 
-.employee-leave-edit-btn:hover {
+.Manager-leave-edit-btn:hover {
   background-color: #d0e0fc;
 }
 
-.employee-leave-delete-btn {
+.Manager-leave-delete-btn {
   color: #e74a3b;
  
 }
 
-.employee-leave-delete-btn:hover {
+.Manager-leave-delete-btn:hover {
   background-color: #fcd5d3;
 }
 
 /* Empty State */
-.employee-leave-empty {
+.Manager-leave-empty {
   text-align: center;
   padding: 2rem;
   color: #6c757d;
 }
 
 /* Pagination */
-.employee-leave-pagination {
+.Manager-leave-pagination {
   display: flex;
   justify-content: end;
   margin-top: 1.5rem;
 }
 
-.employee-leave-pagination-controls {
+.Manager-leave-pagination-controls {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.employee-leave-pagination-btn {
+.Manager-leave-pagination-btn {
   padding: 0.5rem 1rem;
   background-color: #f8f9fa;
   border: 1px solid #dee2e6;
@@ -200,22 +203,22 @@ font-size: medium;
   transition: all 0.2s;
 }
 
-.employee-leave-pagination-btn:hover:not(:disabled) {
+.Manager-leave-pagination-btn:hover:not(:disabled) {
   background-color: #e9ecef;
 }
 
-.employee-leave-pagination-btn:disabled {
+.Manager-leave-pagination-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.employee-leave-pagination-info {
+.Manager-leave-pagination-info {
   font-weight: 500;
   color: #495057;
 }
 
 /* Modal Styles */
-.employee-leave-modal-overlay {
+.Manager-leave-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -228,7 +231,7 @@ font-size: medium;
   z-index: 1000;
 }
 
-.employee-leave-modal {
+.Manager-leave-modal {
   background-color: white;
   border-radius: 8px;
   width: 90%;
@@ -238,7 +241,7 @@ font-size: medium;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-.employee-leave-modal-header {
+.Manager-leave-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -246,12 +249,12 @@ font-size: medium;
   border-bottom: 1px solid #e9ecef;
 }
 
-.employee-leave-modal-header h3 {
+.Manager-leave-modal-header h3 {
   margin: 0;
   color: #2c3e50;
 }
 
-.employee-leave-modal-close {
+.Manager-leave-modal-close {
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -260,30 +263,30 @@ font-size: medium;
   padding: 0 0.5rem;
 }
 
-.employee-leave-modal-close:hover {
+.Manager-leave-modal-close:hover {
   color: #495057;
 }
 
-.employee-leave-modal-body {
+.Manager-leave-modal-body {
   padding: 1.5rem;
   max-height: 60vh;
   overflow-y: auto;
 }
 
-.employee-leave-modal-body p {
+.Manager-leave-modal-body p {
   margin: 0;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
-.employee-leave-modal-footer {
+.Manager-leave-modal-footer {
   padding: 1rem;
   border-top: 1px solid #e9ecef;
   display: flex;
   justify-content: flex-end;
 }
 
-.employee-leave-modal-btn {
+.Manager-leave-modal-btn {
   padding: 0.5rem 1rem;
   background-color: #4e73df;
   color: white;
@@ -293,82 +296,62 @@ font-size: medium;
   transition: background-color 0.2s;
 }
 
-.employee-leave-modal-btn:hover {
+.Manager-leave-modal-btn:hover {
   background-color: #3a5ab6;
 }
-
-.employee-leave-view-comment-btn {
-  background-color: transparent;
-  border: none;
-  color: #4e73df;
-  cursor: pointer;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 0;
-  font-size: 0.9rem;
-  transition: color 0.2s;
-}
-
-.employee-leave-view-comment-btn:hover {
-  color: #3a5ab6;
-  text-decoration: underline;
-}
-
 
 /* Responsive Styles */
 /* Mobile: 360px–740px */
 @media (max-width: 740px) {
-  .employee-leave-container {
+  .Manager-leave-container {
     padding: 1rem;
   }
   
-  .employee-leave-header {
+  .Manager-leave-header {
     flex-direction: column;
     align-items: flex-start;
   }
   
-  .employee-leave-title {
+  .Manager-leave-title {
     font-size: 1.5rem;
 
   }
   
-  .employee-leave-table th,
-  .employee-leave-table td {
+  .Manager-leave-table th,
+  .Manager-leave-table td {
     padding: 0.5rem;
     font-size: 0.85rem;
   }
   
-  .employee-leave-status {
+  .Manager-leave-status {
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
   }
   
-  .employee-leave-action-buttons {
+  .Manager-leave-action-buttons {
     gap: 0.3rem;
   }
   
-  .employee-leave-action-btn {
+  .Manager-leave-action-btn {
     padding: 0.25rem;
   }
 }
 
 /* iPad Mini: 768px–1024px */
 @media (min-width: 768px) and (max-width: 1024px) {
-  .employee-leave-container {
+  .Manager-leave-container {
     padding: 1.5rem;
   }
   
-  .employee-leave-table th,
-  .employee-leave-table td {
+  .Manager-leave-table th,
+  .Manager-leave-table td {
     padding: 0.75rem;
   }
 }
 
 /* Desktop: min-width 1025px */
 @media (min-width: 1025px) {
-  .employee-leave-container {
+  .Manager-leave-container {
     padding: 2rem;
     max-width: calc(100% - 200px);
     margin-left: 200px;

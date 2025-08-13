@@ -11,7 +11,7 @@
 }
 
 .page-title {
-  font-size: 24px;
+ text-align: center;
   color: #333;
   margin-bottom: 20px;
   font-weight: 600;
@@ -102,6 +102,27 @@
   100% { transform: rotate(360deg); }
 }
 
+.accordion-toggle {
+  background: #f8f9fc;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accordion-toggle:hover {
+  background: #e8ecff;
+}
+
+.accordion-arrow {
+  font-size: 14px;
+  color: #555;
+}
+
+
 /* Mobile Styles (up to 767px) */
 @media (max-width: 767px) {
   .admin-staff-container {
@@ -123,8 +144,8 @@
 /* iPad Mini Styles (768px to 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
   .admin-staff-container {
-    padding: 25px;
-    max-width: 90%;
+ 
+    width: 100%;
   }
 
   .page-title {

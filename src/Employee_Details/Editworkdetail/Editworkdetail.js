@@ -214,7 +214,7 @@ const handleChange = (e) => {
   return (
     <>
       <NavbarTopbar />
-      <div className="edit-workdetail-container">
+      <div className="edit-workdetail-container mt-4">
         <div className="edit-workdetail-tabs">
           <NavLink to={`/Editaddemployee/${badgeId}`} className="edit-workdetail-tab">Personal Info</NavLink>
           <NavLink to={`/Editworkdetail/${badgeId}`} className="edit-workdetail-tab active">Work Info</NavLink>

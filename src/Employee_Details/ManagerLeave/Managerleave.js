@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./EmployeeLeave.css";
+import "./Managerleave.css";
 import NavbarTopbar from "../Navbar/NavbarTopbar";
 import { db, auth } from "../../Employee_Details/Firebase/Firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import {  FaTrash  } from "react-icons/fa";
+import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 
-const EmployeeLeave = () => {
+const Managerleave = () => {
   const [leaves, setLeaves] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -85,7 +85,9 @@ const EmployeeLeave = () => {
     }
   };
 
-
+  const handleEdit = (leave, index) => {
+    navigate("/addleave", { state: { leave, index } });
+  };
 
   const handleCommentClick = (comment) => {
     setSelectedComment(comment || "No comment available");
@@ -97,17 +99,17 @@ const EmployeeLeave = () => {
   return (
     <>
       <NavbarTopbar />
-      <div className="employee-leave-container mt-5">
-         <h2 className="employee-leave-title">My Leaves</h2>
-        <div className="employee-leave-header">
+      <div className="Manager-leave-container mt-5">
+         <h2 className="Manager-leave-title">My Leaves</h2>
+        <div className="Manager-leave-header">
          
-          <Link to="/addleave" className="employee-leave-add-btn">
+          <Link to="/addleave" className="Manager-leave-add-btn">
             Add Leave
           </Link>
         </div>
         
-        <div className="employee-leave-table-container">
-          <table className="employee-leave-table">
+        <div className="Manager-leave-table-container">
+          <table className="Manager-leave-table">
             <thead>
               <tr>
                 <th>Employee Name</th>
@@ -138,22 +140,32 @@ const EmployeeLeave = () => {
                     <td>{formatDate(row.toDate)}</td>
                     <td>{row.requestedDays}</td>
                     <td>
-                      <span className={`employee-leave-status employee-leave-status-${row.status?.toLowerCase() || 'pending'}`}>
+                      <span className={`Manager-leave-status Manager-leave-status-${row.status?.toLowerCase() || 'pending'}`}>
                         {row.status || "Pending"}
                       </span>
                     </td>
-                <td>
-                      <button className="btn btn-outline-primary btn-sm"  onClick={() => handleCommentClick(row.comment)}
->
-                        {row.comment ? "View" : "Add"} Comment
-                      </button>
+                    <td 
+                      className="Manager-leave-comment-cell"
+                      onClick={() => handleCommentClick(row.comment)}
+                    >
+                      {row.comment ? (
+                        <>
+                          <span className="Manager-leave-comment-text">
+                            {row.comment.length > 20 
+                              ? `${row.comment.substring(0, 20)}...` 
+                              : row.comment}
+                          </span>
+                          <FaEye className="Manager-leave-view-icon" />
+                        </>
+                      ) : (
+                        "-"
+                      )}
                     </td>
-
-                    <td className="employee-leave-actions">
-                      <div className="employee-leave-action-buttons">
-                     
+                    <td className="Manager-leave-actions">
+                      <div className="Manager-leave-action-buttons">
+                 
                         <button
-                          className="employee-leave-action-btn employee-leave-delete-btn"
+                          className="Manager-leave-action-btn Manager-leave-delete-btn"
                           onClick={() => handleDelete(index)}
                           title="Delete"
                         >
@@ -165,7 +177,7 @@ const EmployeeLeave = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="12" className="employee-leave-empty">
+                  <td colSpan="12" className="Manager-leave-empty">
                     No leaves found
                   </td>
                 </tr>
@@ -174,20 +186,20 @@ const EmployeeLeave = () => {
           </table>
         </div>
 
-        <div className="employee-leave-pagination">
-          <div className="employee-leave-pagination-controls">
+        <div className="Manager-leave-pagination">
+          <div className="Manager-leave-pagination-controls">
             <button
-              className="employee-leave-pagination-btn"
+              className="Manager-leave-pagination-btn"
               disabled={page === 0}
               onClick={() => setPage(page - 1)}
             >
               Previous
             </button>
-            <span className="employee-leave-pagination-info">
+            <span className="Manager-leave-pagination-info">
               Page {page + 1} of {Math.ceil(leaves.length / rowsPerPage) || 1}
             </span>
             <button
-              className="employee-leave-pagination-btn"
+              className="Manager-leave-pagination-btn"
               disabled={page >= Math.ceil(leaves.length / rowsPerPage) - 1 || leaves.length === 0}
               onClick={() => setPage(page + 1)}
             >
@@ -197,25 +209,24 @@ const EmployeeLeave = () => {
         </div>
       </div>
 
-      {/* Comment Modal */}
       {showCommentModal && (
-        <div className="employee-leave-modal-overlay">
-          <div className="employee-leave-modal">
-            <div className="employee-leave-modal-header">
+        <div className="Manager-leave-modal-overlay">
+          <div className="Manager-leave-modal">
+            <div className="Manager-leave-modal-header">
               <h3>Leave Comment</h3>
               <button 
-                className="employee-leave-modal-close"
+                className="Manager-leave-modal-close"
                 onClick={() => setShowCommentModal(false)}
               >
                 &times;
               </button>
             </div>
-            <div className="employee-leave-modal-body">
+            <div className="Manager-leave-modal-body">
               <p>{selectedComment}</p>
             </div>
-            <div className="employee-leave-modal-footer">
+            <div className="Manager-leave-modal-footer">
               <button
-                className="employee-leave-modal-btn"
+                className="Manager-leave-modal-btn"
                 onClick={() => setShowCommentModal(false)}
               >
                 Close
@@ -228,4 +239,4 @@ const EmployeeLeave = () => {
   );
 };
 
-export default EmployeeLeave;
+export default Managerleave;

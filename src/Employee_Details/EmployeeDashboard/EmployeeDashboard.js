@@ -39,14 +39,23 @@ const EmployeeDashboard = () => {
         const userData = querySnapshot.docs[0].data();
         setUser(userData);
         
-        // Fetch reporting manager details if available
-        if (userData.reportingManager) {
-          const managerQuery = query(collection(db, "users"), where("badgeId", "==", userData.reportingManager));
-          const managerSnapshot = await getDocs(managerQuery);
-          if (!managerSnapshot.empty) {
-            setReportingManager(managerSnapshot.docs[0].data());
-          }
-        }
+     if (userData.reportingManager) {
+
+  const match = userData.reportingManager.match(/\(([^)]+)\)/);
+  const managerBadgeId = match ? match[1] : null;
+
+  if (managerBadgeId) {
+    const managerQuery = query(
+      collection(db, "users"),
+      where("badgeId", "==", managerBadgeId)
+    );
+    const managerSnapshot = await getDocs(managerQuery);
+    if (!managerSnapshot.empty) {
+      setReportingManager(managerSnapshot.docs[0].data());
+    }
+  }
+}
+
       }
     };
     fetchUser();
@@ -128,8 +137,7 @@ const EmployeeDashboard = () => {
   return (
     <>
       <NavbarTopbar />
-      <div className="employee-dashboard-container">
-        {/* Profile Header */}
+      <div className="employee-dashboard-container mt-5">
         <div className="profile-header">
           <div className="profile-left">
             <div className="profile-avatar"><FaUserCircle className="avatar-icon" /></div>
@@ -138,7 +146,7 @@ const EmployeeDashboard = () => {
             </h2>
             <div className="profile-id">Badge ID: <span>{user?.badgeId || "N/A"}</span></div>
          
-          </div>
+          </div>  
           <div className="profile-right">
             <div className="contact-column">
               <InfoItem Icon={FaEnvelope} label="Work Email" value={user?.workEmail} />

@@ -80,10 +80,9 @@ const About = () => {
   return (
     <>
       <NavbarTopbar />
-      <div className="about-container">
-        {/* Profile Header */}
+      <div className="about-container mt-5">
+     
      <div className="profile-header">
-  {/* Left Side - Avatar and Badge ID */}
   <div className="profile-left">
     <div className="profile-avatar">
       <FaUserCircle className="avatar-icon" />
@@ -96,7 +95,6 @@ const About = () => {
     </div>
   </div>
 <div className="profile-right-row">
-  {/* Left Column */}
   <div className="contact-column">
     <InfoItem Icon={FaEnvelope} label="Work Email" value={u?.workEmail} className="contact-info-item" />
     <InfoItem Icon={FaEnvelope} label="Personal Email" value={u?.email} className="contact-info-item" />

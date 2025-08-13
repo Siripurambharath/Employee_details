@@ -200,7 +200,6 @@
 /* ========== iPad Mini (768px – 1023px) ========== */
 @media (min-width: 768px) and (max-width: 1023px) {
   .about-container {
-    margin-left: 190px;
     padding: 25px;
     max-width: 95%;
   }

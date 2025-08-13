@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { db } from '../Firebase/Firebase';
-import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, arrayUnion } from 'firebase/firestore';
 import './Payroll.css';
 import { useNavigate } from 'react-router-dom';
 import NavbarTopbar from '../Navbar/NavbarTopbar';
@@ -21,13 +21,20 @@ const Payroll = () => {
     deductions: '',
     paymentMethod: '',
     status: '',
-    comment: '',
     bankName: '',
     ifscCode: '',
     branchName: '',
   });
 
   const [netSalary, setNetSalary] = useState(0);
+
+  // Helper function to format date with dashes
+  const formatDateWithDashes = (date) => {
+    const d = date.getDate().toString().padStart(2, '0');
+    const m = (date.getMonth() + 1).toString().padStart(2, '0');
+    const y = date.getFullYear();
+    return `${d}-${m}-${y}`; 
+  };
 
   // Fetch users from Firestore
   useEffect(() => {
@@ -47,8 +54,8 @@ const Payroll = () => {
       setForm(prev => ({
         ...prev,
         bankName: emp.bankName || '',
-        ifscCode: emp.ifscCode || '',
-        branchName: emp.branchName || '',
+        ifscCode: emp.ifsc || '',
+        branchName: emp.branch || '',
       }));
     }
   }, [selectedBadgeId, users]);
@@ -74,7 +81,7 @@ const Payroll = () => {
 
     const slip = {
       uid: employee.id || '',
-      name: employee.firstName || '',
+      firstName: employee.firstName || '',
       departments: employee.departments || '',
       badgeId: employee.badgeId || '',
       email: employee.email || '',
@@ -82,6 +89,7 @@ const Payroll = () => {
       jobPosition: employee.jobPosition || '',
       jobLevel: employee.jobLevel || '',
       jobRole: employee.jobRole || '',
+        reportingManager: employee.reportingManager || '', 
       basicSalary: employee.basicSalary || 0,
       allowances: form.allowances || 0,
       deductions: form.deductions || 0,
@@ -89,22 +97,20 @@ const Payroll = () => {
       paymentMethod: form.paymentMethod || '',
       status: form.status || '',
       bankName: form.bankName || '',
-      ifsc: employee.ifsc || form.ifsc || '',
-      branchName: employee.branch || form.branchName || '',
-      comment: form.comment || '',
-      date: payDate.toISOString().split('T')[0],
+      ifsc: form.ifscCode || '',
+      branchName: form.branchName || '',
+      date: formatDateWithDashes(payDate),  
       createdAt: new Date().toISOString(),
     };
 
     try {
-      // Document ID -> employee uid + date
-      const payslipId = `${employee.id}_${slip.date}`;
-      const payslipRef = doc(db, "payslips", payslipId);
+      const payslipRef = doc(db, "payslips", employee.id);
 
-      // Create or update
-      await setDoc(payslipRef, slip, { merge: true });
-      alert("Payslip Generated / Updated Successfully!");
+      await setDoc(payslipRef, {
+        slips: arrayUnion(slip)
+      }, { merge: true });
 
+      alert("Payslip Generated & Stored Successfully!");
       navigate("/payslip");
     } catch (err) {
       console.error("Error saving payslip:", err);
@@ -114,7 +120,7 @@ const Payroll = () => {
   return (
     <>
       <NavbarTopbar />
-      <div className="container py-4">
+      <div className="container py-4 mt-5">
         <div className="card shadow-lg p-4">
           <h3 className="text-center text-primary mb-4">Payroll Management</h3>
 
@@ -145,7 +151,7 @@ const Payroll = () => {
                   selected={payDate}
                   onChange={(date) => setPayDate(date)}
                   className="form-control"
-                  dateFormat="yyyy-MM-dd"
+                  dateFormat="dd/MM/yyyy"
                   placeholderText="Select a date"
                   calendarClassName="custom-datepicker"
                 />
@@ -164,6 +170,7 @@ const Payroll = () => {
                 <div className="col-md-4"><strong>Position:</strong> {employee.jobPosition}</div>
                 <div className="col-md-4"><strong>Level:</strong> {employee.jobLevel}</div>
                 <div className="col-md-4"><strong>Role:</strong> {employee.jobRole}</div>
+                <div className="col-md-4"><strong>Reporting Manager:</strong> {employee.reportingManager}</div>
               </div>
 
               <hr className="my-4" />
@@ -197,7 +204,7 @@ const Payroll = () => {
                     onChange={handleInputChange}
                   >
                     <option value="">Select</option>
-                    <option value="pending">Pending</option>
+                    <option value="Pending">Pending</option>
                     <option value="Unpaid">Unpaid</option>
                   </select>
                 </div>
@@ -234,16 +241,7 @@ const Payroll = () => {
                 </div>
               </div>
 
-              <div className="mb-4">
-                <label>Comment</label>
-                <textarea
-                  name="comment"
-                  className="form-control"
-                  rows="2"
-                  value={form.comment}
-                  onChange={handleInputChange}
-                />
-              </div>
+           
 
               <div className="text-center">
                 <button className="btn btn-primary px-5" onClick={handleGenerate}>

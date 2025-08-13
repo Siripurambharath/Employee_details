@@ -24,6 +24,9 @@ const Add_leave = () => {
   const [employeeWorkType, setEmployeeWorkType] = useState("");
   const [employeeShift, setEmployeeShift] = useState("");
   const [userId, setUserId] = useState("");
+const [jobRole, setEmployeejobRole] = useState ("");
+const [reportingManager, setEmployeereportingManager] = useState ("");
+
 
   const [selectedType, setSelectedType] = useState({ id: "", name: "" });
   const [fromDate, setFromDate] = useState("");
@@ -46,6 +49,9 @@ const Add_leave = () => {
           setEmployeedepartmentss(data.departments || "");
           setEmployeeWorkType(data.workType || "");
           setEmployeeShift(data.shift || "");
+          setEmployeejobRole(data.jobRole || "");
+          setEmployeereportingManager(data.reportingManager || "");
+          
         }
 
         const leaveDoc = await getDocs(
@@ -90,59 +96,62 @@ const Add_leave = () => {
       .reduce((sum, leave) => sum + (leave.requestedDays || 0), 0);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const leaveInfo = leaveTypes.find((lt) => lt.id === selectedType.id);
-    const usedDays = getUsedDays(selectedType.id);
-    if (leaveInfo && leaveInfo.totalDays !== 0 && usedDays >= leaveInfo.totalDays) {
-      alert(`${selectedType.name} leave is already completed. You cannot apply again.`);
-      return;
-    }
+  const leaveInfo = leaveTypes.find((lt) => lt.id === selectedType.id);
+  const usedDays = getUsedDays(selectedType.id);
 
-    if (!selectedType.id || !fromDate || !toDate) {
-      alert("Please fill all required fields");
-      return;
-    }
+  if (leaveInfo && leaveInfo.totalDays !== 0 && usedDays >= leaveInfo.totalDays) {
+    alert(`${selectedType.name} leave is already completed.`);
+  }
 
-    const leaveData = {
-      employeeName: firstName,
-      BadgeId: badgeId,
-      departments: employeedepartmentss,
-      workType: employeeWorkType,
-      shift: employeeShift,
-      leaveType: selectedType.name,
-      leaveTypeId: selectedType.id,
-      fromDate,
-      toDate,
-      requestedDays,
-      status: "Pending",
-      appliedAt: new Date().toISOString(),
-    };
+  if (!selectedType.id || !fromDate || !toDate) {
+    alert("Please fill all required fields");
+    return;
+  }
 
-    try {
-      await setDoc(
-        doc(db, "addleave", userId),
-        { leaves: arrayUnion(leaveData) },
-        { merge: true }
-      );
-      alert("Leave request submitted successfully!");
-      setSelectedType({ id: "", name: "" });
-      setFromDate("");
-      setToDate("");
-      setRequestedDays(0);
-
-      navigate("/employeeleave");
-    } catch (error) {
-      console.error("Error saving leave data:", error);
-      alert("Error submitting leave request");
-    }
+  const leaveData = {
+    firstName,
+    badgeId,
+    departments: employeedepartmentss,
+    workType: employeeWorkType,
+    shift: employeeShift,
+    leaveType: selectedType.name,
+    leaveTypeId: selectedType.id,
+    jobRole,
+    reportingManager,
+    fromDate,
+    toDate,
+    requestedDays,
+    status: "Pending",
+    appliedAt: new Date().toISOString(),
   };
+
+  try {
+    await setDoc(
+      doc(db, "addleave", userId),
+      { leaves: arrayUnion(leaveData) },
+      { merge: true }
+    );
+    alert("Leave request submitted successfully!");
+    setSelectedType({ id: "", name: "" });
+    setFromDate("");
+    setToDate("");
+    setRequestedDays(0);
+
+    navigate("/employeeleave");
+  } catch (error) {
+    console.error("Error saving leave data:", error);
+    alert("Error submitting leave request");
+  }
+};
+
 
   return (
     <>
       <NavbarTopbar />
-      <div className="container add-leave-container">
+      <div className="container add-leave-container mt-4">
         <div className="leaves-types-cards-scroll">
           {leaveTypes.map((leave) => {
             const used = getUsedDays(leave.id);
@@ -209,26 +218,26 @@ const Add_leave = () => {
               </div>
               <div className="col-md-6 mb-3">
                 <label className="form-label add-leave-label">Leave Type:</label>
-                <select
-                  className="form-select"
-                  value={selectedType.id}
-                  onChange={(e) => {
-                    const leaveObj = leaveTypes.find((lt) => lt.id === e.target.value);
-                    if (leaveObj) setSelectedType({ id: leaveObj.id, name: leaveObj.name });
-                  }}
-                >
-                  <option value="">Select Leave Type</option>
-                  {leaveTypes
-                    .filter((type) => {
-                      const used = getUsedDays(type.id);
-                      return type.totalDays === 0 || used < type.totalDays;
-                    })
-                    .map((type) => (
-                      <option key={type.id} value={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
-                </select>
+        <select
+  className="form-select"
+  value={selectedType.id}
+  onChange={(e) => {
+    const leaveObj = leaveTypes.find((lt) => lt.id === e.target.value);
+    if (leaveObj) setSelectedType({ id: leaveObj.id, name: leaveObj.name });
+  }}
+>
+  <option value="">Select Leave Type</option>
+  {leaveTypes.map((type) => {
+    const used = getUsedDays(type.id);
+    const isCompleted = type.totalDays !== 0 && used >= type.totalDays;
+    return (
+      <option key={type.id} value={type.id}>
+        {type.name} {isCompleted ? "(Completed)" : ""}
+      </option>
+    );
+  })}
+</select>
+
               </div>
               <div className="col-md-6 mb-3">
                 <label className="form-label add-leave-label">From Date:</label>

@@ -151,8 +151,7 @@
 /* iPad Mini (768px - 1024px) */
 @media (min-width: 768px) and (max-width: 1024px) {
   .edit-employee-container {
-    margin-left: 180px;
-    max-width: 95%;
+    max-width: 100%;
  
     padding: 20px;
   }

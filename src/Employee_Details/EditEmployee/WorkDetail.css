@@ -1,6 +1,6 @@
 /* ============== MAIN CONTAINER ============== */
 .work-detail-container {
-  margin-left: 200px;
+
   padding: 2rem;
   background-color: #f5f7fa;
   min-height: 100vh;
@@ -173,7 +173,6 @@
 /* 💻 Tablet: 768px–1024px */
 @media (min-width: 768px) and (max-width: 1024px) {
   .work-detail-container {
-    margin-left: 180px;
     padding: 1.75rem;
   }
 

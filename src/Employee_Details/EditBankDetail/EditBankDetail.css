@@ -126,7 +126,7 @@
 /* Responsive Breakpoints */
 @media (min-width: 640px) {
   .edit-bankdetail-container {
-    padding: 1.5rem;
+    padding: 1.0rem;
   }
   
   .edit-bankdetail-tab {
@@ -160,7 +160,6 @@
 @media (min-width: 768px) {
   .edit-bankdetail-container {
     max-width: 768px;
-     margin-left: 180px;
   }
   
   .edit-bankdetail-tabs {

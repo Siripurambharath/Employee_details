@@ -28,11 +28,10 @@ const AssignStaff = () => {
 
           // Check role
           if (userData.jobRole !== "Manager") {
-            navigate("/"); // redirect non-managers
+            navigate("/");
             return;
           }
 
-          // Fetch employees assigned to this manager
           const q = query(
             collection(db, "users"),
             where("reportingManager", "==", `${userData.firstName} (${userData.badgeId})`)
@@ -54,9 +53,9 @@ const AssignStaff = () => {
   return (
     <>
       <NavbarTopbar />
-      <div className="assign-staff-container">
+      <div className="assign-staff-container mt-4">
         <div className="assign-staff-header">
-          <h2>Assigned Staff</h2>
+          <h2 >Assigned Staff</h2>
           {managerInfo && (
             <div className="manager-info-badge">
               Manager: {managerInfo.firstName} {managerInfo.lastName} (ID: {managerInfo.badgeId})

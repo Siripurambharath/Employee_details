@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
 import {
-  GoogleAuthProvider,
   signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
@@ -12,6 +9,7 @@ import {
   setPersistence,
   browserLocalPersistence,
   onAuthStateChanged,
+  GoogleAuthProvider
 } from 'firebase/auth';
 import {
   doc,
@@ -22,8 +20,10 @@ import {
   where,
   getDocs,
 } from 'firebase/firestore';
-import { db, auth } from '../Firebase/Firebase';
+import { auth, db } from '../Firebase/Firebase';
 import { useNavigate } from 'react-router-dom';
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
 import companylogo from '../Image/companylogo.png';
 import './UnifiedLogin.css';
 
@@ -38,19 +38,19 @@ const UnifiedLogin = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user && user.uid) {
+      if (user?.uid) {
         await checkUserInFirestore(user);
       }
     });
     return () => unsubscribe();
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     const initAuth = async () => {
       try {
         await setPersistence(auth, browserLocalPersistence);
         const result = await getRedirectResult(auth);
-        if (result && result.user) {
+        if (result?.user) {
           await handleSocialLogin(result.user);
         }
       } catch (error) {
@@ -60,10 +60,10 @@ const UnifiedLogin = () => {
     initAuth();
   }, []);
 
-  const togglePassword = () => setShowPassword((prev) => !prev);
+  const togglePassword = () => setShowPassword(prev => !prev);
 
   const handleAuthError = useCallback((error) => {
-    const messages = {
+    const errorMessages = {
       'auth/user-not-found': '❌ No account found with this email',
       'auth/wrong-password': '❌ Incorrect password',
       'auth/invalid-email': '❌ Invalid email format',
@@ -74,98 +74,17 @@ const UnifiedLogin = () => {
       'auth/network-request-failed': '❌ Network error. Check connection',
       'auth/requires-recent-login': '❌ Session expired. Please login again',
     };
-    setStatusMsg(messages[error?.code] || `❌ Login failed: ${error?.message || 'Unknown error'}`);
+    setStatusMsg(errorMessages[error?.code] || `❌ Login failed: ${error?.message}`);
     setSuccess(false);
   }, []);
-
-  const checkUserInFirestore = async (user) => {
-    if (!user?.uid) return;
-    try {
-      const userDocRef = doc(db, 'users', user.uid);
-      const userDocSnap = await getDoc(userDocRef);
-      if (userDocSnap.exists()) {
-        await completeLogin(user);
-      } else {
-        await handleNewSocialUser(user);
-      }
-    } catch (error) {
-      console.error('Error checking user:', error);
-      setStatusMsg('❌ Error verifying your account');
-      await signOut(auth);
-    }
-  };
-
-  const completeLogin = async (user) => {
-    if (!user?.uid) return;
-    try {
-      localStorage.setItem('uid', user.uid);
-      localStorage.setItem('email', user.email || '');
-      const docSnap = await getDoc(doc(db, 'users', user.uid));
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        localStorage.setItem('badgeId', data.badgeId || '');
-      }
-      setSuccess(true);
-      setStatusMsg('✅ Login Successful!');
-      setTimeout(() => navigate('/employee'), 500);
-    } catch (error) {
-      console.error('Login error:', error);
-      setStatusMsg('❌ Error processing login');
-      await signOut(auth);
-      localStorage.clear();
-    }
-  };
-
-  const handleNewSocialUser = async (user) => {
-    if (!user?.email) return;
-    const usersRef = collection(db, 'users');
-    const q = query(usersRef, where('email', '==', user.email));
-    const snapshot = await getDocs(q);
-
-    if (!snapshot.empty) {
-      const existingDoc = snapshot.docs[0];
-      const existingUser = existingDoc.data();
-      const updatedData = {
-        providers: Array.from(new Set([...(existingUser.providers || []), ...user.providerData.map(p => p.providerId)])),
-      };
-
-      await setDoc(doc(db, 'users', existingDoc.id), updatedData, { merge: true });
-      localStorage.setItem('uid', user.uid);
-      localStorage.setItem('originalUid', existingDoc.id);
-      localStorage.setItem('email', user.email || '');
-      localStorage.setItem('badgeId', existingUser.badgeId || '');
-      setSuccess(true);
-      setStatusMsg('✅ Login Successful!');
-      setTimeout(() => navigate('/employee'), 500);
-    } else {
-      await createNewUserRecord(user);
-      await completeLogin(user);
-    }
-  };
-
-  const createNewUserRecord = async (user) => {
-    const userData = {
-      uid: user.uid,
-      email: user.email || '',
-      firstName: user.displayName?.split(' ')[0] || '',
-      lastName: user.displayName?.split(' ')[1] || '',
-      displayName: user.displayName || '',
-      photoURL: user.photoURL || null,
-      providers: user.providerData.map(p => p.providerId),
-      status: 'active',
-      createdAt: new Date().toISOString(),
-      lastLogin: new Date().toISOString(),
-    };
-    await setDoc(doc(db, 'users', user.uid), userData);
-  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setStatusMsg('');
+
     const enteredEmail = email.trim().toLowerCase();
 
-    // Admin login shortcut
     if (enteredEmail === 'admin@gmail.com' && password === 'admin@123') {
       localStorage.setItem('email', enteredEmail);
       localStorage.setItem('uid', 'admin');
@@ -183,23 +102,21 @@ const UnifiedLogin = () => {
     }
 
     try {
-      // First try direct email/password login
       const userCredential = await signInWithEmailAndPassword(auth, enteredEmail, password);
       await checkUserInFirestore(userCredential.user);
     } catch (error) {
       console.error('Login error:', error);
-      
-      // If email/password fails, check if user exists with Google
+
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         try {
-          const signInMethods = await fetchSignInMethodsForEmail(auth, enteredEmail);
-          if (signInMethods.includes('google.com')) {
-            setStatusMsg('❌ This email is registered with Google. Please use Google Sign-In.');
+          const methods = await fetchSignInMethodsForEmail(auth, enteredEmail);
+          if (methods.includes('google.com')) {
+            setStatusMsg('❌ This email is registered with Google. Use Google Sign-In.');
           } else {
             handleAuthError(error);
           }
-        } catch (methodsError) {
-          handleAuthError(error);
+        } catch (innerError) {
+          handleAuthError(innerError);
         }
       } else {
         handleAuthError(error);
@@ -212,16 +129,17 @@ const UnifiedLogin = () => {
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     setStatusMsg('');
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+
     try {
-      const provider = new GoogleAuthProvider();
-      provider.setCustomParameters({ prompt: 'select_account' });
       const result = await signInWithPopup(auth, provider);
       if (result?.user) {
         await handleSocialLogin(result.user);
       }
     } catch (error) {
       if (['auth/popup-blocked', 'auth/popup-closed-by-user'].includes(error.code)) {
-        await signInWithRedirect(auth, new GoogleAuthProvider());
+        await signInWithRedirect(auth, provider);
       } else {
         handleAuthError(error);
       }
@@ -232,18 +150,22 @@ const UnifiedLogin = () => {
 
   const handleSocialLogin = async (user) => {
     if (!user?.uid) return;
+
     const userDocRef = doc(db, 'users', user.uid);
     const userDocSnap = await getDoc(userDocRef);
+
     if (!userDocSnap.exists()) {
       const usersRef = collection(db, 'users');
       const q = query(usersRef, where('email', '==', user.email));
       const snapshot = await getDocs(q);
+
       if (!snapshot.empty) {
         const existingDoc = snapshot.docs[0];
         const existingUser = existingDoc.data();
         const updatedData = {
           providers: Array.from(new Set([...(existingUser.providers || []), ...user.providerData.map(p => p.providerId)])),
         };
+
         await setDoc(doc(db, 'users', existingDoc.id), updatedData, { merge: true });
         localStorage.setItem('uid', user.uid);
         localStorage.setItem('originalUid', existingDoc.id);
@@ -253,7 +175,64 @@ const UnifiedLogin = () => {
         await createNewUserRecord(user);
       }
     }
+
     await completeLogin(user);
+  };
+
+  const checkUserInFirestore = async (user) => {
+    if (!user?.uid) return;
+    try {
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        await completeLogin(user);
+      } else {
+        await createNewUserRecord(user);
+        await completeLogin(user);
+      }
+    } catch (error) {
+      console.error('Error checking user:', error);
+      setStatusMsg('❌ Error verifying account');
+      await signOut(auth);
+    }
+  };
+
+  const completeLogin = async (user) => {
+    try {
+      localStorage.setItem('uid', user.uid);
+      localStorage.setItem('email', user.email || '');
+
+      const docSnap = await getDoc(doc(db, 'users', user.uid));
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        localStorage.setItem('badgeId', data.badgeId || '');
+      }
+
+      setSuccess(true);
+      setStatusMsg('✅ Login Successful!');
+      setTimeout(() => navigate('/employee'), 500);
+    } catch (error) {
+      console.error('Login error:', error);
+      setStatusMsg('❌ Error during login');
+      await signOut(auth);
+      localStorage.clear();
+    }
+  };
+
+  const createNewUserRecord = async (user) => {
+    const userData = {
+      uid: user.uid,
+      email: user.email || '',
+      firstName: user.displayName?.split(' ')[0] || '',
+      lastName: user.displayName?.split(' ')[1] || '',
+      displayName: user.displayName || '',
+      photoURL: user.photoURL || '',
+      providers: user.providerData.map(p => p.providerId),
+      status: 'active',
+      createdAt: new Date().toISOString(),
+      lastLogin: new Date().toISOString(),
+    };
+    await setDoc(doc(db, 'users', user.uid), userData);
   };
 
   return (
@@ -293,7 +272,7 @@ const UnifiedLogin = () => {
         <div
           className="ul-google-login"
           onClick={!isLoading ? handleGoogleLogin : undefined}
-          style={isLoading ? { opacity: 0.6, cursor: 'not-allowed', pointerEvents: 'none' } : {}}
+          style={isLoading ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
         >
           <FcGoogle className="ul-google-icon" />
           <span>Sign in with Google</span>

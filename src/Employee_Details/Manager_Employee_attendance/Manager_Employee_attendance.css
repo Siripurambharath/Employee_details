@@ -1,11 +1,11 @@
-.employeeattendance-title {
+.employee_attendance-title {
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
 }
 
-.employeeattendance-table-container {
+.employee_attendance-table-container {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   background: #fff;
@@ -13,46 +13,47 @@
 }
 
 /* Blue header */
-.employeeattendance-head th {
+.employee_attendance-head th {
   background-color: #4e73df !important;
   color: #fff !important;
 }
 
-.employeeattendance-table th,
-.employeeattendance-table td {
+.employee_attendance-table th,
+.employee_attendance-table td {
   vertical-align: middle;
 }
 
 /* Increase table width */
-.employeeattendance-table {
+.employee_attendance-table {
   min-width: 1200px;
   width: 100%;
 }
 
 /* Dropdowns styling */
-.employeeattendance-container .form-select {
+.employee_attendance-container .form-select {
   width: auto;
   min-width: 130px;
 }
 
 /* Pagination buttons */
-.employeeattendance-container .btn {
+.employee_attendance-container .btn {
   min-width: 40px;
 }
 
-.employeeattendance-datepicker-wrapper {
-  min-width: 200px;
-  margin: 15px 0;
+.employee_attendance-datepicker-wrapper {
+  position: relative;  /* crucial for correct popper positioning */
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end; /* align left */
   width: 100%;
+  min-width: 200px;
+  margin-bottom: 10px;
+  padding-right: 20px;
 }
 
 /* Date picker input styling */
-.employeeattendance-datepicker {
-  text-align: center;
+.employee_attendance-datepicker {
+  text-align: flex-end;
   width: 200px;
-  margin: 0 auto;
 }
 
 /* Date picker popup positioning */
@@ -69,14 +70,37 @@
   margin-top: 10px;
 }
 
+.employee_attendance-filters {
+  display: flex;
+  justify-content: space-around; 
+  align-items: center;
+  margin-bottom: 15px;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.employee_attendance-dropdown {
+  padding: 10px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 200px;
+}
+
+.employee_attendance-datepicker {
+  padding: 8px 10px;
+  border-radius: 5px;
+ 
+  width: 200px;
+}
+
 /* ====== Mobile (360px - 740px) ====== */
 @media (max-width: 740px) {
-  .employeeattendance-title {
+  .employee_attendance-title {
     font-size: 1.2rem;
   }
 
-  .employeeattendance-table th,
-  .employeeattendance-table td {
+  .employee_attendance-table th,
+  .employee_attendance-table td {
     font-size: 0.75rem;
     padding: 0.4rem;
   }
@@ -84,12 +108,12 @@
 
 /* ====== iPad Mini (768px - 1024px) ====== */
 @media (min-width: 768px) and (max-width: 1024px) {
-  .employeeattendance-title {
+  .employee_attendance-title {
     font-size: 1.5rem;
   }
 
-  .employeeattendance-table th,
-  .employeeattendance-table td {
+  .employee_attendance-table th,
+  .employee_attendance-table td {
     font-size: 0.85rem;
     padding: 0.5rem;
   }
@@ -97,17 +121,17 @@
 
 /* ====== Desktop (min-width: 1025px) ====== */
 @media (min-width: 1025px) {
-  .employeeattendance-title {
+  .employee_attendance-title {
     font-size: 1.75rem;
   }
 
-  .employeeattendance-table th,
-  .employeeattendance-table td {
+  .employee_attendance-table th,
+  .employee_attendance-table td {
     font-size: 0.95rem;
     padding: 0.75rem;
   }
 
-  .employeeattendance-table-container {
+  .employee_attendance-table-container {
     margin-left: 200px;
     width: 1050px;
   }

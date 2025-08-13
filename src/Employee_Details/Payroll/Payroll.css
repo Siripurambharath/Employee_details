@@ -97,12 +97,10 @@
 }
 
 /* Responsive layout */
-
-/* 📱 Mobile (360px–740px) */
 @media (max-width: 740px) {
-  .payroll-input,
-  .payroll-select,
-  .payroll-textarea {
+  .form-control,
+  .form-select,
+  textarea {
     font-size: 14px;
   }
 
@@ -123,6 +121,15 @@
     border-right: 1px solid #ccc;
     margin-bottom: 10px;
   }
+
+  .row > .col-md-6,
+  .row > .col-md-4 {
+    width: 100%;
+  }
+
+  .btn-primary {
+    width: 100%;
+  }
 }
 
 /* 📲 iPad Mini / Tablet (768px–1024px) */
@@ -136,7 +143,7 @@
     padding: 25px;
   }
   .container{
-    margin-left: 190px;
+   
     padding: 10px;
   }
 }

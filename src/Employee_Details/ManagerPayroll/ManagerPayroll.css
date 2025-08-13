@@ -1,0 +1,157 @@
+/* ===== Base (table only UI + filters) ===== */
+.managerpayroll-container {
+  padding: 16px;
+  background: #f7f9fc;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #2c3e50;
+}
+
+/* Title */
+.managerpayroll-title {
+  margin: 10px 0 14px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2c3e50;
+  text-align: center;
+}
+
+/* Filters Row */
+.managerpayroll-filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 5px;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.managerpayroll-filters label {
+  font-weight: 600;
+  color: #4a6baf;
+  margin-right: 8px;
+}
+
+.managerpayroll-filters select,
+.managerpayroll-filters input {
+  padding: 8px 10px;
+  border: 1px solid #d9e1ec;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.managerpayroll-filters select:focus,
+.managerpayroll-filters input:focus {
+  border-color: #4a6baf;
+  box-shadow: 0 0 0 3px rgba(74, 107, 175, 0.15);
+}
+
+/* Table wrapper */
+.managerpayroll-table-wrapper {
+  overflow-x: auto;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+/* Table */
+.managerpayroll-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1000px;
+}
+
+.managerpayroll-table thead th {
+  background-color: #4e73df;
+  color: #fff;
+  padding: 12px;
+  font-size: 14px;
+  text-align: center;
+  border-bottom: 2px solid #dcdcdc; 
+}
+
+.managerpayroll-table tbody td {
+  padding: 12px 10px;
+  border-bottom: 2px solid #e8eef6; 
+  font-size: 14px;
+  text-align: center;
+  color: #34495e;
+}
+
+.managerpayroll-table tbody tr:hover {
+  background: #f3f7ff;
+}
+
+/* Status */
+.status-paid { color: #1aa24a; font-weight: 700; }
+.status-pending, .status-unpaid { color: #d9534f; font-weight: 700; }
+.status-processing { color: #f0ad4e; font-weight: 700; }
+
+/* Pagination */
+.managerpayroll-pagination {
+  display: flex;
+  justify-content: end;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.managerpayroll-pagination button {
+  padding: 6px 12px;
+  border: 1px solid #4a6baf;
+  background: #fff;
+  color: #4a6baf;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.managerpayroll-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===========================
+   Responsive
+   =========================== */
+
+/* Mobile (<= 740px) */
+@media (max-width: 740px) {
+  .managerpayroll-container { padding: 12px; }
+  .managerpayroll-title { font-size: 18px; }
+
+  .managerpayroll-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .managerpayroll-filters select,
+  .managerpayroll-filters input {
+    width: 100%;
+  }
+
+  .managerpayroll-table thead th,
+  .managerpayroll-table tbody td {
+    font-size: 12px;
+    padding: 8px 6px;
+  }
+}
+
+/* iPad Mini (768px–1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .managerpayroll-container { padding: 20px; }
+  .managerpayroll-title { font-size: 20px; }
+  .managerpayroll-filters { gap: 14px; }
+  .managerpayroll-table thead th,
+  .managerpayroll-table tbody td { font-size: 13px; }
+}
+
+/* Desktop (>= 1025px) */
+@media (min-width: 1025px) {
+  .managerpayroll-container {
+    margin-left: 180px;
+    margin-top: 15px;
+    padding: 24px;
+  }
+}

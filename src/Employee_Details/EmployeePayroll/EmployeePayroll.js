@@ -1,90 +1,102 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, NavLink } from "react-router-dom";
 import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { db } from "../Firebase/Firebase";
 import { FaUserCircle, FaEnvelope, FaPhone } from "react-icons/fa";
 import "./EmployeePayroll.css";
 import NavbarTopbar from "../Navbar/NavbarTopbar";
-import { AuthContext } from "../Contextapi/Authcontext";
 
 const EmployeePayroll = () => {
-  const { id } = useParams(); // badgeId from URL
+  const { id } = useParams();
   const [user, setUser] = useState(null);
   const [payrollData, setPayrollData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch user details based on badgeId or document ID
+  const parseDateDMY = (dateStr) => {
+    if (!dateStr) return null;
+    const parts = dateStr.includes('-') ? dateStr.split('-') : dateStr.split('/');
+    if (parts.length !== 3) return null;
+    const [dd, mm, yyyy] = parts;
+    return new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+  };
+
+  const formatDateDMY = (date) => {
+    if (!(date instanceof Date)) return "";
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); 
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        // First try to find user by badgeId
         const q = query(collection(db, "users"), where("badgeId", "==", id));
         const querySnapshot = await getDocs(q);
-        
+
         if (!querySnapshot.empty) {
-          setUser({ id: querySnapshot.docs[0].id, ...querySnapshot.docs[0].data() });
+          setUser({ uid: querySnapshot.docs[0].id, ...querySnapshot.docs[0].data() });
+          setLoading(false);
           return;
         }
 
-        // If not found by badgeId, try as document ID
         const docRef = doc(db, "users", id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setUser({ id: docSnap.id, ...docSnap.data() });
+          setUser({ uid: docSnap.id, ...docSnap.data() });
         } else {
           setError("User not found");
         }
       } catch (err) {
         console.error("Error fetching user info:", err);
         setError("Failed to load user data");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchUserData();
   }, [id]);
 
-  // Fetch payroll data based on the badgeId from URL params
   useEffect(() => {
     const fetchPayroll = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        setLoading(true);
-        setError(null);
+        const payrollDocRef = doc(db, "payslips", user?.uid || id);
+        const payrollDocSnap = await getDoc(payrollDocRef);
 
-        // Get the badgeId to use for query
-        const badgeIdToQuery = user?.badgeId || id;
-
-        if (!badgeIdToQuery) {
-          setError("No badge ID available for payroll query");
+        if (!payrollDocSnap.exists()) {
+          setPayrollData([]);
+          setError("No payroll records found");
+          setLoading(false);
           return;
         }
 
-        // Query payslips using the badgeId
-        const q = query(
-          collection(db, "payslips"),
-          where("badgeId", "==", badgeIdToQuery)
-        );
+        const payrollDocData = payrollDocSnap.data();
 
-        const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map((doc) => {
-          const docData = doc.data();
-          return {
-            id: doc.id,
-            ...docData,
-            // Calculate net salary if not present
-            netSalary: docData.netSalary || 
-              (Number(docData.basicSalary || 0) + 
-               Number(docData.allowances || 0) - 
-               Number(docData.deductions || 0)),
-            // Format date if needed
-            date: docData.date?.toDate ? docData.date.toDate() : new Date(docData.date)
-          };
-        });
-
-        setPayrollData(data);
-        if (data.length === 0) {
-          setError("No payroll records found");
+        if (!Array.isArray(payrollDocData.slips)) {
+          setPayrollData([]);
+          setError("No payroll slips data found");
+          setLoading(false);
+          return;
         }
+
+        const slips = payrollDocData.slips.map((slip, index) => ({
+          id: `${payrollDocSnap.id}_${index}`,
+          ...slip,
+          netSalary:
+            slip.netSalary !== undefined
+              ? slip.netSalary
+              : Number(slip.basicSalary || 0) + Number(slip.allowances || 0) - Number(slip.deductions || 0),
+          date: slip.date?.toDate ? slip.date.toDate() : parseDateDMY(slip.date),
+        }));
+
+        setPayrollData(slips);
       } catch (err) {
         console.error("Error fetching payroll data:", err);
         setError("Failed to load payroll data");
@@ -93,11 +105,10 @@ const EmployeePayroll = () => {
       }
     };
 
-    // Only fetch payroll if we have user data or a direct badgeId
-    if (user || id) {
+    if (user?.uid || id) {
       fetchPayroll();
     }
-  }, [id, user]);
+  }, [user, id]);
 
   const InfoItem = ({ Icon, label, value }) => {
     if (!value) return null;
@@ -132,8 +143,7 @@ const EmployeePayroll = () => {
   return (
     <>
       <NavbarTopbar />
-      <div className="employee-payroll-container">
-        {/* Employee Payroll Profile Header */}
+      <div className="employee-payroll-container mt-5">
         <div className="employee-profile-header">
           <div className="employee-profile-left">
             <FaUserCircle className="employee-avatar-icon" />
@@ -163,15 +173,17 @@ const EmployeePayroll = () => {
         {/* Navigation Tabs */}
         <div className="profile-tabs-container">
           <nav className="profile-tabs">
-            {["/about", "/attendance", "/leave", "/employeepayroll", "/employeedashboard"].map((path) => (
-              <NavLink
-                key={path}
-                to={`${path}/${user?.badgeId || user?.id || id}`}
-                className={({ isActive }) => `profile-tab ${isActive ? "active" : ""}`}
-              >
-                {path.slice(1).charAt(0).toUpperCase() + path.slice(2)}
-              </NavLink>
-            ))}
+            {["/about", "/attendance", "/leave", "/employeepayroll", "/employeedashboard"].map(
+              (path) => (
+                <NavLink
+                  key={path}
+                  to={`${path}/${user?.badgeId || user?.uid || id}`}
+                  className={({ isActive }) => `profile-tab ${isActive ? "active" : ""}`}
+                >
+                  {path.slice(1).charAt(0).toUpperCase() + path.slice(2)}
+                </NavLink>
+              )
+            )}
           </nav>
         </div>
 
@@ -194,7 +206,6 @@ const EmployeePayroll = () => {
                   <th>Net Salary</th>
                   <th>Bank</th>
                   <th>Account</th>
-                  <th>Comment</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -202,20 +213,13 @@ const EmployeePayroll = () => {
                 {payrollData.map((payslip, index) => (
                   <tr key={payslip.id}>
                     <td>{index + 1}</td>
-                    <td>
-                      {payslip.date?.toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric"
-                      })}
-                    </td>
+                    <td>{formatDateDMY(payslip.date)}</td>
                     <td>₹{Number(payslip.basicSalary).toLocaleString("en-IN")}</td>
                     <td>₹{Number(payslip.allowances).toLocaleString("en-IN")}</td>
                     <td>₹{Number(payslip.deductions).toLocaleString("en-IN")}</td>
                     <td>₹{Number(payslip.netSalary).toLocaleString("en-IN")}</td>
                     <td>{payslip.bankName || "N/A"}</td>
                     <td>{payslip.ifsc || "N/A"}</td>
-                    <td>{payslip.comment || "-"}</td>
                     <td className={`status-${payslip.status?.toLowerCase() || "pending"}`}>
                       {payslip.status || "Pending"}
                     </td>

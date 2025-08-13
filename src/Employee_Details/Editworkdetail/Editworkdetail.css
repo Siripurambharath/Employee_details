@@ -221,8 +221,7 @@
 
 @media (min-width: 768px) {
   .edit-workdetail-container {
-    max-width: 768px;
-  margin-left: 180px;
+    max-width: 100%;
   }
   
   .edit-workdetail-tabs {

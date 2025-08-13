@@ -124,7 +124,7 @@ const EditBankDetail = () => {
   return (
     <>
     <NavbarTopbar />
-    <div className="edit-bankdetail-container">
+    <div className="edit-bankdetail-container mt-4">
       <div className="edit-bankdetail-tabs">
         <NavLink to={`/Editaddemployee/${badgeId}`} className="edit-bankdetail-tab">
           Personal Info

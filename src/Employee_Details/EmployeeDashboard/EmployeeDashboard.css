@@ -176,6 +176,7 @@
   padding: 20px;
   margin: 20px 0;
   box-shadow: var(--card-shadow);
+  width: 350px;
 }
 .manager-header {
   display: flex;
@@ -334,9 +335,8 @@
 /* ========== iPad Mini (768px – 1023px) ========== */
 @media (min-width: 768px) {
   .employee-dashboard-container {
-    margin-left: 190px;
     padding: 25px;
-    max-width: calc(100% - 190px);
+    max-width: 100%;
   }
   
   .profile-header {
@@ -372,6 +372,7 @@
 /* ========== Desktop (1024px and above) ========== */
 @media (min-width: 1024px) {
   .employee-dashboard-container {
+    margin-left: 180px;
     padding: 30px;
     max-width: 1200px;
   }

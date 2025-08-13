@@ -3,7 +3,7 @@
 /* 🎯 Base Layout */
 .payslip-table-wrapper {
   padding: 24px;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: auto;
   background-color: #f9f9f9;
 }
@@ -45,6 +45,7 @@
   font-weight: 600;
   white-space: nowrap;
 }
+
 
 .payslip-table tbody tr:hover {
   background-color: #f1f5ff;
@@ -92,9 +93,15 @@
   transform: scale(1.1);
   background-color: #e9ecef;
 }
+.single-email-button {
+  padding: 0.50rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
 
 /* ✨ Text Colors */
 .text-primary {
+  
   color: #007bff;
 }
 
@@ -157,7 +164,62 @@
   cursor: default;
 }
 
+/* Add this to your CSS */
+.payslip-table th:nth-child(15),
+.payslip-table td:nth-child(15) {
+  width: 120px; /* Increase date column width */
+  white-space: nowrap;
+}
 
+/* Action column styling */
+.payslip-table th:nth-child(16),
+.payslip-table td:nth-child(16) {
+  width: 100px;
+}
+
+.action-icons-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+}
+
+.action-icon-pair {
+  display: flex;
+  gap: 5px;
+}
+
+/* Add tooltip styles */
+[title] {
+  position: relative;
+}
+
+[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+[title]:hover::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% - 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+  z-index: 10;
+}
 
 /* 📱 Mobile (360px–740px) */
 @media (max-width: 740px) {
@@ -189,7 +251,7 @@
 @media (min-width: 768px) and (max-width: 1024px) {
   .payslip-table-wrapper {
     padding: 20px;
-    margin-left: 140px;
+ 
   }
 
   .payslip-table th,

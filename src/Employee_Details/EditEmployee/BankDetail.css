@@ -1,6 +1,6 @@
 /* ============== MAIN CONTAINER ============== */
 .bank-detail-container {
-  margin-left: 220px;
+
   padding: 2.5rem;
   background-color: #f5f7fa;
   min-height: 100vh;
@@ -165,7 +165,7 @@
 @media (min-width: 768px) and (max-width: 1024px) {
   .bank-detail-container {
 
-    margin-left: 160px;
+
     padding: 2rem;
   }
 

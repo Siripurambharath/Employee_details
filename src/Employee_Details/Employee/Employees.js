@@ -520,220 +520,198 @@ const handleImportFile = async () => {
       <NavbarTopbar />
     
 
-      <div className="emp-container container-fluid">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h3 className="emp-header-title">{isAdmin ? 'All Employees' : 'My Profile'}</h3>
-          {isAdmin && (
-            <div className="d-flex align-items-center gap-3">
-              {upcomingAlerts.length > 0 && (
-                <span className="position-relative">
-                  <Button 
-                    variant="outline-warning" 
-                    onClick={() => setShowNotifications(true)}
-                    className="d-flex align-items-center gap-2 position-relative"
-                  >
-                    <FaBell /> 
-                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                      {upcomingAlerts.length}
-                    </span>
-                  </Button>
-                </span>
-              )}
-              <Link to="/addemployee" className="btn btn-danger">
-                + Create Employee
-              </Link>
-            </div>
-          )}
-        </div>
+  <div className="employee-main-container container-fluid">
+  <div className="d-flex justify-content-between align-items-center mb-4">
+    <h3 className="employee-main-header-title">{isAdmin ? 'All Employees' : 'My Profile'}</h3>
+    {isAdmin && (
+      <div className="d-flex align-items-center gap-3">
+        {upcomingAlerts.length > 0 && (
+          <span className="position-relative">
+            <Button
+              variant="outline-warning"
+              onClick={() => setShowNotifications(true)}
+              className="d-flex align-items-center gap-2 position-relative"
+            >
+              <FaBell />
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {upcomingAlerts.length}
+              </span>
+            </Button>
+          </span>
+        )}
+        <Link to="/addemployee" className="btn btn-danger">
+          + Create Employee
+        </Link>
+      </div>
+    )}
+  </div>
 
-        {/* Combined Filter and Action Controls */}
-        <div className="filter-controls bg-white p-3 rounded shadow-sm mb-4">
-          <div className="row g-3 align-items-center">
-            <div className="col-md-3">
-              <Form.Control
-                type="text"
-                placeholder="Search by name"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-              />
-            </div>
-            <div className="col-md-2">
-              <Form.Select
-                value={selectedDept}
-                onChange={(e) => setSelectedDept(e.target.value)}
-              >
-                <option value="">All Departments</option>
-                {allDepartments.map((dept, index) => (
-                  <option key={index} value={dept}>{dept}</option>
-                ))}
-              </Form.Select>
-            </div>
-            <div className="col-md-2">
-              <Form.Control
-                type="text"
-                placeholder="Filter by badge ID"
-                value={badgeFilter}
-                onChange={(e) => setBadgeFilter(e.target.value)}
-              />
-            </div>
-            <div className="col-md-2">
-              <Button 
-                variant="outline-secondary" 
-                onClick={clearAllFilters}
-                className="w-100"
-              >
-                Clear All
-              </Button>
-            </div>
-            {isAdmin && (
-              <div className="col-md-3">
-                <div className="dropdown d-flex">
-                  <Button 
-                    variant="primary" 
-                    onClick={() => setShowActionDropdown(!showActionDropdown)}
-                    className="flex-grow-1"
-                  >
-                    Bulk Actions
-                  </Button>
-                  {showActionDropdown && (
-                    <div className="dropdown-menu show" style={{ position: 'absolute', inset: '0px auto auto 0px', margin: '0px', transform: 'translate(0px, 40px)' }}>
-                      <button 
-                        className="dropdown-item" 
-                        onClick={() => {
-                          setShowImportModal(true);
-                          setShowActionDropdown(false);
-                        }}
-                      >
-                        Import Employees
-                      </button>
-                      <button 
-                        className="dropdown-item" 
-                        onClick={handleExport}
-                      >
-                        Export Employees
-                      </button>
-                      <button 
-                        className="dropdown-item text-danger" 
-                        onClick={handleDeleteAll}
-                      >
-                        Delete All Employees
-                      </button>
-                    </div>
-                  )}
-                </div>
+  <div className="employee-main-filter-controls bg-white p-3 rounded shadow-sm mb-4">
+    <div className="row g-3 align-items-center">
+      <div className="col-md-3">
+        <Form.Control
+          type="text"
+          placeholder="Search by name"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+      </div>
+      <div className="col-md-2">
+        <Form.Select
+          value={selectedDept}
+          onChange={(e) => setSelectedDept(e.target.value)}
+        >
+          <option value="">All Departments</option>
+          {allDepartments.map((dept, index) => (
+            <option key={index} value={dept}>{dept}</option>
+          ))}
+        </Form.Select>
+      </div>
+      <div className="col-md-2">
+        <Form.Control
+          type="text"
+          placeholder="Filter by badge ID"
+          value={badgeFilter}
+          onChange={(e) => setBadgeFilter(e.target.value)}
+        />
+      </div>
+      <div className="col-md-2">
+        <Button
+          variant="outline-secondary"
+          onClick={clearAllFilters}
+          className="w-100"
+        >
+          Clear All
+        </Button>
+      </div>
+      {isAdmin && (
+        <div className="col-md-3">
+          <div className="dropdown d-flex">
+            <Button
+              variant="primary"
+              onClick={() => setShowActionDropdown(!showActionDropdown)}
+              className="flex-grow-1"
+            >
+              Bulk Actions
+            </Button>
+            {showActionDropdown && (
+              <div className="dropdown-menu show" style={{ position: 'absolute', inset: '0px auto auto 0px', margin: '0px', transform: 'translate(0px, 40px)' }}>
+                <button
+                  className="dropdown-item"
+                  onClick={() => {
+                    setShowImportModal(true);
+                    setShowActionDropdown(false);
+                  }}
+                >
+                  Import Employees
+                </button>
+                <button
+                  className="dropdown-item"
+                  onClick={handleExport}
+                >
+                  Export Employees
+                </button>
+                <button
+                  className="dropdown-item text-danger"
+                  onClick={handleDeleteAll}
+                >
+                  Delete All Employees
+                </button>
               </div>
             )}
           </div>
         </div>
+      )}
+    </div>
+  </div>
 
-        {/* Employee Cards */}
-        {filteredEmployees.length > 0 ? (
-          <div className="row g-4">
-            {filteredEmployees.map(emp => (
-              <div className="col-md-6 col-lg-4" key={emp.id}>
-                <div
-                  className={`emp-card card h-100 ${emp.status === 'inactive' ? 'inactive-employee' : ''}`}
-                  onClick={() => navigate(`/about/${emp.badgeId || emp.id}`)}
+  {filteredEmployees.length > 0 ? (
+    <div className="row g-4">
+      {filteredEmployees.map(emp => (
+        <div className="col-md-6 col-lg-4" key={emp.id}>
+          <div
+            className={`employee-main-card card h-100 ${emp.status === 'inactive' ? 'inactive-employee' : ''}`}
+            onClick={() => navigate(`/about/${emp.badgeId || emp.id}`)}
+          >
+            <div className="card-body position-relative">
+              <div className="dropdown position-absolute top-0 end-0">
+                <button
+                  className="btn btn-sm btn-light rounded-circle"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDropdown(emp.id);
+                  }}
                 >
-                  <div className="card-body position-relative">
-                    <div className="dropdown position-absolute top-0 end-0">
-                      <button 
-                        className="btn btn-sm btn-light rounded-circle"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleDropdown(emp.id);
-                        }}
-                      >
-                        <FaEllipsisV />
+                  <FaEllipsisV />
+                </button>
+                {openDropdownId === emp.id && (
+                  <div className="dropdown-menu show position-absolute end-0">
+                    <Link className="dropdown-item" to={`/about/${emp.badgeId || emp.id}`}>View Profile</Link>
+                    <Link className="dropdown-item" to={`/Editaddemployee/${emp.badgeId || emp.id}`} onClick={(e) => e.stopPropagation()}>Edit Profile</Link>
+                    {isAdmin && (
+                      <button className="dropdown-item" onClick={(e) => {
+                        e.stopPropagation();
+                        toggleEmployeeStatus(emp.id);
+                        setOpenDropdownId(null);
+                      }}>
+                        {emp.status === 'active' ? 'Mark Inactive' : 'Mark Active'}
                       </button>
-                      {openDropdownId === emp.id && (
-                        <div className="dropdown-menu show position-absolute end-0">
-                          <Link 
-                            className="dropdown-item" 
-                            to={`/about/${emp.badgeId || emp.id}`}
-                          >
-                            View Profile
-                          </Link>
-                          <Link 
-                            className="dropdown-item" 
-                            to={`/Editaddemployee/${emp.badgeId || emp.id}`}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            Edit Profile
-                          </Link>
-                          {isAdmin && (
-                            <button 
-                              className="dropdown-item" 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleEmployeeStatus(emp.id);
-                                setOpenDropdownId(null);
-                              }}
-                            >
-                              {emp.status === 'active' ? 'Mark Inactive' : 'Mark Active'}
-                            </button>
-                          )}
-                          {isAdmin && (
-                            <button 
-                              className="dropdown-item text-danger" 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDelete(emp.id);
-                              }}
-                            >
-                              Delete Employee
-                            </button>
-                          )}
-                        </div>
-                      )}
-                    </div>
+                    )}
+                    {isAdmin && (
+                      <button className="dropdown-item text-danger" onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(emp.id);
+                      }}>
+                        Delete Employee
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
 
-                    <div className="d-flex align-items-center gap-3">
-                      <div className="emp-avatar">
-                        <FaUserCircle size={40} />
-                      </div>
-                      <div className="flex-grow-1">
-                        <h5 className="mb-1">
-                          {emp.firstName || 'No Name'} {emp.lastName || ''}
-                          {emp.status === 'inactive' && (
-                            <span className="badge bg-danger ms-2">Inactive</span>
-                          )}
-                        </h5>
-                        <div className="text-muted small mb-1">
-                          <span className="fw-medium">Badge ID:</span> {emp.badgeId || 'N/A'}
-                        </div>
-                        <div className="text-muted small mb-1">
-                          <span className="fw-medium">Email:</span> {emp.email || 'No Email'}
-                        </div>
-                        <div className="text-muted small mb-2">
-                          <span className="fw-medium">Dept:</span> {emp.departments || 'No departments'}
-                        </div>
-                        <div className="d-flex align-items-center gap-1">
-                          <span className={`emp-status-dot ${emp.status === 'active' ? 'bg-success' : 'bg-secondary'}`} />
-                          <small className="text-muted">
-                            {emp.status ? emp.status.charAt(0).toUpperCase() + emp.status.slice(1) : 'Offline'}
-                          </small>
-                        </div>
-                      </div>
-                    </div>
+              <div className="d-flex align-items-center gap-3">
+                <div className="employee-main-avatar">
+                  <FaUserCircle size={40} />
+                </div>
+                <div className="flex-grow-1">
+                  <h5 className="mb-1">
+                    {emp.firstName || 'No Name'} {emp.lastName || ''}
+                    {emp.status === 'inactive' && (
+                      <span className="badge bg-danger ms-2">Inactive</span>
+                    )}
+                  </h5>
+                  <div className="text-muted small mb-1">
+                    <span className="fw-medium">Badge ID:</span> {emp.badgeId || 'N/A'}
+                  </div>
+                  <div className="text-muted small mb-1">
+                    <span className="fw-medium">Email:</span> {emp.email || 'No Email'}
+                  </div>
+                  <div className="text-muted small mb-2">
+                    <span className="fw-medium">Dept:</span> {emp.departments || 'No departments'}
+                  </div>
+                  <div className="d-flex align-items-center gap-1">
+                    <span className={`employee-main-status-dot ${emp.status === 'active' ? 'bg-success' : 'bg-secondary'}`} />
+                    <small className="text-muted">
+                      {emp.status ? emp.status.charAt(0).toUpperCase() + emp.status.slice(1) : 'Offline'}
+                    </small>
                   </div>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
-        ) : (
-          <div className="text-center py-5 bg-white rounded shadow-sm">
-            <h4 className="text-muted">No employees match your criteria</h4>
-            <Button 
-              variant="outline-primary" 
-              onClick={clearAllFilters}
-              className="mt-3"
-            >
-              Clear Filters
-            </Button>
-          </div>
-        )}
-      </div>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div className="text-center py-5 bg-white rounded shadow-sm">
+      <h4 className="text-muted">No employees match your criteria</h4>
+      <Button variant="outline-primary" onClick={clearAllFilters} className="mt-3">
+        Clear Filters
+      </Button>
+    </div>
+  )}
+</div>
+
 
       {/* Import Modal */}
       <Modal show={showImportModal} onHide={() => setShowImportModal(false)} centered>

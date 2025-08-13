@@ -7,6 +7,7 @@ import NavbarTopbar from '../Navbar/NavbarTopbar';
 const AdminStaff = () => {
   const [staffData, setStaffData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [openIndex, setOpenIndex] = useState(null); // track accordion
 
   useEffect(() => {
     const fetchStaffData = async () => {
@@ -20,7 +21,6 @@ const AdminStaff = () => {
         for (const managerDoc of managersSnapshot.docs) {
           const manager = managerDoc.data();
           const managerBadgeId = manager.badgeId || '';
-          
           const reportingManagerPattern = new RegExp(`\\((${managerBadgeId})\\)`, 'i');
 
           const employeesQuery = query(usersRef);
@@ -64,6 +64,10 @@ const AdminStaff = () => {
     fetchStaffData();
   }, []);
 
+  const toggleAccordion = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -75,49 +79,55 @@ const AdminStaff = () => {
 
   return (
     <>
-    <NavbarTopbar />
-    <div className="admin-staff-container">
-      <h1 className="page-title">Assigned Staff</h1>
+      <NavbarTopbar />
+      <div className="admin-staff-container mt-4">
+        <h1 className="page-title">Assigned Staff</h1>
 
-      {staffData.map((group, index) => (
-        <div key={index} className="manager-group">
-          <div className="manager-header">
-            <span className="manager-label">Manager: </span>
-            <span className="manager-name">{group.manager.name}</span>
-            <span className="manager-badge"> (ID: {group.manager.badgeId})</span>
-          </div>
+        {staffData.map((group, index) => (
+          <div key={index} className="manager-group">
+            <div 
+              className="manager-header accordion-toggle" 
+              onClick={() => toggleAccordion(index)}
+            >
+              <span className="manager-label">Manager: </span>
+              <span className="manager-name">{group.manager.name}</span>
+              <span className="manager-badge"> (ID: {group.manager.badgeId})</span>
+              <span className="accordion-arrow">{openIndex === index ? '▲' : '▼'}</span>
+            </div>
 
-          <table className="staff-table">
-            <thead className='staff-table-head'>
-              <tr>
-                <th>Badge ID</th>
-                <th>Name</th>
-                <th>Department</th>
-                <th>Job Position</th>
-              </tr>
-            </thead>
-            <tbody>
-              {group.employees.length > 0 ? (
-                group.employees.map((employee, empIndex) => (
-                  <tr key={empIndex}>
-                    <td className="badge-id">{employee.badgeId}</td>
-                    <td>{employee.name}</td>
-                    <td>{employee.department}</td>
-                    <td>{employee.jobPosition}</td>
+            {openIndex === index && (
+              <table className="staff-table">
+                <thead className='staff-table-head'>
+                  <tr>
+                    <th>Badge ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Job Position</th>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4" style={{ textAlign: 'center' }}>
-                    No employees assigned
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      ))}
-    </div>
+                </thead>
+                <tbody>
+                  {group.employees.length > 0 ? (
+                    group.employees.map((employee, empIndex) => (
+                      <tr key={empIndex}>
+                        <td className="badge-id">{employee.badgeId}</td>
+                        <td>{employee.name}</td>
+                        <td>{employee.department}</td>
+                        <td>{employee.jobPosition}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" style={{ textAlign: 'center' }}>
+                        No employees assigned
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            )}
+          </div>
+        ))}
+      </div>
     </>
   );
 };

@@ -45,7 +45,7 @@ const LeaveTypes = () => {
         <>
             <NavbarTopbar />
 
-            <div className="leaves-types-container">
+            <div className="leaves-types-container mt-4" >
                 <h2 className="leave-types-headername">Leave Types</h2>
                 <div className="leaves-types-header">
                     <div className="leaves-types-search">

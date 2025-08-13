@@ -211,7 +211,7 @@ const fetchDepartmentWiseCounts = async () => {
   return (
     <>
       <NavbarTopbar />
-      <div className="db-container">
+      <div className="db-container mt-4">
         <h2 className="db-title">Dashboard</h2>
 
         <div className="db-stats-grid">

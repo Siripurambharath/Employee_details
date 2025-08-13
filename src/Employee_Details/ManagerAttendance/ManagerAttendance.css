@@ -1,0 +1,69 @@
+.employee-attendance-container {
+  margin-top: 2rem;
+}
+
+.employee-attendance-title {
+  font-weight: bold;
+}
+
+.employee-attendance-table-container {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  background: #fff;
+  padding: 1rem;
+}
+
+/* Blue table header */
+.employee-attendance-head th {
+  background-color: #4e73df !important;
+  color: #fff !important;
+}
+
+.employee-attendance-table th,
+.employee-attendance-table td {
+  vertical-align: middle;
+}
+
+/* ====== Mobile (360px - 740px) ====== */
+@media (max-width: 740px) {
+  .employee-attendance-title {
+    font-size: 1.2rem;
+  }
+
+  .employee-attendance-table th,
+  .employee-attendance-table td {
+    font-size: 0.75rem;
+    padding: 0.4rem;
+  }
+}
+
+/* ====== iPad Mini (768px - 1024px) ====== */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .employee-attendance-title {
+    font-size: 1.5rem;
+  }
+
+  .employee-attendance-table th,
+  .employee-attendance-table td {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+}
+
+/* ====== Desktop (min-width: 1025px) ====== */
+@media (min-width: 1025px) {
+  .employee-attendance-title {
+    font-size: 1.75rem;
+  }
+
+  .employee-attendance-table th,
+  .employee-attendance-table td {
+    font-size: 0.95rem;
+    padding: 0.75rem;
+  }
+
+  .employee-attendance-table {
+    min-width: 1100px;
+    width: 100%;
+  }
+}

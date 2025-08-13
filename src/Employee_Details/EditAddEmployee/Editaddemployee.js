@@ -75,7 +75,7 @@ const Editaddemployee = () => {
   return (
     <>
     <NavbarTopbar />
-    <div className="edit-employee-container">
+    <div className="edit-employee-container mt-4">
     
       
       <div className="edit-employee-tabs">

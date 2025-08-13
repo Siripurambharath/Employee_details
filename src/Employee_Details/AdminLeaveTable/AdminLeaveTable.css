@@ -87,11 +87,11 @@
   cursor: not-allowed;
 }
 
-/* Table Styles */
 .adminleave-table {
   border-collapse: separate;
-  border-spacing: 0;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-spacing: 0 1px; 
+  width: 100% !important;
+ 
 }
 
 .adminleave-table thead {
@@ -101,16 +101,27 @@
   top: 0;
 }
 
+
+
 .adminleave-table th {
   padding: 12px 8px;
   font-weight: 500;
-  border: none;
+  border: none; 
+  border-bottom: 2px solid #4e73df; 
+  background-color: #4e73df;
+  color: white;
 }
 
 .adminleave-table td {
   padding: 10px 8px;
   vertical-align: middle;
-  border: 1px solid #e0e0e0;
+  border: none; 
+  border-bottom: 1px solid #e0e0e0; 
+  background-color: white;
+}
+
+.adminleave-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .adminleave-table tbody tr:hover {
@@ -122,25 +133,22 @@
 }
 
 /* Status Badges */
-.status-badge {
+.adminleave-status-badge {
   padding: 4px 8px;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 14apx;
   font-weight: 500;
 }
 
-.status-badge.accepted {
-  background-color: #d4edda;
+.adminleave-status-badge.accepted {
   color: #155724;
 }
 
-.status-badge.rejected {
-  background-color: #f8d7da;
+.adminleave-status-badge.rejected {
   color: #721c24;
 }
 
-.status-badge.pending {
-  background-color: #fff3cd;
+.adminleave-status-badge.pending {
   color: #856404;
 }
 
@@ -162,14 +170,12 @@
   transition: all 0.2s;
 }
 
-.delete-icon:hover {
-  color: #c0392b;
-}
+
 
 /* Confirmation Buttons */
 .confirmation-buttons {
   display: flex;
-  flex-direction: column; /* vertical stack */
+  flex-direction: column;
   gap: 6px;
   align-items: center;
 }
@@ -203,6 +209,15 @@
   background: #bdc3c7;
 }
 
+.admin-leave-outline-danger{
+  color: red;
+  font-size: medium;
+}
+
+.admin-leave-outline-danger:hover{
+  color: red;
+  font-size: medium;
+}
 /* Pagination */
 .pagination-controls {
   gap: 15px;
@@ -266,5 +281,13 @@
   .confirmation-buttons button {
     width: 100%;
     margin: 0 !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  .table-responsive{
+    width: 1000px;
+    font-size: 15px;
+    
   }
 }

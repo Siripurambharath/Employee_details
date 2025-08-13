@@ -1,8 +1,6 @@
 .leaves-types-container {
   padding: 20px;
-  margin-left: 190px;
-  background: #f8f9fa;
-  min-height: 100vh;
+
 }
 
 /* Header */
@@ -173,7 +171,7 @@
 /* Mobile (360px – 740px) */
 @media (max-width: 740px) {
   .leaves-types-container {
-    margin-left: 0;
+
     padding: 10px;
   }
 
@@ -213,10 +211,7 @@
 
 /* iPad Mini (768px – 1024px) */
 @media (min-width: 768px) and (max-width: 1024px) {
-  .leaves-types-container {
-    margin-left: 170px;
-    padding: 15px;
-  }
+
 
   .leaves-types-search input {
     width: 60%;
@@ -228,14 +223,49 @@
   }
 
   .leaves-types-cards {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 18px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 👈 EXACTLY TWO CARDS PER ROW */
+    gap: 20px;
+    margin-top: 20px;
   }
 
   .leave-card {
     padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+  }
+
+  .leave-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .leave-card-header h4 {
+    font-size: 18px;
+  }
+
+  .leave-card-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    flex-wrap: wrap;
+  }
+
+  .footer-section {
+    width: 48%;
+  }
+
+  .footer-label {
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 4px;
+  }
+
+  .footer-value {
+    color: #333;
   }
 }
+
 
 /* Desktop (≥1025px) */
 @media (min-width: 1025px) {

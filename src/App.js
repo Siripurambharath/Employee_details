@@ -23,7 +23,6 @@ import EmployeePayroll from './Employee_Details/EmployeePayroll/EmployeePayroll'
 import { AuthProvider } from '../src/Employee_Details/Contextapi/Authcontext';
 import EmployeeDashboard from './Employee_Details/EmployeeDashboard/EmployeeDashboard';
 import EmployeeAttendance from "./Employee_Details/Employee_Attendance/EmployeeAttendance";
-import EmployeeNavbar from './Employee_Details/EmployeeNavbar/EmployeeNavbar';
 import AdminLeaveTable from "./Employee_Details/AdminLeaveTable/AdminLeaveTable";
 import EmployeeLeave from './Employee_Details/EmployeeLeave/EmployeeLeave';
 import Add_leave from './Employee_Details/EmployeeLeave/Addleave/Addleave';
@@ -32,6 +31,15 @@ import AddleaveType from './Employee_Details/LeaveTypes/AddleaveTypes/AddleaveTy
 import EditLeaveTypes from './Employee_Details/LeaveTypes/EditLeaveTypes/EditLeaveTypes';
 import AssignStaff from './Employee_Details/AssignStaff/AssignStaff';
 import AdminStaff from './Employee_Details/AdminStaff/AdminStaff';
+import ManagerAttendance from './Employee_Details/ManagerAttendance/ManagerAttendance';
+import Manager_Employee_attendance from './Employee_Details/Manager_Employee_attendance/Manager_Employee_attendance';
+import Admin_Attendance from './Employee_Details/Admin_Attendance/Admin_Attendance';
+import Employee_manager_leave from './Employee_Details/Employee_Manager_leave/Employee_manager_leave';
+import Managerleave from './Employee_Details/ManagerLeave/Managerleave';
+import ManagerPayroll from './Employee_Details/ManagerPayroll/ManagerPayroll';
+
+
+
 
 const App = () => {
   return (
@@ -56,11 +64,10 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/payroll" element={<Payroll />} />
           <Route path="/payslip" element={<PayslipTable />} />
-          <Route path="/payslipedit/:id" element={<Payslipedit />} />
+<Route path="/payslipedit/:employeeId/:date" element={<Payslipedit />} />
           <Route path='/employeepayroll/:id' element={<EmployeePayroll />} />
           <Route path="/employeedashboard/:id" element={<EmployeeDashboard />} />
           <Route path="/employeeattendance" element={<EmployeeAttendance />} />
-          <Route path="/employeenavbar" element={<EmployeeNavbar />} />
           <Route path="/adminleavetable" element={<AdminLeaveTable />} />
           <Route path='/employeeleave' element={<EmployeeLeave />} />
           <Route path='/addleave' element={<Add_leave />} />
@@ -69,6 +76,15 @@ const App = () => {
           <Route path='/edittypeleave' element={<EditLeaveTypes />} />
           <Route path='/assignstaff' element={<AssignStaff />} />
           <Route path='/adminstaff' element={<AdminStaff />} />
+          <Route path='/managerattendance' element={<ManagerAttendance  />} />
+          <Route path='/employee_manager_attendance' element={<Manager_Employee_attendance />} />
+
+          <Route path='/adminattendance' element={<Admin_Attendance />} />
+          <Route path='/employeemanagaerleave' element={<Employee_manager_leave />} />
+          <Route path='/managerleave' element={<Managerleave />} />
+
+          <Route path='/managerleave' element={<Managerleave />} />
+          <Route path='/managerpayroll' element={<ManagerPayroll />} />
 
         </Routes>
       </BrowserRouter>

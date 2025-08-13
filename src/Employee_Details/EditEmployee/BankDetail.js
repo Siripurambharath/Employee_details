@@ -96,7 +96,7 @@ const BankDetail = () => {
       localStorage.removeItem('personalInfo');
       localStorage.removeItem('workInfo');
       localStorage.removeItem('bankInfo');
-
+  
       alert('Employee registered successfully!');
       navigate('/employee');
 

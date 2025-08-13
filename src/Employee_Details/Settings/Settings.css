@@ -160,12 +160,23 @@
   border: 1px solid var(--gray-light);
   border-radius: 0.35rem;
   background-color: var(--white);
+
+  
 }
+@media (max-width: 740px) {
+  .add-item-form{
+    flex-direction: row;
+  }
+  .btn-primary{
+    width: 50px !important;
+  }
+}
+
 
 /* Tablet Styles (768px - 1024px) */
 @media (min-width: 768px) {
   .settings-container {
-    margin-left: 160px;
+
     padding: 1.5rem;
   }
 

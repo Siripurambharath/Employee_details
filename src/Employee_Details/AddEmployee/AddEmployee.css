@@ -1,7 +1,7 @@
 /* ============= Base Styles ============= */
 .add-employee-container {
-  margin-left: 200px;
-  padding: 2rem;
+
+
   background-color: #f8f9fa;
   min-height: 100vh;
 }
@@ -141,22 +141,19 @@
   }
 }
 
-/* ----------- Tablet (768px – 1024px) ----------- */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .add-employee-container {
-    margin-left: 180px;
-    padding: 1.5rem;
-  }
+  /* ----------- Tablet (768px – 1024px) ----------- */
+  @media (min-width: 768px) and (max-width: 1024px) {
+  
 
-  .add-employee-container h3 {
-    font-size: 1.6rem;
+    .add-employee-container h3 {
+      font-size: 1.6rem;
+    }
   }
-}
 
 /* ----------- Desktop (min-width: 1025px) ----------- */
 @media (min-width: 1025px) {
   .add-employee-container {
-  width: 1050px;
+  width: 1200px;
     margin-left:  190px;
   }
 
