@@ -6,7 +6,7 @@ import NavbarTopbar from "../Navbar/NavbarTopbar";
 import { db, auth } from "../../Employee_Details/Firebase/Firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import {  FaTrash  } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 
 const EmployeeLeave = () => {
   const [leaves, setLeaves] = useState([]);
@@ -53,11 +53,13 @@ const EmployeeLeave = () => {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-          const userLeaves = (data.leaves || []).map((leave) => ({
-            ...leave,
-            badgeId: leave.badgeId || badgeId,
-          }));
+          // Reverse the array to show newest first
+       const userLeaves = (data.leaves || [])
+  .map((leave) => ({ ...leave, badgeId: leave.badgeId || badgeId }))
+  .sort((a, b) => new Date(b.appliedAt) - new Date(a.appliedAt)); // ✅ newest first
+
           setLeaves(userLeaves);
+          setPage(0); // Reset to first page
         } else {
           setLeaves([]);
         }
@@ -69,6 +71,7 @@ const EmployeeLeave = () => {
     fetchLeaves();
   }, [userId, badgeId]);
 
+  // Delete a leave entry
   const handleDelete = async (index) => {
     if (!window.confirm("Are you sure you want to delete this leave?")) return;
     try {
@@ -85,8 +88,7 @@ const EmployeeLeave = () => {
     }
   };
 
-
-
+  // Show comment modal
   const handleCommentClick = (comment) => {
     setSelectedComment(comment || "No comment available");
     setShowCommentModal(true);
@@ -98,18 +100,16 @@ const EmployeeLeave = () => {
     <>
       <NavbarTopbar />
       <div className="employee-leave-container mt-5">
-         <h2 className="employee-leave-title">My Leaves</h2>
+        <h2 className="employee-leave-title">My Leaves</h2>
         <div className="employee-leave-header">
-         
-          <Link to="/addleave" className="employee-leave-add-btn">
-            Add Leave
-          </Link>
+          <Link to="/addleave" className="employee-leave-add-btn">Add Leave</Link>
         </div>
-        
+
         <div className="employee-leave-table-container">
           <table className="employee-leave-table">
             <thead>
               <tr>
+                <th>S.No</th>
                 <th>Employee Name</th>
                 <th>Badge ID</th>
                 <th>Department</th>
@@ -128,6 +128,7 @@ const EmployeeLeave = () => {
               {paginatedRows.length > 0 ? (
                 paginatedRows.map((row, index) => (
                   <tr key={index}>
+<td>{page * rowsPerPage + index + 1}</td>
                     <td>{row.firstName}</td>
                     <td>{row.badgeId}</td>
                     <td>{row.departments?.name || row.departments || "N/A"}</td>
@@ -142,16 +143,13 @@ const EmployeeLeave = () => {
                         {row.status || "Pending"}
                       </span>
                     </td>
-                <td>
-                      <button className="btn btn-outline-primary btn-sm"  onClick={() => handleCommentClick(row.comment)}
->
-                        {row.comment ? "View" : "Add"} Comment
+                    <td>
+                      <button className="btn btn-outline-primary btn-sm" onClick={() => handleCommentClick(row.comment)}>
+                        View Comment
                       </button>
                     </td>
-
                     <td className="employee-leave-actions">
                       <div className="employee-leave-action-buttons">
-                     
                         <button
                           className="employee-leave-action-btn employee-leave-delete-btn"
                           onClick={() => handleDelete(index)}
@@ -165,9 +163,7 @@ const EmployeeLeave = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="12" className="employee-leave-empty">
-                    No leaves found
-                  </td>
+                  <td colSpan="13" className="employee-leave-empty">No leaves found</td>
                 </tr>
               )}
             </tbody>
@@ -181,7 +177,7 @@ const EmployeeLeave = () => {
               disabled={page === 0}
               onClick={() => setPage(page - 1)}
             >
-              Previous
+              &lt;
             </button>
             <span className="employee-leave-pagination-info">
               Page {page + 1} of {Math.ceil(leaves.length / rowsPerPage) || 1}
@@ -191,7 +187,7 @@ const EmployeeLeave = () => {
               disabled={page >= Math.ceil(leaves.length / rowsPerPage) - 1 || leaves.length === 0}
               onClick={() => setPage(page + 1)}
             >
-              Next
+              &gt;
             </button>
           </div>
         </div>
@@ -203,10 +199,7 @@ const EmployeeLeave = () => {
           <div className="employee-leave-modal">
             <div className="employee-leave-modal-header">
               <h3>Leave Comment</h3>
-              <button 
-                className="employee-leave-modal-close"
-                onClick={() => setShowCommentModal(false)}
-              >
+              <button className="employee-leave-modal-close" onClick={() => setShowCommentModal(false)}>
                 &times;
               </button>
             </div>
@@ -214,10 +207,7 @@ const EmployeeLeave = () => {
               <p>{selectedComment}</p>
             </div>
             <div className="employee-leave-modal-footer">
-              <button
-                className="employee-leave-modal-btn"
-                onClick={() => setShowCommentModal(false)}
-              >
+              <button className="employee-leave-modal-btn" onClick={() => setShowCommentModal(false)}>
                 Close
               </button>
             </div>

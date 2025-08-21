@@ -157,7 +157,7 @@ const AdminLeave = () => {
     <>
       <NavbarTopbar />
       <div className="adminleave-container container mt-5">
-        <h3 className="text-center mb-1">Admin Leave</h3>
+        <h3 className="text-center mb-1"> Leaves</h3>
 
         {/* Search & Filters */}
         <div className="search-filter-container mb-1">
@@ -193,7 +193,7 @@ const AdminLeave = () => {
           </div>
         </div>
 
-        <div className="action-buttons mb-3">
+        <div className="action-buttons mb-3 mt-2">
           <button 
             className={`select-all-btn ${selectedRows.length === filteredLeaves.length ? 'active' : ''}`}
             onClick={handleSelectAll}
@@ -270,17 +270,17 @@ const AdminLeave = () => {
                       <div className="d-flex justify-content-center gap-2">
                         <button
                           className="btn btn-success btn-sm"
-                          onClick={() => handleStatusChange(globalIndex, "Accepted")}
-                          disabled={row.status === "Accepted"}
+                          onClick={() => handleStatusChange(globalIndex, "Approved")}
+                          disabled={row.status === "Approved"}
                         >
-                          Accept
+                          Approved
                         </button>
                         <button
                           className="btn btn-danger btn-sm"
                           onClick={() => handleStatusChange(globalIndex, "Rejected")}
                           disabled={row.status === "Rejected"}
                         >
-                          Reject
+                          Rejected
                         </button>
                     
                       </div>

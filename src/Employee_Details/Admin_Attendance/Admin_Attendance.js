@@ -193,7 +193,7 @@ const Admin_Attendance = () => {
     <>
       <NavbarTopbar />
       <div className="admin-attendance-container">
-        <h2 className="admin-attendance-title">Employee Attendance Records</h2>
+        <h2 className="admin-attendance-title"> Attendance Records</h2>
 
         <div className="admin-attendance-controls">
           <div className="search-filter-container">

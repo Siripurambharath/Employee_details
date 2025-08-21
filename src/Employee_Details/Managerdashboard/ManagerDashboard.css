@@ -1,10 +1,10 @@
 /* 🌐 Base (Mobile First) */
-.employee-dashboard {
+.Managerdashboard {
   padding: 15px;
   font-family: 'Segoe UI', sans-serif;
 }
 
-.employee-dashboard .dashboard-title {
+.Managerdashboard .dashboard-title {
   text-align: center;
   font-size: 20px;
   font-weight: 600;
@@ -13,7 +13,7 @@
 }
 
 /* 👨‍💼 Manager Card */
-.employee-dashboard .manager-card {
+.Managerdashboard .manager-card {
   background: #fff;
   padding: 16px;
   border-radius: 10px;
@@ -21,27 +21,27 @@
   margin-bottom: 20px;
 }
 
-.employee-dashboard .manager-header {
+.Managerdashboard .manager-header {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 12px;
 }
 
-.employee-dashboard .manager-info h5 {
+.Managerdashboard .manager-info h5 {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
   color: #2c3e50;
 }
 
-.employee-dashboard .manager-info p {
+.Managerdashboard .manager-info p {
   margin: 0;
   font-size: 14px;
   color: #7f8c8d;
 }
 
-.employee-dashboard .manager-contact {
+.Managerdashboard .manager-contact {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -49,7 +49,7 @@
   margin-top: 8px;
 }
 
-.employee-dashboard .manager-contact span {
+.Managerdashboard .manager-contact span {
   font-size: 14px;
   color: #2c3e50;
   display: flex;
@@ -58,7 +58,7 @@
 }
 
 /* 📊 Charts */
-.employee-dashboard .charts-row {
+.Managerdashboard .charts-row {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
@@ -66,21 +66,21 @@
 }
 
 /* Make pie chart smaller */
-.piechart-employee-dashboard {
+.piechart-Managerdashboard {
   max-width: 280px;   /* ⬅️ decrease this value to shrink more */
   max-height: 280px;
   margin: 0 auto;     /* center it */
 }
 
-.employee-dashboard .chart-container-piechart,
-.employee-dashboard .chart-container-bargraph {
+.Managerdashboard .chart-container-piechart,
+.Managerdashboard .chart-container-bargraph {
   background: #fff;
   padding: 16px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.employee-dashboard .chart-header {
+.Managerdashboard .chart-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -88,59 +88,59 @@
 }
 
 /* 📝 Performance Section */
-.employee-dashboard .performance-section {
+.Managerdashboard .performance-section {
   background: #fff;
   padding: 16px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.employee-dashboard .performance-section h3 {
+.Managerdashboard .performance-section h3 {
   margin-bottom: 12px;
   font-size: 18px;
   font-weight: 600;
   color: #2c3e50;
 }
 
-.employee-dashboard .performance-table {
+.Managerdashboard .performance-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
-.employee-dashboard .performance-table th,
-.employee-dashboard .performance-table td {
+.Managerdashboard .performance-table th,
+.Managerdashboard .performance-table td {
   padding: 10px;
   border-bottom: 1px solid #ddd;
   text-align: left;
 }
 
-.employee-dashboard .status-badge {
+.Managerdashboard .status-badge {
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
 }
 
-.employee-dashboard .status-badge.in-progress { background: #fff3e0; color: #e65100; }
-.employee-dashboard .status-badge.completed   { background: #e8f5e9; color: #2e7d32; }
-.employee-dashboard .status-badge.pending     { background: #e3f2fd; color: #1565c0; }
+.Managerdashboard .status-badge.in-progress { background: #fff3e0; color: #e65100; }
+.Managerdashboard .status-badge.completed   { background: #e8f5e9; color: #2e7d32; }
+.Managerdashboard .status-badge.pending     { background: #e3f2fd; color: #1565c0; }
 
 /* 📈 Progress Bar */
-.employee-dashboard .progress-bar-container {
+.Managerdashboard .progress-bar-container {
   background: #eee;
   border-radius: 4px;
   height: 18px;
   position: relative;
 }
 
-.employee-dashboard .progress-bar {
+.Managerdashboard .progress-bar {
   height: 100%;
   background: #4a6baf;
   border-radius: 4px;
 }
 
-.employee-dashboard .progress-text {
+.Managerdashboard .progress-text {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -152,27 +152,27 @@
 
 /* 📱 iPad Mini (768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .employee-dashboard .charts-row {
+  .Managerdashboard .charts-row {
     grid-template-columns: 1fr 1fr;
   }
 
-  .employee-dashboard .manager-card {
+  .Managerdashboard .manager-card {
     max-width: 500px;
   }
 }
 
 /* 💻 Desktop (1024px and up) */
 @media (min-width: 1024px) {
-  .employee-dashboard {
+  .Managerdashboard {
     margin-left: 180px;
     max-width: 1200px;
   }
 
-  .employee-dashboard .charts-row {
+  .Managerdashboard .charts-row {
     grid-template-columns: 1fr 1fr;
   }
 
-  .employee-dashboard .manager-card {
+  .Managerdashboard .manager-card {
     width: 400px;
   }
 }

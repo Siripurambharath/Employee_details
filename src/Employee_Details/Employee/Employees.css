@@ -77,11 +77,23 @@
   background-color: #6c757d;
 }
 
-/* Dropdown Menu */
+.employee-rounded-circle{
+border-radius: 15px;
+padding: 8px;
+border: none;
+
+}
+
+.employee-rounded-circle:hover{
+  background-color: #6c757d06;
+}
+
+
 .dropdown-menu {
   z-index: 1050;
   min-width: 140px;
   animation: fadeIn 0.2s ease;
+  border-radius: 5px;
 }
 
 .dropdown-item {

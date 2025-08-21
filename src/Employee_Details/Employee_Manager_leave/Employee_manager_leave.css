@@ -147,6 +147,13 @@
   padding: 1rem;
   border-top: 1px solid #e9ecef;
 }
+.employeemanagerleave-table td:nth-child(3) { 
+  white-space: nowrap;      
+  overflow: hidden;         
+  text-overflow: ellipsis;  
+  max-width: 150px;         
+}
+
 
 /* ========================
    Responsive Design

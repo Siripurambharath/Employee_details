@@ -7,6 +7,8 @@ import { db, auth } from "../../Employee_Details/Firebase/Firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+   import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+
 
 const Managerleave = () => {
   const [leaves, setLeaves] = useState([]);
@@ -85,10 +87,7 @@ const Managerleave = () => {
     }
   };
 
-  const handleEdit = (leave, index) => {
-    navigate("/addleave", { state: { leave, index } });
-  };
-
+ 
   const handleCommentClick = (comment) => {
     setSelectedComment(comment || "No comment available");
     setShowCommentModal(true);
@@ -99,8 +98,7 @@ const Managerleave = () => {
   return (
     <>
       <NavbarTopbar />
-      <div className="Manager-leave-container mt-5">
-         <h2 className="Manager-leave-title">My Leaves</h2>
+      <div className="Manager-leave-container ">
         <div className="Manager-leave-header">
          
           <Link to="/addleave" className="Manager-leave-add-btn">
@@ -112,6 +110,7 @@ const Managerleave = () => {
           <table className="Manager-leave-table">
             <thead>
               <tr>
+                <th>S.No</th>
                 <th>Employee Name</th>
                 <th>Badge ID</th>
                 <th>Department</th>
@@ -130,7 +129,8 @@ const Managerleave = () => {
               {paginatedRows.length > 0 ? (
                 paginatedRows.map((row, index) => (
                   <tr key={index}>
-                    <td>{row.firstName}</td>
+<td>{page * rowsPerPage + index + 1}</td>
+                      <td>{row.firstName}</td>
                     <td>{row.badgeId}</td>
                     <td>{row.departments?.name || row.departments || "N/A"}</td>
                     <td>{row.workType?.name || row.workType || "N/A"}</td>
@@ -144,23 +144,21 @@ const Managerleave = () => {
                         {row.status || "Pending"}
                       </span>
                     </td>
-                    <td 
-                      className="Manager-leave-comment-cell"
-                      onClick={() => handleCommentClick(row.comment)}
-                    >
-                      {row.comment ? (
-                        <>
-                          <span className="Manager-leave-comment-text">
-                            {row.comment.length > 20 
-                              ? `${row.comment.substring(0, 20)}...` 
-                              : row.comment}
-                          </span>
-                          <FaEye className="Manager-leave-view-icon" />
-                        </>
-                      ) : (
-                        "-"
-                      )}
-                    </td>
+                    <td className="Manager-leave-comment-cell">
+  {row.comment ? (
+    <button 
+      className="btn btn-outline-primary btn-sm"  
+      onClick={() => handleCommentClick(row.comment)}
+    >
+      View Comment
+    </button>
+  ) : (
+    "-"
+  )}
+</td>
+
+
+
                     <td className="Manager-leave-actions">
                       <div className="Manager-leave-action-buttons">
                  
@@ -186,27 +184,33 @@ const Managerleave = () => {
           </table>
         </div>
 
-        <div className="Manager-leave-pagination">
-          <div className="Manager-leave-pagination-controls">
-            <button
-              className="Manager-leave-pagination-btn"
-              disabled={page === 0}
-              onClick={() => setPage(page - 1)}
-            >
-              Previous
-            </button>
-            <span className="Manager-leave-pagination-info">
-              Page {page + 1} of {Math.ceil(leaves.length / rowsPerPage) || 1}
-            </span>
-            <button
-              className="Manager-leave-pagination-btn"
-              disabled={page >= Math.ceil(leaves.length / rowsPerPage) - 1 || leaves.length === 0}
-              onClick={() => setPage(page + 1)}
-            >
-              Next
-            </button>
-          </div>
-        </div>
+
+<div className="Manager-leave-pagination">
+  <div className="Manager-leave-pagination-controls d-flex align-items-center gap-2">
+    <button
+       className="btn btn-sm btn-light border"
+    style={{ backgroundColor: "#f0f0f0" }}
+      disabled={page === 0}
+      onClick={() => setPage(page - 1)}
+    >
+      <FaChevronLeft />
+    </button>
+
+    <span className="Manager-leave-pagination-info">
+      Page {page + 1} of {Math.ceil(leaves.length / rowsPerPage) || 1}
+    </span>
+
+    <button
+      className="btn btn-sm btn-light border"
+    style={{ backgroundColor: "#f0f0f0" }}
+      disabled={page >= Math.ceil(leaves.length / rowsPerPage) - 1 || leaves.length === 0}
+      onClick={() => setPage(page + 1)}
+    >
+      <FaChevronRight />
+    </button>
+  </div>
+</div>
+
       </div>
 
       {showCommentModal && (

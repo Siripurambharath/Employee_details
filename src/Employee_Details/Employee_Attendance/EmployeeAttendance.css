@@ -1,69 +1,227 @@
+/* Base Styles */
 .employee-attendance-container {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .employee-attendance-title {
-  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
 }
 
-.employee-attendance-table-container {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  background: #fff;
-  padding: 1rem;
+.employee-attendance-buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-/* Blue table header */
+.btn-group {
+  display: flex;        /* ensure flex layout */
+  gap: 20px;            /* space between buttons */
+}
+
+.employee-attendance-tab-btn {
+  border: 1px solid #000;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.employee-attendance-tab-btn.active {
+  background-color: #000;
+  color: #fff;
+}
+
+.employee-attendance-tab-btn.inactive {
+  background-color: #fff;
+  color: #000;
+}
+
+.employee-attendance-month-year {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.employee-attendance-select {
+  min-width: 120px;
+}
+
+/* Table Styles */
 .employee-attendance-head th {
   background-color: #4e73df !important;
-  color: #fff !important;
+  color: white !important;
+  font-weight: 500;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
-.employee-attendance-table th,
-.employee-attendance-table td {
+.table {
+  font-size: 0.9rem;
+}
+
+.table td {
   vertical-align: middle;
 }
 
-/* ====== Mobile (360px - 740px) ====== */
-@media (max-width: 740px) {
+/* Attendance Report Table */
+.employee-attendance-report-container .table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.employee-attendance-report-container th,
+.employee-attendance-report-container td {
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+  border: 1px solid #dee2e6;
+}
+
+.employee-attendance-report-container td span.present {
+  color: green;
+  font-weight: bold;
+}
+
+.employee-attendance-report-container td span.absent {
+  color: red;
+  font-weight: bold;
+}
+
+/* Scroll for large months */
+.employee-attendance-report-container .table-responsive {
+  overflow-x: auto;
+}
+.employeeattendance-delete {
+  color: red;
+  font-size: medium;
+  border: none;
+  background: none; 
+
+}
+
+
+
+/* ====== Mobile (360px - 767px) ====== */
+@media (max-width: 767px) {
   .employee-attendance-title {
     font-size: 1.2rem;
   }
 
-  .employee-attendance-table th,
-  .employee-attendance-table td {
+  .employee-attendance-tab-btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .employee-attendance-select {
+    min-width: 80px;
+    font-size: 0.85rem;
+  }
+
+  .table {
     font-size: 0.75rem;
-    padding: 0.4rem;
+  }
+
+  /* Hide less important columns on mobile */
+  .employee-attendance-head th:nth-child(6),
+  .employee-attendance-head th:nth-child(7),
+  .employee-attendance-head th:nth-child(8),
+  .table td:nth-child(6),
+  .table td:nth-child(7),
+  .table td:nth-child(8) {
+    display: none;
   }
 }
 
 /* ====== iPad Mini (768px - 1024px) ====== */
 @media (min-width: 768px) and (max-width: 1024px) {
   .employee-attendance-title {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
-  .employee-attendance-table th,
-  .employee-attendance-table td {
-    font-size: 0.85rem;
-    padding: 0.5rem;
+  .employee-attendance-tab-btn {
+    font-size: 0.9rem;
+    padding: 0.45rem 0.9rem;
+  }
+
+  .employee-attendance-select {
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+
+  .table {
+    font-size: 0.82rem;
+  }
+
+  /* Hide only overtime column on tablet */
+  .employee-attendance-head th:nth-child(8),
+  .table td:nth-child(8) {
+    display: none;
   }
 }
 
 /* ====== Desktop (min-width: 1025px) ====== */
 @media (min-width: 1025px) {
   .employee-attendance-title {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 
-  .employee-attendance-table th,
-  .employee-attendance-table td {
-    font-size: 0.95rem;
-    padding: 0.75rem;
+  .employee-attendance-tab-btn {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
   }
 
-  .employee-attendance-table {
-    min-width: 1100px;
-    width: 100%;
+  .employee-attendance-select {
+    min-width: 120px;
+    font-size: 1rem;
+  }
+
+  .table {
+    font-size: 0.9rem;
+  }
+
+  .employee-attendance-container {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Check In/Out Button */
+.btn-check {
+  min-width: 150px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+}
+
+/* Card Styles */
+.card {
+  border: none;
+  border-radius: 0.5rem;
+}
+
+/* Print Styles */
+@media print {
+  .navbar-topbar, .employee-attendance-buttons {
+    display: none !important;
+  }
+
+  .employee-attendance-container {
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .table {
+    font-size: 0.8rem;
   }
 }

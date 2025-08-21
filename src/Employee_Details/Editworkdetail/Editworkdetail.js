@@ -44,24 +44,25 @@ const Editworkdetail = () => {
     }
   };
 
-  const fetchReportingManagers = async () => {
-    try {
-      const snapshot = await getDocs(collection(db, 'users'));
-      return snapshot.docs
-        .map(doc => {
-          const data = doc.data();
-          return {
-            badgeId: data.badgeId,
-            firstName: data.firstName,
-            lastName: data.lastName
-          };
-        })
-        .filter(u => u.firstName);
-    } catch (error) {
-      console.error("Error fetching reporting managers:", error);
-      return [];
-    }
-  };
+const fetchReportingManagers = async () => {
+  try {
+    const q = query(collection(db, 'users'), where('jobRole', '==', 'Manager'));
+    const snapshot = await getDocs(q);
+
+    return snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        badgeId: data.badgeId,
+        firstName: data.firstName,
+        lastName: data.lastName
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching reporting managers:", error);
+    return [];
+  }
+};
+
 
   const fetchData = async () => {
     try {
@@ -137,18 +138,25 @@ const Editworkdetail = () => {
 
 const handleChange = (e) => {
   const { name, value } = e.target;
-  let updated = { ...formData, [name]: value };
 
-  if (name === 'jobRole') {
-    if (value.toLowerCase() === 'manager') {
-      updated.reportingManager = 'Admin';
-    } else if (formData.reportingManager === 'Admin') {
-      updated.reportingManager = ''; 
-    }
+  if (name === "reportingManager") {
+    const selected = JSON.parse(value);
+
+    // Build string like "Pavan (BADGE6)"
+    const managerString = `${selected.firstName} (${selected.badgeId})`;
+
+    setFormData((prev) => ({
+      ...prev,
+      reportingManager: managerString,  // store combined string
+    }));
+  } else {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   }
-
-  setFormData(updated);
 };
+
 
 
   const handleSubmit = async (e) => {
@@ -283,7 +291,7 @@ const handleChange = (e) => {
                 </select>
               </div>
 
-           <div className="col-md-6">
+<div className="col-md-6">
   <label className="form-label">Reporting Manager</label>
   {formData.jobRole.toLowerCase() === 'manager' ? (
     <input
@@ -297,18 +305,55 @@ const handleChange = (e) => {
     <select
       name="reportingManager"
       className="form-select"
-      value={formData.reportingManager}
-      onChange={handleChange}
+      value={formData.reportingManager}   // ← matches Firestore string
+      onChange={(e) => {
+        const selected = JSON.parse(e.target.value);
+        const managerString = `${selected.firstName} (${selected.badgeId})`;
+        setFormData((prev) => ({
+          ...prev,
+          reportingManager: managerString, // store as "Pavan (BADGE6)"
+        }));
+      }}
     >
-      <option value="">Select</option>
-      {dropdownData.reportingManagers.map((mgr, idx) => (
-        <option key={idx} value={mgr.badgeId}>
-          {mgr.firstName} {mgr.lastName} ({mgr.badgeId})
-        </option>
-      ))}
+      <option value="">Select Reporting Manager</option>
+      {dropdownData.reportingManagers.map((manager) => {
+        const managerString = `${manager.firstName} (${manager.badgeId})`;
+        return (
+          <option key={manager.badgeId} value={JSON.stringify(manager)}>
+            {managerString}
+          </option>
+        );
+      })}
     </select>
   )}
 </div>
+{/* Work Type */}
+<div className="col-md-6">
+  <label className="form-label d-flex justify-content-between">
+    <span>Work Type</span>
+    <span
+      className="edit-workdetail-add-new text-primary text-aling-start"
+      role="button"
+      onClick={() => openModal('workType', 'Add New Work Type')}
+    >
+      ➕ Add New
+    </span>
+  </label>
+  <select
+    name="workType"
+    className="form-select"
+    value={formData.workType}
+    onChange={handleChange}
+  >
+    <option value="">Select Work Type</option>
+    {dropdownData.workTypes.map((t, idx) => (
+      <option key={idx} value={t}>{t}</option>
+    ))}
+  </select>
+</div>
+
+
+
 
 
               {/* Remaining Inputs */}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { db } from '../Firebase/Firebase';
-import { doc, setDoc, collection, addDoc } from 'firebase/firestore';
+import { doc, setDoc, collection, addDoc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import './BankDetail.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -28,13 +28,8 @@ const BankDetail = () => {
     const personalInfo = JSON.parse(localStorage.getItem('personalInfo'));
     const bankInfo = JSON.parse(localStorage.getItem('bankInfo'));
 
-    if (personalInfo) {
-      setBadgeId(personalInfo.badgeId);
-    }
-
-    if (bankInfo) {
-      setFormData(bankInfo);
-    }
+    if (personalInfo) setBadgeId(personalInfo.badgeId);
+    if (bankInfo) setFormData(bankInfo);
   }, []);
 
   const handleChange = (e) => {
@@ -45,7 +40,6 @@ const BankDetail = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!formData.bankName || !formData.accountNumber || !formData.ifsc) {
       return alert('Bank name, account number, and IFSC are required');
     }
@@ -59,7 +53,7 @@ const BankDetail = () => {
         throw new Error('Missing personal or work information');
       }
 
-      // Create user in Firebase Auth
+      // 1️⃣ Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         personalInfo.email,
@@ -68,35 +62,69 @@ const BankDetail = () => {
 
       const uid = userCredential.user.uid;
 
-      // Prepare complete employee data
+      // 2️⃣ Prepare full employee data
       const employeeData = {
         ...personalInfo,
         ...workInfo,
         ...formData,
-        uid: uid,
+        uid,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         status: 'active',
       };
 
-      // Save to Firestore
+      // 3️⃣ Save to users collection
       await setDoc(doc(db, 'users', uid), employeeData);
 
-      // Save badge ID reference
+      // 4️⃣ If manager → save in adminstaff
+      if (workInfo.jobRole.toLowerCase() === 'manager') {
+        await setDoc(doc(db, 'adminstaff', uid), {
+          uid,
+          badgeId: personalInfo.badgeId,
+          email: personalInfo.email,
+          firstName: personalInfo.firstName,
+          lastName: personalInfo.lastName,
+          jobRole: workInfo.jobRole,
+          reportingManager: 'admin',
+          employees: [],
+          createdAt: new Date().toISOString(),
+          status: 'active',
+        });
+      }
+
+      // 5️⃣ If employee has a reporting manager → add to manager's employees array
+      if (workInfo.reportingManager) {
+        const managerDocRef = doc(db, 'adminstaff', workInfo.reportingManager);
+        const managerDoc = await getDoc(managerDocRef);
+
+        if (managerDoc.exists()) {
+          await updateDoc(managerDocRef, {
+            employees: arrayUnion({
+              uid,
+              badgeId: personalInfo.badgeId,
+              firstName: personalInfo.firstName,
+              lastName: personalInfo.lastName,
+              jobRole: workInfo.jobRole,
+            }),
+          });
+        }
+      }
+
+      // 6️⃣ Save badge ID
       const badgeNumber = parseInt(personalInfo.badgeId.replace('BADGE', ''));
       await addDoc(collection(db, 'badgeIds'), {
         badgeId: personalInfo.badgeId,
         badgeNumber: badgeNumber,
         userId: uid,
         assignedAt: new Date().toISOString(),
-        status: 'assigned'
+        status: 'assigned',
       });
 
       // Clear local storage
       localStorage.removeItem('personalInfo');
       localStorage.removeItem('workInfo');
       localStorage.removeItem('bankInfo');
-  
+
       alert('Employee registered successfully!');
       navigate('/employee');
 

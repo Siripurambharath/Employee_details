@@ -12,6 +12,7 @@ import { FaTrash } from "react-icons/fa";
 
 import "./Employee_manager_leave.css";
 import NavbarTopbar from "../Navbar/NavbarTopbar";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const Employee_manager_leave = () => {
     const [leaveData, setLeaveData] = useState([]);
@@ -21,6 +22,9 @@ const Employee_manager_leave = () => {
     const [commentText, setCommentText] = useState("");
     const [filterRole, setFilterRole] = useState("All");
     const [isCommentReadOnly, setIsCommentReadOnly] = useState(false);
+    const [page, setPage] = useState(0); // current page, 0-based
+    const [rowsPerPage, setRowsPerPage] = useState(10); // number of rows per page
+
 
     useEffect(() => {
         fetchLeavesForManager();
@@ -39,40 +43,42 @@ const Employee_manager_leave = () => {
                 return;
             }
 
-            const { firstName, badgeId, jobRole } = managerSnap.data();
-            const managerIdString = `${firstName} (${badgeId})`;
+         const { firstName, badgeId, jobRole } = managerSnap.data();
+const managerUid = user.uid; // ✅ get logged-in manager UID
 
-            const leavesRef = collection(db, "addleave");
-            const leavesSnap = await getDocs(leavesRef);
+const leavesRef = collection(db, "addleave");
+const leavesSnap = await getDocs(leavesRef);
 
-            let allLeaves = [];
+let allLeaves = [];
 
-            leavesSnap.forEach((docSnap) => {
-                const docData = docSnap.data();
-                if (Array.isArray(docData.leaves)) {
-                    docData.leaves.forEach((leaveItem, index) => {
-                        const leaveBadgeId = leaveItem.badgeId || leaveItem.BadgeId || "";
-                        const leaveJobRole = leaveItem.jobRole || "";
+leavesSnap.forEach((docSnap) => {
+  const docData = docSnap.data();
+  if (Array.isArray(docData.leaves)) {
+    docData.leaves.forEach((leaveItem, index) => {
+      const leaveBadgeId = leaveItem.badgeId || "";
+      const leaveJobRole = leaveItem.jobRole || "";
 
-                        const isEmployeeUnderManager =
-                            leaveJobRole === "Employee" &&
-                            leaveItem.reportingManager === managerIdString;
+      // ✅ fix: check reportingManager.uid instead of string
+      const isEmployeeUnderManager =
+        leaveJobRole === "Employee" &&
+        leaveItem.reportingManager?.uid === managerUid;
 
-                        const isManagerSelfLeave =
-                            leaveBadgeId === badgeId && leaveJobRole === jobRole;
+      const isManagerSelfLeave =
+        leaveItem.uid === managerUid && leaveJobRole === jobRole;
 
-                        if (isEmployeeUnderManager || isManagerSelfLeave) {
-                            allLeaves.push({
-                                docId: docSnap.id,
-                                index,
-                                ...leaveItem,
-                            });
-                        }
-                    });
-                }
-            });
+      if (isEmployeeUnderManager || isManagerSelfLeave) {
+        allLeaves.push({
+          docId: docSnap.id,
+          index,
+          ...leaveItem,
+        });
+      }
+    });
+  }
+});
 
-            setLeaveData(allLeaves);
+setLeaveData(allLeaves);
+
         } catch (error) {
             console.error("Error fetching leaves:", error);
         } finally {
@@ -171,13 +177,17 @@ const Employee_manager_leave = () => {
         }
     };
 
+    const paginatedLeaves = filteredLeaveData.slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage
+    );
+
 
 
     return (
         <>
             <NavbarTopbar />
-            <div className="Employee_manager_leave_container mt-5">
-                <h3 className="text-center mb-4">Employee Leave Requests</h3>
+            <div className="Employee_manager_leave_container ">
 
                 {/* Filter dropdown */}
                 <div className="filter-container mb-3 d-flex align-items-center">
@@ -192,8 +202,8 @@ const Employee_manager_leave = () => {
                         onChange={(e) => setFilterRole(e.target.value)}
                     >
                         <option value="All">All</option>
-                        <option value="Employee">Employee</option>
-                        <option value="Manager">Manager</option>
+                        <option value="Employee">Employees</option>
+                        <option value="Manager">Me</option>
                     </select>
                 </div>
 
@@ -201,6 +211,7 @@ const Employee_manager_leave = () => {
                     <table className="table table-hover table-bordered text-center employeemanagerleave-table">
                         <thead className="employeemanagerleave-table-head">
                             <tr>
+                                <th>S.No</th>
                                 <th>Employee Name</th>
                                 <th>Badge ID</th>
                                 <th>Department</th>
@@ -218,17 +229,10 @@ const Employee_manager_leave = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {loading ? (
-                                <tr>
-                                    <td colSpan="13" className="py-4">
-                                        <div className="spinner-border text-primary" role="status">
-                                            <span className="visually-hidden">Loading...</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ) : filteredLeaveData.length > 0 ? (
-                                filteredLeaveData.map((leave) => (
+                            {paginatedLeaves.length > 0 ? (
+                                paginatedLeaves.map((leave, index) => (
                                     <tr key={leave.docId + leave.index}>
+                                        <td>{page * rowsPerPage + index + 1}</td>
                                         <td>{leave.firstName}</td>
                                         <td>{leave.badgeId}</td>
                                         <td>{leave.departments}</td>
@@ -242,10 +246,10 @@ const Employee_manager_leave = () => {
                                         <td>
                                             <span
                                                 className={`status-badge-employee-manager-leave ${leave.status === "Accepted"
-                                                        ? "accepted"
-                                                        : leave.status === "Rejected"
-                                                            ? "rejected"
-                                                            : "pending"
+                                                    ? "accepted"
+                                                    : leave.status === "Rejected"
+                                                        ? "rejected"
+                                                        : "pending"
                                                     }`}
                                             >
                                                 {leave.status || "Pending"}
@@ -357,6 +361,32 @@ const Employee_manager_leave = () => {
                             )}
                         </tbody>
                     </table>
+
+
+                </div>
+
+                <div className="d-flex justify-content-end align-items-center mt-1 gap-2">
+                    <button
+                        className="btn btn-sm btn-light border"
+                        style={{ backgroundColor: "#f0f0f0" }}
+                        disabled={page === 0}
+                        onClick={() => setPage(page - 1)}
+                    >
+                        <FaChevronLeft />
+                    </button>
+
+                    <span className="mx-2">
+                        Page {page + 1} of {Math.ceil(filteredLeaveData.length / rowsPerPage)}
+                    </span>
+
+                    <button
+                        className="btn btn-sm btn-light border"
+                        style={{ backgroundColor: "#f0f0f0" }}
+                        disabled={page + 1 >= Math.ceil(filteredLeaveData.length / rowsPerPage)}
+                        onClick={() => setPage(page + 1)}
+                    >
+                        <FaChevronRight />
+                    </button>
                 </div>
             </div>
 
@@ -414,6 +444,10 @@ const Employee_manager_leave = () => {
                     </div>
                 </div>
             )}
+
+
+
+
         </>
     );
 };

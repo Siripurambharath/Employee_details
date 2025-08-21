@@ -14,7 +14,6 @@ import Editaddemployee from './Employee_Details/EditAddEmployee/Editaddemployee'
 import Settings from './Employee_Details/Settings/Settings'
 import UnifiedLogin from './Employee_Details/LoginEmployee/UnifiedLogin';
 import Dashboard from './Employee_Details/Dashboard/Dashboard';
-import Attendance from './Employee_Details/Admin_Atttendance/Attendance';
 import Login from './Employee_Details/LoginEmployee/Login';
 import Payroll from './Employee_Details/Payroll/Payroll';
 import PayslipTable from './Employee_Details/Payslip/PayslipTable';
@@ -37,6 +36,8 @@ import Admin_Attendance from './Employee_Details/Admin_Attendance/Admin_Attendan
 import Employee_manager_leave from './Employee_Details/Employee_Manager_leave/Employee_manager_leave';
 import Managerleave from './Employee_Details/ManagerLeave/Managerleave';
 import ManagerPayroll from './Employee_Details/ManagerPayroll/ManagerPayroll';
+import LeaveManagement from './Employee_Details/ManagerleaveManagement/LeaveManagement';
+import Managerdashboard from './Employee_Details/Managerdashboard/Managerdashboard'
 
 
 
@@ -60,13 +61,12 @@ const App = () => {
           <Route path='/setting' element={<Settings />} />
           <Route path='/' element={<UnifiedLogin />} />
           <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/attendance' element={<Attendance />} />
           <Route path="/login" element={<Login />} />
           <Route path="/payroll" element={<Payroll />} />
           <Route path="/payslip" element={<PayslipTable />} />
-<Route path="/payslipedit/:employeeId/:date" element={<Payslipedit />} />
+          <Route path="/payslipedit/:employeeId/:date" element={<Payslipedit />} />
           <Route path='/employeepayroll/:id' element={<EmployeePayroll />} />
-          <Route path="/employeedashboard/:id" element={<EmployeeDashboard />} />
+          <Route path="/employeedashboard" element={<EmployeeDashboard />} />
           <Route path="/employeeattendance" element={<EmployeeAttendance />} />
           <Route path="/adminleavetable" element={<AdminLeaveTable />} />
           <Route path='/employeeleave' element={<EmployeeLeave />} />
@@ -76,15 +76,17 @@ const App = () => {
           <Route path='/edittypeleave' element={<EditLeaveTypes />} />
           <Route path='/assignstaff' element={<AssignStaff />} />
           <Route path='/adminstaff' element={<AdminStaff />} />
-          <Route path='/managerattendance' element={<ManagerAttendance  />} />
+          <Route path='/managerattendance' element={<ManagerAttendance />} />
           <Route path='/employee_manager_attendance' element={<Manager_Employee_attendance />} />
 
           <Route path='/adminattendance' element={<Admin_Attendance />} />
           <Route path='/employeemanagaerleave' element={<Employee_manager_leave />} />
           <Route path='/managerleave' element={<Managerleave />} />
 
-          <Route path='/managerleave' element={<Managerleave />} />
           <Route path='/managerpayroll' element={<ManagerPayroll />} />
+
+          <Route path='/leaevemanagement' element={<LeaveManagement />} />
+          <Route path='/managerdashboard' element={<Managerdashboard />} />
 
         </Routes>
       </BrowserRouter>

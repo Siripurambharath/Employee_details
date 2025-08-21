@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AddEmployee.css';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../Firebase/Firebase';
 import NavbarTopbar from '../Navbar/NavbarTopbar';
 
@@ -16,30 +16,25 @@ const AddEmployee = () => {
   });
 
   const navigate = useNavigate();
+  const [newBadgeNumber, setNewBadgeNumber] = useState(0);
 
+  // Generate Badge ID
   useEffect(() => {
     const generateBadgeId = async () => {
       try {
-        const savedPersonalInfo = localStorage.getItem('personalInfo');
-        if (savedPersonalInfo) {
-          const savedData = JSON.parse(savedPersonalInfo);
-          if (savedData.badgeId) {
-            setBadgeId(savedData.badgeId);
-            setFormData(savedData);
-            return;
-          }
+        const badgeDocRef = doc(db, 'badgeIds', 'lastBadge');
+        const badgeDocSnap = await getDoc(badgeDocRef);
+
+        let number = 1;
+        if (badgeDocSnap.exists()) {
+          number = badgeDocSnap.data().badgeNumber || 0;
+          number += 1;
         }
 
-        const badgeIdsRef = collection(db, 'badgeIds');
-        const q = query(badgeIdsRef, orderBy("badgeNumber", "desc"), limit(1));
-        const snapshot = await getDocs(q);
-
-        const lastNumber = snapshot.empty ? 0 : snapshot.docs[0].data().badgeNumber;
-        const newBadgeId = `BADGE${lastNumber + 1}`;
-        setBadgeId(newBadgeId);
-
+        setNewBadgeNumber(number);
+        setBadgeId(`BADGE${number}`);
       } catch (error) {
-        console.error("Error generating badge ID:", error);
+        console.error('Error generating badge ID:', error);
       }
     };
 
@@ -50,9 +45,9 @@ const AddEmployee = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.firstName) {
       return alert('First name required');
     }
@@ -62,9 +57,40 @@ const AddEmployee = () => {
       badgeId,
       password: `${formData.firstName.toLowerCase()}@123` 
     };
-    
-    localStorage.setItem('personalInfo', JSON.stringify(personalInfo));
-    navigate('/workdetail');
+
+    try {
+      // Save employee data in Firestore
+      await setDoc(doc(db, 'employees', badgeId), personalInfo);
+
+      // Update last badge number
+      const badgeDocRef = doc(db, 'badgeIds', 'lastBadge');
+      await setDoc(badgeDocRef, { badgeNumber: newBadgeNumber });
+
+      localStorage.setItem('personalInfo', JSON.stringify(personalInfo));
+      navigate('/workdetail');
+    } catch (error) {
+      console.error('Error saving employee:', error);
+    }
+  };
+
+  // Function to delete employee (use this in list view)
+  const deleteEmployee = async (badgeIdToDelete) => {
+    try {
+      await deleteDoc(doc(db, 'employees', badgeIdToDelete));
+
+      // Decrement badge number
+      const badgeDocRef = doc(db, 'badgeIds', 'lastBadge');
+      const badgeDocSnap = await getDoc(badgeDocRef);
+      if (badgeDocSnap.exists()) {
+        let lastNumber = badgeDocSnap.data().badgeNumber || 1;
+        if (lastNumber > 1) {
+          lastNumber -= 1;
+          await updateDoc(badgeDocRef, { badgeNumber: lastNumber });
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+    }
   };
 
   return (
@@ -82,7 +108,7 @@ const AddEmployee = () => {
             Bank Info
           </NavLink>
         </div>
-       
+
         <div className="card shadow p-4">
           <h3 className="mb-4">Add Employee</h3>
           <form onSubmit={handleSubmit}>

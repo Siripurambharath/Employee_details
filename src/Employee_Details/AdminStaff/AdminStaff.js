@@ -81,7 +81,7 @@ const AdminStaff = () => {
     <>
       <NavbarTopbar />
       <div className="admin-staff-container mt-4">
-        <h1 className="page-title">Assigned Staff</h1>
+        <h1 className="page-title">Managers </h1>
 
         {staffData.map((group, index) => (
           <div key={index} className="manager-group">

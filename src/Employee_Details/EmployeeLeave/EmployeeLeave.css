@@ -10,22 +10,22 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .employee-leave-title {
   font-size: 1.75rem;
   font-weight: 600;
   color: #2c3e50;
- text-align: center;
+  text-align: center;
 }
 
 .employee-leave-add-btn {
   background-color: #4e73df;
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 4px;
   text-decoration: none;
   font-weight: 500;
@@ -34,15 +34,14 @@
 
 .employee-leave-add-btn:hover {
   background-color: #3a5ab6;
-  color: white;
 }
 
 /* Table Styles */
 .employee-leave-table-container {
   width: 100%;
   overflow-x: auto;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
   border-radius: 8px;
 }
 
@@ -59,33 +58,26 @@
 }
 
 .employee-leave-table th {
-  padding: 1rem;
+  padding: 0.5rem;
   font-weight: 600;
   text-align: center;
   position: sticky;
   top: 0;
-}
-
-.employee-leave-table tbody tr {
-  transition: background-color 0.2s;
-}
-
-.employee-leave-table tbody tr:hover {
-  background-color: #f8f9fa;
+  height: 40px; /* reduced header height */
 }
 
 .employee-leave-table td {
-  padding: 0.75rem 1rem;
+  padding: 0.5rem;
   text-align: center;
   vertical-align: middle;
   border-bottom: 1px solid #e9ecef;
 }
 
-/* Status Badges */
+/* Status Colors */
 .employee-leave-status {
-  padding: 0.35rem 0.75rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 500;
   text-transform: capitalize;
 }
@@ -94,8 +86,7 @@
   color: #856404;
 }
 
-.employee-leave-status-accepted {
-font-size: medium;
+.employee-leave-status-approved {
   color: #155724;
 }
 
@@ -103,34 +94,7 @@ font-size: medium;
   color: #721c24;
 }
 
-/* Comment Cell */
-.employee-leave-comment-cell {
-  cursor: pointer;
-  position: relative;
-  max-width: 200px;
-}
-
-.employee-leave-comment-cell:hover {
-  background-color: #f0f7ff;
-}
-
-.employee-leave-comment-text {
-  display: inline-block;
-  max-width: calc(100% - 20px);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: middle;
-}
-
-.employee-leave-view-icon {
-  color: #4e73df;
-  margin-left: 5px;
-  font-size: 0.9rem;
-  vertical-align: middle;
-}
-
-/* Action Buttons */
+/* Comment & Actions */
 .employee-leave-actions {
   width: 120px;
 }
@@ -138,14 +102,14 @@ font-size: medium;
 .employee-leave-action-buttons {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
 }
 
 .employee-leave-action-btn {
   border: none;
   background: none;
   cursor: pointer;
-  padding: 0.35rem;
+  padding: 0.25rem;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -153,18 +117,8 @@ font-size: medium;
   transition: all 0.2s;
 }
 
-.employee-leave-edit-btn {
-  color: #4e73df;
- 
-}
-
-.employee-leave-edit-btn:hover {
-  background-color: #d0e0fc;
-}
-
 .employee-leave-delete-btn {
   color: #e74a3b;
- 
 }
 
 .employee-leave-delete-btn:hover {
@@ -174,7 +128,7 @@ font-size: medium;
 /* Empty State */
 .employee-leave-empty {
   text-align: center;
-  padding: 2rem;
+  padding: 1rem;
   color: #6c757d;
 }
 
@@ -182,17 +136,17 @@ font-size: medium;
 .employee-leave-pagination {
   display: flex;
   justify-content: end;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .employee-leave-pagination-controls {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .employee-leave-pagination-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.8rem;
   background-color: #f8f9fa;
   border: 1px solid #dee2e6;
   border-radius: 4px;
@@ -209,19 +163,14 @@ font-size: medium;
   cursor: not-allowed;
 }
 
-.employee-leave-pagination-info {
-  font-weight: 500;
-  color: #495057;
-}
-
-/* Modal Styles */
+/* Modal */
 .employee-leave-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0,0,0,0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -232,145 +181,63 @@ font-size: medium;
   background-color: white;
   border-radius: 8px;
   width: 90%;
-  max-width: 500px;
-  max-height: 80vh;
+  max-width: 450px;
+  max-height: 70vh;
   overflow: auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
 .employee-leave-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 0.8rem;
   border-bottom: 1px solid #e9ecef;
 }
 
-.employee-leave-modal-header h3 {
-  margin: 0;
-  color: #2c3e50;
-}
-
-.employee-leave-modal-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #6c757d;
-  padding: 0 0.5rem;
-}
-
-.employee-leave-modal-close:hover {
-  color: #495057;
-}
-
 .employee-leave-modal-body {
-  padding: 1.5rem;
-  max-height: 60vh;
+  padding: 1rem;
+  max-height: 50vh;
   overflow-y: auto;
 }
 
-.employee-leave-modal-body p {
-  margin: 0;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
 .employee-leave-modal-footer {
-  padding: 1rem;
+  padding: 0.8rem;
   border-top: 1px solid #e9ecef;
   display: flex;
   justify-content: flex-end;
 }
 
 .employee-leave-modal-btn {
-  padding: 0.5rem 1rem;
-  background-color: #4e73df;
+  padding: 0.4rem 0.8rem;
+  background-color: #4e73df ;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
 }
 
 .employee-leave-modal-btn:hover {
   background-color: #3a5ab6;
 }
 
-.employee-leave-view-comment-btn {
-  background-color: transparent;
-  border: none;
-  color: #4e73df;
-  cursor: pointer;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 0;
-  font-size: 0.9rem;
-  transition: color 0.2s;
-}
-
-.employee-leave-view-comment-btn:hover {
-  color: #3a5ab6;
-  text-decoration: underline;
-}
-
-
-/* Responsive Styles */
-/* Mobile: 360px–740px */
+/* Responsive */
+/* Mobile 360–740px */
 @media (max-width: 740px) {
-  .employee-leave-container {
-    padding: 1rem;
-  }
-  
-  .employee-leave-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .employee-leave-title {
-    font-size: 1.5rem;
-
-  }
-  
-  .employee-leave-table th,
-  .employee-leave-table td {
-    padding: 0.5rem;
-    font-size: 0.85rem;
-  }
-  
-  .employee-leave-status {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-  }
-  
-  .employee-leave-action-buttons {
-    gap: 0.3rem;
-  }
-  
-  .employee-leave-action-btn {
-    padding: 0.25rem;
-  }
+  .employee-leave-container { padding: 1rem; }
+  .employee-leave-title { font-size: 1.4rem; }
+  .employee-leave-table th, .employee-leave-table td { padding: 0.35rem; font-size: 0.75rem; }
+  .employee-leave-status { font-size: 0.7rem; padding: 0.2rem 0.4rem; }
 }
 
-/* iPad Mini: 768px–1024px */
+/* iPad Mini 768–1024px */
 @media (min-width: 768px) and (max-width: 1024px) {
-  .employee-leave-container {
-    padding: 1.5rem;
-  }
-  
-  .employee-leave-table th,
-  .employee-leave-table td {
-    padding: 0.75rem;
-  }
+  .employee-leave-container { padding: 1.5rem; }
+  .employee-leave-table th, .employee-leave-table td { padding: 0.5rem; font-size: 0.85rem; }
 }
 
-/* Desktop: min-width 1025px */
+/* Desktop ≥1025px */
 @media (min-width: 1025px) {
-  .employee-leave-container {
-    padding: 2rem;
-    max-width: calc(100% - 200px);
-    margin-left: 200px;
-  }
+  .employee-leave-container { margin-left: 190px; max-width: calc(100% - 200px); }
+  .employee-leave-table th, .employee-leave-table td { font-size: 0.9rem; }
 }

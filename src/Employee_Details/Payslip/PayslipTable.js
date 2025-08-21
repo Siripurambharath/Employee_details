@@ -14,7 +14,6 @@ import './PayslipTable.css';
 const PayslipTable = () => {
   const [payslips, setPayslips] = useState([]);
   const [data, setData] = useState([]);
-
   const [selectedPayslip, setSelectedPayslip] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -41,7 +40,7 @@ const PayslipTable = () => {
       if (Array.isArray(p.slips) && p.slips.length > 0) {
         p.slips.forEach(slip => {
           allPayslips.push({
-            id: docSnap.id + '_' + slip.date, 
+            id: docSnap.id + '_' + slip.date,
             badgeId: slip.badgeId || p.badgeId || '',
             uid: slip.uid || p.uid || '',
             firstName: slip.firstName || p.firstName || '',
@@ -50,6 +49,7 @@ const PayslipTable = () => {
             departments: slip.departments || p.departments || '',
             jobRole: slip.jobRole || p.jobRole || '',
             reportingManager: slip.reportingManager || p.reportingManager || '',
+             calculatedSalary: slip.calculatedSalary ?? p.calculatedSalary ?? 0, // <-- NEW
             bankName: slip.bankName || p.bankName || '',
             ifsc: slip.ifsc || p.ifsc || '',
             branchName: slip.branchName || p.branchName || '',
@@ -59,6 +59,12 @@ const PayslipTable = () => {
             netSalary: slip.netSalary || p.netSalary || 0,
             status: slip.status || p.status || '',
             date: slip.date || p.date || '',
+            // --- NEW FIELDS ---
+            attendanceDays: slip.attendanceDays ?? p.attendanceDays ?? 0,
+            bonus: slip.bonus ?? p.bonus ?? 0,
+            approvedLeavesCount: slip.approvedLeavesCount ?? p.approvedLeavesCount ?? 0,
+         
+            // -------------------
             slips: [slip]
           });
         });
@@ -66,6 +72,11 @@ const PayslipTable = () => {
         allPayslips.push({
           id: docSnap.id,
           ...p,
+          // ensure new fields exist even if slips empty
+          attendanceDays: p.attendanceDays ?? 0,
+          bonus: p.bonus ?? 0,
+          approvedLeavesCount: p.approvedLeavesCount ?? 0,
+        
           slips: []
         });
       }
@@ -74,10 +85,7 @@ const PayslipTable = () => {
     setPayslips(allPayslips);
   };
 
-
-
   useEffect(() => {
-
     fetchPayslips();
     const interval = setInterval(fetchPayslips, 10000);
     return () => clearInterval(interval);
@@ -85,10 +93,9 @@ const PayslipTable = () => {
 
   const filteredPayslips = payslips.filter(p => {
     if (!p.date) return false;
-    const d = moment(p.date, ["DD/MM/YYYY", "YYYY-MM-DD"]); // parse both formats
+    const d = moment(p.date, ["DD/MM/YYYY", "YYYY-MM-DD"]);
     return d.month() + 1 === Number(selectedMonth) && d.year() === Number(selectedYear);
   });
-
 
   const handleView = p => {
     setSelectedPayslip(p);
@@ -122,15 +129,20 @@ const PayslipTable = () => {
         badgeId: selectedPayslip.badgeId,
         phone: selectedPayslip.phone,
         bankName: selectedPayslip.bankName,
+         calculatedSalary: selectedPayslip.calculatedSalary ?? 0, // <-- ADD THIS
         branchName: selectedPayslip.branchName,
         ifsc: selectedPayslip.ifsc,
         jobRole: selectedPayslip.jobRole,
-         reportingManager: selectedPayslip.reportingManager ,  
+        reportingManager: selectedPayslip.reportingManager,
         departments: selectedPayslip.departments,
-paymentMethod: selectedPayslip.paymentMethod || 'Bank Transfer'
+        paymentMethod: selectedPayslip.paymentMethod || 'Bank Transfer',
+        // --- NEW FIELDS INCLUDED IN REQUEST ---
+        attendanceDays: selectedPayslip.attendanceDays ?? 0,
+        bonus: selectedPayslip.bonus ?? 0,
+        approvedLeavesCount: selectedPayslip.approvedLeavesCount ?? 0,
+     
       });
       alert('Email sent successfully');
-
       setShowEmailModal(false);
       fetchPayslips();
     } catch (e) {
@@ -138,7 +150,6 @@ paymentMethod: selectedPayslip.paymentMethod || 'Bank Transfer'
       alert('Error sending email');
     }
   };
-
 
   const toggleRowSelection = id =>
     setSelectedRows(prev => (prev.includes(id) ? prev.filter(rowId => rowId !== id) : [...prev, id]));
@@ -148,20 +159,19 @@ paymentMethod: selectedPayslip.paymentMethod || 'Bank Transfer'
       ? setSelectedRows([])
       : setSelectedRows(filteredPayslips.map(p => p.id));
 
-const exportSelectedRows = () => {
-  if (selectedRows.length === 0) return alert('Please select at least one row');
+  const exportSelectedRows = () => {
+    if (selectedRows.length === 0) return alert('Please select at least one row');
 
-  const selectedData = filteredPayslips
-    .filter(p => selectedRows.includes(p.id))
-    .map(({ slips, ...rest }) => rest);  // exclude 'slips' property
+    const selectedData = filteredPayslips
+      .filter(p => selectedRows.includes(p.id))
+      .map(({ slips, ...rest }) => rest); // exclude 'slips' property
 
-  const worksheet = XLSX.utils.json_to_sheet(selectedData);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Payslips');
-  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  saveAs(new Blob([excelBuffer], { type: 'application/octet-stream' }), 'payslips.xlsx');
-};
-
+    const worksheet = XLSX.utils.json_to_sheet(selectedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Payslips');
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    saveAs(new Blob([excelBuffer], { type: 'application/octet-stream' }), 'payslips.xlsx');
+  };
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -174,8 +184,7 @@ const exportSelectedRows = () => {
 
     try {
       const encodedEmployeeId = encodeURIComponent(employeeId);
-      const encodedDate = encodeURIComponent(date);  // e.g. "08/08/2025"
-
+      const encodedDate = encodeURIComponent(date);
       const res = await fetch(`http://localhost:5000/api/salary/${encodedEmployeeId}/${encodedDate}`, {
         method: 'DELETE',
       });
@@ -191,9 +200,6 @@ const exportSelectedRows = () => {
       alert('Error deleting record');
     }
   };
-
-
-
 
   return (
     <>
@@ -237,14 +243,17 @@ const exportSelectedRows = () => {
                 <th>Department</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Basic</th>
+           
+                <th>Bonus</th>
+                <th>Approved Leaves</th>
+             
                 <th>Allowances</th>
                 <th>Deductions</th>
                 <th>Net Salary</th>
                 <th>Bank</th>
                 <th>IFSC</th>
                 <th>Status</th>
-                <th >Date</th>
+                <th>Date</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -264,6 +273,9 @@ const exportSelectedRows = () => {
                   <td>{p.departments}</td>
                   <td>{p.email}</td>
                   <td>{p.phone}</td>
+           
+                  <td>₹{p.bonus}</td>
+               
                   <td>₹{p.basicSalary}</td>
                   <td>₹{p.allowances}</td>
                   <td>₹{p.deductions}</td>
@@ -299,7 +311,7 @@ const exportSelectedRows = () => {
                     </div>
                   </td>
                 </tr>
-              )) : <tr><td colSpan="16" className="text-center text-muted">No payslips found</td></tr>}
+              )) : <tr><td colSpan="20" className="text-center text-muted">No payslips found</td></tr>}
             </tbody>
           </table>
         </div>
@@ -309,7 +321,6 @@ const exportSelectedRows = () => {
           <span>Page {currentPage} of {totalPages}</span>
           <span onClick={() => currentPage < totalPages && setCurrentPage(prev => prev + 1)}>&gt;</span>
         </div>
-
 
         {/* View Modal */}
         <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
@@ -330,24 +341,30 @@ const exportSelectedRows = () => {
                 </div>
 
                 <div className="row mb-3">
+                  <div className="col-md-4"><strong>Present Days:</strong> {selectedPayslip.attendanceDays}</div>
+                  <div className="col-md-4"><strong>Bonus:</strong> ₹{selectedPayslip.bonus}</div>
+                  <div className="col-md-4"><strong>Approved Leaves:</strong> {selectedPayslip.approvedLeavesCount}</div>
+                </div>
+
+                <div className="row mb-3">
                   <div className="col-md-4"><strong>Basic Salary:</strong> ₹{selectedPayslip.basicSalary}</div>
                   <div className="col-md-4"><strong>Allowances:</strong> ₹{selectedPayslip.allowances}</div>
-                  <div className="col-md-4"><strong>Deductions:</strong> ₹{selectedPayslip.deductions}</div>
                 </div>
 
                 <div className="row mb-3">
+                  <div className="col-md-4"><strong>Deductions:</strong> ₹{selectedPayslip.deductions}</div>
                   <div className="col-md-4"><strong>Net Salary:</strong> ₹{selectedPayslip.netSalary}</div>
                   <div className="col-md-4"><strong>Bank:</strong> {selectedPayslip.bankName}</div>
-                  <div className="col-md-4"><strong>IFSC:</strong> {selectedPayslip.ifsc}</div>
                 </div>
 
                 <div className="row mb-3">
+                  <div className="col-md-4"><strong>IFSC:</strong> {selectedPayslip.ifsc}</div>
                   <div className="col-md-4"><strong>Branch:</strong> {selectedPayslip.branchName}</div>
                   <div className="col-md-4"><strong>Email:</strong> {selectedPayslip.email}</div>
-                  <div className="col-md-4"><strong>Phone:</strong> {selectedPayslip.phone}</div>
                 </div>
 
                 <div className="row mb-3">
+                  <div className="col-md-4"><strong>Phone:</strong> {selectedPayslip.phone}</div>
                   <div className="col-md-4"><strong>Job Role:</strong> {selectedPayslip.jobRole}</div>
                   <div className="col-md-4"><strong>Reporting Manager:</strong> {selectedPayslip.reportingManager}</div>
                 </div>
@@ -358,6 +375,7 @@ const exportSelectedRows = () => {
             <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
           </Modal.Footer>
         </Modal>
+
         {/* Email Modal */}
         <Modal show={showEmailModal} onHide={() => setShowEmailModal(false)} centered>
           <Modal.Header closeButton><Modal.Title>Schedule Email</Modal.Title></Modal.Header>

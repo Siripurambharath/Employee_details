@@ -58,6 +58,9 @@ const userName = (role === "Employee" || role === "Manager")
         {role === "Employee" && (
           <>
            
+             <NavLink to="/employeedashboard" className="navtop-sidebar-link" onClick={closeSidebar}>
+              Dashboard
+            </NavLink>
             <NavLink to="/employee" className="navtop-sidebar-link" onClick={closeSidebar}>
               Employee
             </NavLink>
@@ -65,9 +68,7 @@ const userName = (role === "Employee" || role === "Manager")
               Employee Attendance
             </NavLink>
           
-             <NavLink to="/attendance" className="navtop-sidebar-link" onClick={closeSidebar}>
-              Attendance
-            </NavLink>
+          
               <NavLink to="/employeeleave" className="navtop-sidebar-link" onClick={closeSidebar}>
               Employee Leave
             </NavLink>
@@ -76,30 +77,37 @@ const userName = (role === "Employee" || role === "Manager")
 
         {role === "Manager" && (
           <>
+
+                   <NavLink to="/managerdashboard" className="navtop-sidebar-link" onClick={closeSidebar}>
+            Dashboard
+            </NavLink>
             <NavLink to="/employee" className="navtop-sidebar-link" onClick={closeSidebar}>
-              Employee
+              Employees
             </NavLink>
             <NavLink to="/assignstaff" className="navtop-sidebar-link" onClick={closeSidebar}>
               Assigned Staff
             </NavLink>
              <NavLink to="/employee_manager_attendance" className="navtop-sidebar-link" onClick={closeSidebar}>
-              Employee attendance
+               Attendance
             </NavLink>
 
-                <NavLink to="/managerattendance" className="navtop-sidebar-link" onClick={closeSidebar}>
+                {/* <NavLink to="/managerattendance" className="navtop-sidebar-link" onClick={closeSidebar}>
              Attendance
-            </NavLink>
+            </NavLink> */}
 
-                 <NavLink to="/employeemanagaerleave" className="navtop-sidebar-link" onClick={closeSidebar}>
+                 {/* <NavLink to="/employeemanagaerleave" className="navtop-sidebar-link" onClick={closeSidebar}>
              EmployeLeave
-            </NavLink>
+            </NavLink> */}
 
-             <NavLink to="/Managerleave" className="navtop-sidebar-link" onClick={closeSidebar}>
+             {/* <NavLink to="/Managerleave" className="navtop-sidebar-link" onClick={closeSidebar}>
               Manager Leave
             </NavLink>
 
                   <NavLink to="/managerpayroll" className="navtop-sidebar-link" onClick={closeSidebar}>
               Manager Payroll
+            </NavLink> */}
+                  <NavLink to="/leaevemanagement" className="navtop-sidebar-link" onClick={closeSidebar}>
+            Leaves
             </NavLink>
         
           </>
@@ -112,12 +120,12 @@ const userName = (role === "Employee" || role === "Manager")
             </NavLink>
        
         <NavLink to="/employee" className="navtop-sidebar-link" onClick={closeSidebar}>
-              Employee
+              Employees
             </NavLink>
           
        
             <NavLink to="/adminstaff" className="navtop-sidebar-link" onClick={closeSidebar}>
-              Admined Staff
+              Managers 
             </NavLink>
                    <NavLink to="/adminattendance" className="navtop-sidebar-link" onClick={closeSidebar}>
               Attendance
@@ -127,19 +135,19 @@ const userName = (role === "Employee" || role === "Manager")
 
             <div className="navtop-leave-container">
               <button className="navtop-leave-btn" onClick={() => setLeaveDropdown(!leaveDropdown)}>
-                <span>Admin </span>
+                <span>Leaves </span>
                 <FaChevronDown className={`navtop-leave-icon ${leaveDropdown ? "open" : ""}`} />
               </button>
               {leaveDropdown && (
                 <div className="navtop-leave-dropdown">
                   <NavLink to="/adminleavetable" className="navtop-leave-link" onClick={closeSidebar}>
-                    Admin   
+                    Leaves   
                   </NavLink>
                   {/* <NavLink to="/adminleavedashboard" className="navtop-leave-link" onClick={closeSidebar}>
                     Leaves Dashboard
                   </NavLink> */}
                   <NavLink to="/leavetypes" className="navtop-leave-link" onClick={closeSidebar}>
-                    Leave Types
+                    Leaves Types
                   </NavLink>
                 </div>
               )}
@@ -152,10 +160,10 @@ const userName = (role === "Employee" || role === "Manager")
               {payrollDropdown && (
                 <div className="navtop-payroll-dropdown">
                   <NavLink to="/payroll" className="navtop-payroll-link" onClick={closeSidebar}>
-                    Payroll Home
+                    Payroll 
                   </NavLink>
                   <NavLink to="/payslip" className="navtop-payroll-link" onClick={closeSidebar}>
-                    Payslip
+                    Payslips
                   </NavLink>
                 </div>
               )}

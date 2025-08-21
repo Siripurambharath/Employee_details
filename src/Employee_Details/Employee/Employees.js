@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaEllipsisV, FaUserCircle, FaBell } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-import { collection, getDocs, deleteDoc, doc, setDoc,getDoc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc,  updateDoc } from 'firebase/firestore';
 import { db } from '../Firebase/Firebase';
 import './Employees.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import NavbarTopbar from '../Navbar/NavbarTopbar';
+
 
 
 
@@ -636,7 +637,7 @@ const handleImportFile = async () => {
             <div className="card-body position-relative">
               <div className="dropdown position-absolute top-0 end-0">
                 <button
-                  className="btn btn-sm btn-light rounded-circle"
+                  className="employee-rounded-circle"
                   onClick={(e) => {
                     e.stopPropagation();
                     toggleDropdown(emp.id);

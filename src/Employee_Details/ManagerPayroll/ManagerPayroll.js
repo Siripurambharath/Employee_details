@@ -1,12 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../Firebase/Firebase";
 import NavbarTopbar from "../Navbar/NavbarTopbar";
+import { FaTrash } from "react-icons/fa";
 import "./ManagerPayroll.css";
-import { FaTrash  } from "react-icons/fa";
 
-/* Utility functions */
 const toDateSafe = (val) => {
   if (!val) return null;
   if (val instanceof Date && !isNaN(val.getTime())) return val;
@@ -32,20 +31,22 @@ const currencyIN = (n) =>
     currency: "INR",
   }).format(Number(n || 0));
 
-export default function EmployeePayroll() {
+const ManagerPayroll = () => {
   const [loading, setLoading] = useState(true);
   const [authUser, setAuthUser] = useState(null);
-  const [rows, setRows] = useState([]);
+  const [myPayrollRows, setMyPayrollRows] = useState([]);
+  const [employeePayrollRows, setEmployeePayrollRows] = useState([]);
   const [error, setError] = useState(null);
+  const [viewType, setViewType] = useState("my");
 
-  const [roleFilter, setRoleFilter] = useState("");
-  const [dateFilter, setDateFilter] = useState("");
-
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageMy, setCurrentPageMy] = useState(1);
+  const [currentPageEmp, setCurrentPageEmp] = useState(1);
   const rowsPerPage = 10;
 
-  // Track logged-in user
+  // Date filters for each table
+  const [filterDateMy, setFilterDateMy] = useState("");
+  const [filterDateEmp, setFilterDateEmp] = useState("");
+
   useEffect(() => {
     const auth = getAuth();
     const unsub = onAuthStateChanged(auth, (user) => setAuthUser(user || null));
@@ -58,39 +59,34 @@ export default function EmployeePayroll() {
     const loadData = async () => {
       setLoading(true);
       try {
-        // Get manager details
         const managerSnap = await getDoc(doc(db, "users", authUser.uid));
         if (!managerSnap.exists()) throw new Error("Manager data not found");
 
         const { firstName, badgeId, jobRole } = managerSnap.data();
         const managerString = `${firstName} (${badgeId})`;
 
-        // Get all users
         const usersSnap = await getDocs(collection(db, "users"));
+        let myProfile = null;
         let team = [];
 
         usersSnap.forEach((userDoc) => {
           const data = userDoc.data();
-          const isEmployeeUnderManager =
+          if (data.badgeId === badgeId && data.jobRole === jobRole) {
+            myProfile = { uid: userDoc.id, ...data };
+          } else if (
             data.jobRole === "Employee" &&
-            data.reportingManager === managerString;
-
-          const isManagerSelf =
-            data.badgeId === badgeId && data.jobRole === jobRole;
-
-          if (isEmployeeUnderManager || isManagerSelf) {
+            data.reportingManager === managerString
+          ) {
             team.push({ uid: userDoc.id, ...data });
           }
         });
 
-        // Get payroll data for each
-        const allRows = [];
-        for (const person of team) {
+        const fetchPayrollData = async (person) => {
           const payslipDoc = await getDoc(doc(db, "payslips", person.uid));
-          if (!payslipDoc.exists()) continue;
+          if (!payslipDoc.exists()) return [];
           const { slips = [] } = payslipDoc.data();
 
-          slips.forEach((slip, idx) => {
+          return slips.map((slip, idx) => {
             const date = toDateSafe(slip.date);
             const basic = Number(slip.basicSalary || 0);
             const allow = Number(slip.allowances || 0);
@@ -100,13 +96,11 @@ export default function EmployeePayroll() {
                 ? Number(slip.netSalary)
                 : basic + allow - ded;
 
-            allRows.push({
+            return {
               id: `${payslipDoc.id}_${idx}`,
-              uid: person.uid, // Needed for deletion
-              slipIndex: idx,  // Needed for deletion
-              employeeName: `${person.firstName || ""} ${
-                person.lastName || ""
-              }`.trim(),
+              uid: person.uid,
+              slipIndex: idx,
+              employeeName: `${person.firstName || ""} ${person.lastName || ""}`.trim(),
               badgeId: person.badgeId || "N/A",
               date,
               basic,
@@ -117,17 +111,26 @@ export default function EmployeePayroll() {
               ifsc: slip.ifsc || "N/A",
               status: slip.status || "Pending",
               jobRole: person.jobRole || "",
-            });
+            };
           });
+        };
+
+        let myRows = myProfile ? await fetchPayrollData(myProfile) : [];
+        let empRows = [];
+        for (const emp of team) {
+          const empData = await fetchPayrollData(emp);
+          empRows.push(...empData);
         }
 
-        // Sort by latest date
-        allRows.sort(
-          (a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0)
-        );
-        setRows(allRows);
+        myRows.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
+        empRows.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
 
-        if (allRows.length === 0) setError("No payslips found.");
+        setMyPayrollRows(myRows);
+        setEmployeePayrollRows(empRows);
+
+        if (myRows.length === 0 && empRows.length === 0) {
+          setError("No payslips found.");
+        }
       } catch (err) {
         console.error(err);
         setError(err.message || "Error loading payroll");
@@ -139,8 +142,7 @@ export default function EmployeePayroll() {
     loadData();
   }, [authUser]);
 
-  // Delete handler
-  const handleDelete = async (uid, slipIndex) => {
+  const handleDelete = async (uid, slipIndex, type) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this payslip?");
     if (!confirmDelete) return;
 
@@ -154,14 +156,19 @@ export default function EmployeePayroll() {
       }
 
       const { slips = [] } = payslipSnap.data();
-      slips.splice(slipIndex, 1); // Remove the slip from the array
+      slips.splice(slipIndex, 1);
 
       await updateDoc(payslipRef, { slips });
 
-      // Remove from UI
-      setRows((prev) =>
-        prev.filter((row) => !(row.uid === uid && row.slipIndex === slipIndex))
-      );
+      if (type === "my") {
+        setMyPayrollRows((prev) =>
+          prev.filter((row) => !(row.uid === uid && row.slipIndex === slipIndex))
+        );
+      } else {
+        setEmployeePayrollRows((prev) =>
+          prev.filter((row) => !(row.uid === uid && row.slipIndex === slipIndex))
+        );
+      }
 
       alert("Payslip deleted successfully!");
     } catch (err) {
@@ -170,30 +177,90 @@ export default function EmployeePayroll() {
     }
   };
 
-  // Filter rows
-  const filteredRows = useMemo(() => {
-    return rows.filter((r) => {
-      let ok = true;
-      if (roleFilter)
-        ok = ok && r.jobRole?.toLowerCase() === roleFilter.toLowerCase();
-      if (dateFilter) {
-        const d = new Date(dateFilter);
-        ok =
-          ok &&
-          r.date &&
-          r.date.getFullYear() === d.getFullYear() &&
-          r.date.getMonth() === d.getMonth() &&
-          r.date.getDate() === d.getDate();
-      }
-      return ok;
-    });
-  }, [rows, roleFilter, dateFilter]);
+  const renderTable = (rows, type, currentPage, setCurrentPage, totalPages, filterDate, setFilterDate) => {
+    const filteredRows = filterDate
+      ? rows.filter((r) => formatDateDMY(r.date) === formatDateDMY(new Date(filterDate)))
+      : rows;
 
-  // Pagination logic
-  const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = filteredRows.slice(indexOfFirstRow, indexOfLastRow);
+    const totalFilteredPages = Math.ceil(filteredRows.length / rowsPerPage);
+    const currentRows = filteredRows.slice(
+      (currentPage - 1) * rowsPerPage,
+      currentPage * rowsPerPage
+    );
+
+    return (
+      <>
+        <div className="table-header">
+          <input
+            type="date"
+            value={filterDate}
+            onChange={(e) => {
+              setFilterDate(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="date-filter-managerpayroll"
+          />
+        </div>
+
+        <table className="managerpayroll-table">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Employee</th>
+              <th>Badge ID</th>
+              <th>Pay Date</th>
+              <th>Basic Salary</th>
+              <th>Allowances</th>
+              <th>Deductions</th>
+              <th>Net Salary</th>
+              <th>Bank</th>
+              <th>IFSC/Account</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentRows.map((r, idx) => (
+              <tr key={r.id}>
+                <td>{(currentPage - 1) * rowsPerPage + idx + 1}</td>
+                <td>{r.employeeName}</td>
+                <td>{r.badgeId}</td>
+                <td>{formatDateDMY(r.date)}</td>
+                <td>{currencyIN(r.basic)}</td>
+                <td>{currencyIN(r.allow)}</td>
+                <td>{currencyIN(r.ded)}</td>
+                <td>{currencyIN(r.net)}</td>
+                <td>{r.bankName}</td>
+                <td>{r.ifsc}</td>
+                <td className={`status-${r.status.toLowerCase()}`}>{r.status}</td>
+                <td>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(r.uid, r.slipIndex, type)}
+                  >
+                    <FaTrash />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="managerpayroll-pagination">
+          <button onClick={() => setCurrentPage((p) => p - 1)} disabled={currentPage === 1}>
+            &lt; Prev
+          </button>
+          <span>Page {currentPage} of {totalFilteredPages}</span>
+          <button
+            onClick={() => setCurrentPage((p) => p + 1)}
+            disabled={currentPage === totalFilteredPages}
+          >
+            Next &gt;
+          </button>
+        </div>
+      </>
+    );
+  };
 
   return (
     <>
@@ -201,119 +268,41 @@ export default function EmployeePayroll() {
       <div className="managerpayroll-container">
         <h2 className="managerpayroll-title">Payroll</h2>
 
-        {/* Filters */}
-        <div className="managerpayroll-filters">
-          <div>
-            <label>Job Role</label>
-            <select
-              value={roleFilter}
-              onChange={(e) => {
-                setRoleFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-            >
-              <option value="">All</option>
-              <option value="Employee">Employee</option>
-              <option value="Manager">Manager</option>
-            </select>
-          </div>
-          <div>
-            <label>Pay Date</label>
-            <input
-              type="date"
-              value={dateFilter}
-              onChange={(e) => {
-                setDateFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-            />
-          </div>
+        <div className="managerpayroll-tabs">
+          <button
+            className={viewType === "my" ? "active-tab" : ""}
+            onClick={() => setViewType("my")}
+          >
+            My Payroll
+          </button>
+          <button
+            className={viewType === "employee" ? "active-tab" : ""}
+            onClick={() => setViewType("employee")}
+          >
+            Employee Payroll
+          </button>
         </div>
 
-        {/* Table */}
         <div className="managerpayroll-table-wrapper">
           {loading ? (
             <p>Loading payroll...</p>
           ) : error ? (
             <p>{error}</p>
-          ) : filteredRows.length === 0 ? (
+          ) : viewType === "my" ? (
+            myPayrollRows.length === 0 ? (
+              <p>No payslips to display.</p>
+            ) : (
+              renderTable(myPayrollRows, "my", currentPageMy, setCurrentPageMy, Math.ceil(myPayrollRows.length / rowsPerPage), filterDateMy, setFilterDateMy)
+            )
+          ) : employeePayrollRows.length === 0 ? (
             <p>No payslips to display.</p>
           ) : (
-            <>
-              <table className="managerpayroll-table">
-                <thead>
-                  <tr>
-                    <th>S.No</th>
-                    <th>Employee</th>
-                    <th>Badge ID</th>
-                    <th>Pay Date</th>
-                    <th>Basic Salary</th>
-                    <th>Allowances</th>
-                    <th>Deductions</th>
-                    <th>Net Salary</th>
-                    <th>Bank</th>
-                    <th>IFSC/Account</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentRows.map((r, idx) => (
-                    <tr key={r.id}>
-                      <td>{indexOfFirstRow + idx + 1}</td>
-                      <td>{r.employeeName}</td>
-                      <td>{r.badgeId}</td>
-                      <td>{formatDateDMY(r.date)}</td>
-                      <td>{currencyIN(r.basic)}</td>
-                      <td>{currencyIN(r.allow)}</td>
-                      <td>{currencyIN(r.ded)}</td>
-                      <td>{currencyIN(r.net)}</td>
-                      <td>{r.bankName}</td>
-                      <td>{r.ifsc}</td>
-                      <td className={`status-${r.status.toLowerCase()}`}>
-                        {r.status}
-                      </td>
-                      <td>
-                        <button
-                          style={{
-                            background: "transparent",
-                            border: "none",
-                            color: "red",
-                            cursor: "pointer",
-                            fontSize: "18px",
-                          }}
-                          onClick={() => handleDelete(r.uid, r.slipIndex)}
-                        >
-                           <FaTrash />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              {/* Pagination */}
-              <div className="managerpayroll-pagination">
-                <button
-                  onClick={() => setCurrentPage((p) => p - 1)}
-                  disabled={currentPage === 1}
-                >
-                  &lt; Prev
-                </button>
-                <span>
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button
-                  onClick={() => setCurrentPage((p) => p + 1)}
-                  disabled={currentPage === totalPages}
-                >
-                  Next &gt;
-                </button>
-              </div>
-            </>
+            renderTable(employeePayrollRows, "employee", currentPageEmp, setCurrentPageEmp, Math.ceil(employeePayrollRows.length / rowsPerPage), filterDateEmp, setFilterDateEmp)
           )}
         </div>
       </div>
     </>
   );
-}
+};
+
+export default ManagerPayroll;

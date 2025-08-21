@@ -9,6 +9,7 @@ import {
   where,
   getDocs,
   doc,
+  getDoc,
   setDoc,
   arrayUnion,
 } from "firebase/firestore";
@@ -20,18 +21,18 @@ const Add_leave = () => {
   const [appliedLeaves, setAppliedLeaves] = useState([]);
   const [firstName, setFirstName] = useState("");
   const [badgeId, setBadgeId] = useState("");
-  const [employeedepartmentss, setEmployeedepartmentss] = useState("");
-  const [employeeWorkType, setEmployeeWorkType] = useState("");
-  const [employeeShift, setEmployeeShift] = useState("");
-  const [userId, setUserId] = useState("");
-const [jobRole, setEmployeejobRole] = useState ("");
-const [reportingManager, setEmployeereportingManager] = useState ("");
-
-
+  const [departments, setDepartments] = useState("");
+  const [workType, setWorkType] = useState("");
+  const [shift, setShift] = useState("");
+  const [jobRole, setJobRole] = useState("");
+  const [reportingManager, setReportingManager] = useState("");
+  const [reason, setReason] = useState("");
   const [selectedType, setSelectedType] = useState({ id: "", name: "" });
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [requestedDays, setRequestedDays] = useState(0);
+  const [userId, setUserId] = useState("");
+  const [email, setEmail] = useState("");
 
   const navigate = useNavigate();
 
@@ -39,26 +40,24 @@ const [reportingManager, setEmployeereportingManager] = useState ("");
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUserId(user.uid);
+        setEmail(user.email);
 
         const q = query(collection(db, "users"), where("uid", "==", user.uid));
         const snapshot = await getDocs(q);
         if (!snapshot.empty) {
           const data = snapshot.docs[0].data();
-          setFirstName(data.firstName || data.name || "");
+          setFirstName(data.firstName || "");
           setBadgeId(data.badgeId || "");
-          setEmployeedepartmentss(data.departments || "");
-          setEmployeeWorkType(data.workType || "");
-          setEmployeeShift(data.shift || "");
-          setEmployeejobRole(data.jobRole || "");
-          setEmployeereportingManager(data.reportingManager || "");
-          
+          setDepartments(data.departments || "");
+          setWorkType(data.workType || "");
+          setShift(data.shift || "");
+          setJobRole(data.jobRole || "");
+          setReportingManager(data.reportingManager || "");
         }
 
-        const leaveDoc = await getDocs(
-          query(collection(db, "addleave"), where("__name__", "==", user.uid))
-        );
-        if (!leaveDoc.empty) {
-          setAppliedLeaves(leaveDoc.docs[0].data().leaves || []);
+        const leaveDoc = await getDoc(doc(db, "addleave", user.uid));
+        if (leaveDoc.exists()) {
+          setAppliedLeaves(leaveDoc.data().leaves || []);
         }
       }
     });
@@ -75,90 +74,142 @@ const [reportingManager, setEmployeereportingManager] = useState ("");
 
   const calculateDays = (from, to) => {
     if (!from || !to) return 0;
-    const start = new Date(from);
-    const end = new Date(to);
-    const diff = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
+    const diff =
+      Math.floor((new Date(to) - new Date(from)) / (1000 * 60 * 60 * 24)) + 1;
     return diff > 0 ? diff : 0;
   };
 
   const handleDateChange = (type, value) => {
     if (type === "from") setFromDate(value);
     if (type === "to") setToDate(value);
-
     const start = type === "from" ? value : fromDate;
     const end = type === "to" ? value : toDate;
     setRequestedDays(calculateDays(start, end));
   };
 
-  const getUsedDays = (typeId) => {
-    return appliedLeaves
-      .filter((leave) => leave.leaveTypeId === typeId)
-      .reduce((sum, leave) => sum + (leave.requestedDays || 0), 0);
+ const getUsedDays = (typeId) =>
+  appliedLeaves
+    .filter(
+      (leave) => leave.leaveTypeId === typeId && leave.status?.toLowerCase() === "approved"
+    )
+    .reduce((sum, leave) => sum + (leave.requestedDays || 0), 0);
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!selectedType.id || !fromDate || !toDate || !reason) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    if (requestedDays <= 0) {
+      alert("Invalid leave duration.");
+      return;
+    }
+
+    const leaveInfo = leaveTypes.find((lt) => lt.id === selectedType.id);
+    const usedDays = getUsedDays(selectedType.id);
+
+    if (
+      leaveInfo &&
+      leaveInfo.totalDays !== 0 &&
+      usedDays + requestedDays > leaveInfo.totalDays
+    ) {
+      alert(
+        `You only have ${leaveInfo.totalDays - usedDays} ${selectedType.name} days left.`
+      );
+      return;
+    }
+
+    try {
+      if (!reportingManager) {
+        alert("Reporting Manager info missing!");
+        return;
+      }
+
+      const managerMatch = reportingManager.match(/(.*)\s+\((.*)\)/);
+      if (!managerMatch) {
+        alert("Invalid Reporting Manager format. Expected 'Name (BADGEID)'");
+        return;
+      }
+
+      const managerName = managerMatch[1].trim();
+      const managerBadgeId = managerMatch[2].trim();
+
+      const managerQuery = query(
+        collection(db, "users"),
+        where("badgeId", "==", managerBadgeId)
+      );
+      const managerSnapshot = await getDocs(managerQuery);
+      if (managerSnapshot.empty) {
+        alert("Reporting manager not found!");
+        return;
+      }
+
+      const managerDoc = managerSnapshot.docs[0];
+      const managerData = managerDoc.data();
+
+      const leaveId = Date.now().toString(); // ✅ Unique leave ID
+      const leaveData = {
+        leaveId,
+        firstName,
+        badgeId,
+        email,
+        uid: userId,
+        departments,
+        workType,
+        shift,
+        leaveType: selectedType.name,
+        leaveTypeId: selectedType.id,
+        jobRole,
+        reportingManager: {
+          uid: managerDoc.id,
+          display: `${managerName} (${managerBadgeId})`,
+          badgeId: managerBadgeId,
+          firstName: managerName,
+          email: managerData.email,
+        },
+        fromDate,
+        toDate,
+        requestedDays,
+        reason,
+        status: "pending",
+        comment: "",
+        appliedAt: new Date().toISOString(),
+      };
+
+      await setDoc(
+        doc(db, "addleave", userId),
+        { leaves: arrayUnion(leaveData) },
+        { merge: true }
+      );
+
+      // send email
+      await fetch("http://localhost:5001/send-leave-mail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...leaveData }),
+      });
+
+      alert("Leave submitted successfully!");
+      navigate("/employeeleave");
+    } catch (error) {
+      console.error(error);
+      alert("Error submitting leave.");
+    }
   };
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  const leaveInfo = leaveTypes.find((lt) => lt.id === selectedType.id);
-  const usedDays = getUsedDays(selectedType.id);
-
-  if (leaveInfo && leaveInfo.totalDays !== 0 && usedDays >= leaveInfo.totalDays) {
-    alert(`${selectedType.name} leave is already completed.`);
-  }
-
-  if (!selectedType.id || !fromDate || !toDate) {
-    alert("Please fill all required fields");
-    return;
-  }
-
-  const leaveData = {
-    firstName,
-    badgeId,
-    departments: employeedepartmentss,
-    workType: employeeWorkType,
-    shift: employeeShift,
-    leaveType: selectedType.name,
-    leaveTypeId: selectedType.id,
-    jobRole,
-    reportingManager,
-    fromDate,
-    toDate,
-    requestedDays,
-    status: "Pending",
-    appliedAt: new Date().toISOString(),
-  };
-
-  try {
-    await setDoc(
-      doc(db, "addleave", userId),
-      { leaves: arrayUnion(leaveData) },
-      { merge: true }
-    );
-    alert("Leave request submitted successfully!");
-    setSelectedType({ id: "", name: "" });
-    setFromDate("");
-    setToDate("");
-    setRequestedDays(0);
-
-    navigate("/employeeleave");
-  } catch (error) {
-    console.error("Error saving leave data:", error);
-    alert("Error submitting leave request");
-  }
-};
-
 
   return (
     <>
       <NavbarTopbar />
       <div className="container add-leave-container mt-4">
+        {/* Leave Type Cards */}
         <div className="leaves-types-cards-scroll">
           {leaveTypes.map((leave) => {
             const used = getUsedDays(leave.id);
             const total = leave.totalDays === 0 ? "Unlimited" : leave.totalDays;
-            const completed =
-              leave.totalDays !== 0 && used >= leave.totalDays;
-
+            const completed = leave.totalDays !== 0 && used >= leave.totalDays;
             return (
               <div
                 className={`leave-card ${
@@ -171,7 +222,6 @@ const handleSubmit = async (e) => {
                   {completed && <span className="completed-badge">Completed</span>}
                 </div>
                 <div className="leave-card-footer">
-                  <div className="leave-card-icon">{leave.icon}</div>
                   <div className="footer-section">
                     <p className="footer-label">Payment</p>
                     <p className="footer-value">{leave.type}</p>
@@ -188,59 +238,51 @@ const handleSubmit = async (e) => {
           })}
         </div>
 
+        {/* Leave Form */}
         <div className="leave-form-page">
           <form className="add-leave-form" onSubmit={handleSubmit}>
             <h4 className="add-leave-title">Add Leave</h4>
             <div className="row">
               <div className="col-md-6 mb-3">
-                <label className="form-label add-leave-label">
-                  Employee Name:
-                </label>
-                <input type="text" className="form-control" value={firstName} readOnly />
+                <label>Employee Name</label>
+                <input className="form-control" value={firstName} readOnly />
               </div>
               <div className="col-md-6 mb-3">
-                <label className="form-label add-leave-label">BadgeId:</label>
-                <input type="text" className="form-control" value={badgeId} readOnly />
+                <label>Badge ID</label>
+                <input className="form-control" value={badgeId} readOnly />
               </div>
               <div className="col-md-6 mb-3">
-                <label className="form-label add-leave-label">
-                  Department:
-                </label>
-                <input type="text" className="form-control" value={employeedepartmentss} readOnly />
+                <label>Department</label>
+                <input className="form-control" value={departments} readOnly />
               </div>
               <div className="col-md-6 mb-3">
-                <label className="form-label add-leave-label">Work Type:</label>
-                <input type="text" className="form-control" value={employeeWorkType} readOnly />
+                <label>Work Type</label>
+                <input className="form-control" value={workType} readOnly />
               </div>
               <div className="col-md-6 mb-3">
-                <label className="form-label add-leave-label">Shift:</label>
-                <input type="text" className="form-control" value={employeeShift} readOnly />
+                <label>Shift</label>
+                <input className="form-control" value={shift} readOnly />
               </div>
               <div className="col-md-6 mb-3">
-                <label className="form-label add-leave-label">Leave Type:</label>
-        <select
-  className="form-select"
-  value={selectedType.id}
-  onChange={(e) => {
-    const leaveObj = leaveTypes.find((lt) => lt.id === e.target.value);
-    if (leaveObj) setSelectedType({ id: leaveObj.id, name: leaveObj.name });
-  }}
->
-  <option value="">Select Leave Type</option>
-  {leaveTypes.map((type) => {
-    const used = getUsedDays(type.id);
-    const isCompleted = type.totalDays !== 0 && used >= type.totalDays;
-    return (
-      <option key={type.id} value={type.id}>
-        {type.name} {isCompleted ? "(Completed)" : ""}
-      </option>
-    );
-  })}
-</select>
-
+                <label>Leave Type</label>
+                <select
+                  className="form-select"
+                  value={selectedType.id}
+                  onChange={(e) => {
+                    const obj = leaveTypes.find((lt) => lt.id === e.target.value);
+                    if (obj) setSelectedType({ id: obj.id, name: obj.name });
+                  }}
+                >
+                  <option value="">Select Leave Type</option>
+                  {leaveTypes.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="col-md-6 mb-3">
-                <label className="form-label add-leave-label">From Date:</label>
+                <label>From Date</label>
                 <input
                   type="date"
                   className="form-control"
@@ -249,7 +291,7 @@ const handleSubmit = async (e) => {
                 />
               </div>
               <div className="col-md-6 mb-3">
-                <label className="form-label add-leave-label">To Date:</label>
+                <label>To Date</label>
                 <input
                   type="date"
                   className="form-control"
@@ -258,11 +300,23 @@ const handleSubmit = async (e) => {
                 />
               </div>
               <div className="col-md-6 mb-3">
-                <label className="form-label add-leave-label">Requested Days:</label>
-                <input type="number" className="form-control" value={requestedDays} readOnly />
+                <label>Requested Days</label>
+                <input className="form-control" value={requestedDays} readOnly />
+              </div>
+              <div className="col-md-6 mb-3">
+                <label>Email</label>
+                <input className="form-control" value={email} readOnly />
+              </div>
+              <div className="col-12 mb-3">
+                <label>Reason</label>
+                <textarea
+                  className="form-control"
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                />
               </div>
             </div>
-            <button type="submit" className="btn btn-primary w-100 mt-2">
+            <button type="submit" className="btn btn-primary w-100">
               Submit Leave
             </button>
           </form>

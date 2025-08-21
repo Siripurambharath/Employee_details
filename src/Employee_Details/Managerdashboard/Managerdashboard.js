@@ -6,7 +6,7 @@ import {
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db, auth } from "../Firebase/Firebase";
 import NavbarTopbar from "../Navbar/NavbarTopbar";
-import "./EmployeeDashboard.css";
+import "./ManagerDashboard.css";
 import dayjs from "dayjs";
 
 import { Pie, Bar } from "react-chartjs-2";
@@ -31,7 +31,7 @@ ChartJS.register(
   Title
 );
 
-const EmployeeDashboard = () => {
+const Managerdashboard = () => {
   const [user, setUser] = useState(null);
   const [reportingManager, setReportingManager] = useState(null);
   const [attendanceData, setAttendanceData] = useState([]);
@@ -196,7 +196,7 @@ const EmployeeDashboard = () => {
   return (
     <>
       <NavbarTopbar />
-      <div className="employee-dashboard">
+      <div className="Managerdashboard">
         <h2 className="dashboard-title">Employee Dashboard</h2>
 
         {reportingManager && (
@@ -207,7 +207,7 @@ const EmployeeDashboard = () => {
             <div className="manager-details">
               <div className="manager-info">
                 <h5>
-                  {`${reportingManager.firstName} (${reportingManager.badgeId})`}
+                  {`${reportingManager.firstName} `}
                 </h5>
                 <p>{reportingManager.designation || "Manager"}</p>
                 <div className="manager-contact">
@@ -235,7 +235,7 @@ const EmployeeDashboard = () => {
               />
             </div>
 <Pie
-  className="piechart-employee-dashboard"
+  className="piechart-Managerdashboard"
   data={getPieChartData()}
   options={pieOptions}
 />
@@ -300,4 +300,4 @@ const EmployeeDashboard = () => {
   );
 };
 
-export default EmployeeDashboard;
+export default Managerdashboard;
