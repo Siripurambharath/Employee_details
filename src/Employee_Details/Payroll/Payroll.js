@@ -270,7 +270,7 @@ const calculatedSalary = (attendanceDays + paidLeaves - unpaidLeaves) * perDaySa
       jobLevel: employee.jobLevel || '',
       jobRole: employee.jobRole || '',
         bonus: form.bonus || 0,  
-          calculatedSalary: calculatedSalary,  // ✅ stored in DB
+          calculatedSalary: calculatedSalary,  
 
       reportingManager: employee.reportingManager || '',
       attendanceDays,
@@ -333,9 +333,7 @@ const calculatedSalary = (attendanceDays + paidLeaves - unpaidLeaves) * perDaySa
                 Pay Date
               </label>
               <div className="input-group">
-                <span className="input-group-text bg-light">
                   <i className="bi bi-calendar-event"></i>
-                </span>
                 <DatePicker
                   id="payDate"
                   selected={payDate}
@@ -380,26 +378,28 @@ const calculatedSalary = (attendanceDays + paidLeaves - unpaidLeaves) * perDaySa
               <hr className="my-4" />
               <h5 className="text-success mb-3">Attendance & Leave Details</h5>
               <div className="row">
-                <div className="col-md-4">
+                <div className="col-md-3">
                   <strong>Days Present:</strong> {attendanceDays}
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-3">
                   <strong>Paid Leaves:</strong> {paidLeaves}
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-3">
                   <strong>Unpaid Leaves:</strong> {unpaidLeaves}
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-3">
                   <strong>Total Requested Leave Days:</strong> {totalRequestedDays}
                 </div>
                 </div>
                 <div className='row'>
-                <div className="col-md-4">
+                <div className="col-md-3">
                   <strong>Per Day Salary:</strong> ₹{perDaySalary}
                 </div>
-               <strong>Calculated Salary:</strong> ₹{(attendanceDays + paidLeaves - unpaidLeaves) * perDaySalary}
+                                <div className="col-md-3">
 
-<div className="col-md-4">
+               <strong>Calculated Salary:</strong> ₹{(attendanceDays + paidLeaves - unpaidLeaves) * perDaySalary}
+        </div>
+<div className="col-md-3">
   <strong>Approved Leaves:</strong> {approvedLeavesCount}
 </div>
 

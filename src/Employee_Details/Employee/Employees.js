@@ -540,9 +540,10 @@ const handleImportFile = async () => {
             </Button>
           </span>
         )}
-        <Link to="/addemployee" className="btn btn-danger">
-          + Create Employee
-        </Link>
+     <Link to="/addemployee" className="create-employeebutton">
+   Create Employee
+</Link>
+
       </div>
     )}
   </div>

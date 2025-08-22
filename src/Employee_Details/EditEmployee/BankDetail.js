@@ -38,103 +38,72 @@ const BankDetail = () => {
     localStorage.setItem('bankInfo', JSON.stringify(updatedForm));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.bankName || !formData.accountNumber || !formData.ifsc) {
-      return alert('Bank name, account number, and IFSC are required');
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!formData.bankName || !formData.accountNumber || !formData.ifsc) {
+    return alert('Bank name, account number, and IFSC are required');
+  }
+
+  setIsSubmitting(true);
+  try {
+    const personalInfo = JSON.parse(localStorage.getItem('personalInfo'));
+    const workInfo = JSON.parse(localStorage.getItem('workInfo'));
+
+    if (!personalInfo || !workInfo) {
+      throw new Error('Missing personal or work information');
     }
 
-    setIsSubmitting(true);
-    try {
-      const personalInfo = JSON.parse(localStorage.getItem('personalInfo'));
-      const workInfo = JSON.parse(localStorage.getItem('workInfo'));
+    // 1️⃣ Create user in Firebase Auth
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      personalInfo.email,
+      personalInfo.password
+    );
 
-      if (!personalInfo || !workInfo) {
-        throw new Error('Missing personal or work information');
-      }
+    const uid = userCredential.user.uid;
 
-      // 1️⃣ Create user in Firebase Auth
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        personalInfo.email,
-        personalInfo.password
-      );
+    // 2️⃣ Prepare full employee data
+    const employeeData = {
+      ...personalInfo,
+      ...workInfo,
+      ...formData,
+      uid,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      status: 'active',
+    };
 
-      const uid = userCredential.user.uid;
+    // 3️⃣ Save to users collection
+    await setDoc(doc(db, 'users', uid), employeeData);
 
-      // 2️⃣ Prepare full employee data
-      const employeeData = {
-        ...personalInfo,
-        ...workInfo,
-        ...formData,
-        uid,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        status: 'active',
-      };
+    // ❌ Removed adminstaff-related logic
 
-      // 3️⃣ Save to users collection
-      await setDoc(doc(db, 'users', uid), employeeData);
+    // 4️⃣ Save badge ID
+    const badgeNumber = parseInt(personalInfo.badgeId.replace('BADGE', ''));
+    await addDoc(collection(db, 'badgeIds'), {
+      badgeId: personalInfo.badgeId,
+      badgeNumber: badgeNumber,
+      userId: uid,
+      assignedAt: new Date().toISOString(),
+      status: 'assigned',
+    });
 
-      // 4️⃣ If manager → save in adminstaff
-      if (workInfo.jobRole.toLowerCase() === 'manager') {
-        await setDoc(doc(db, 'adminstaff', uid), {
-          uid,
-          badgeId: personalInfo.badgeId,
-          email: personalInfo.email,
-          firstName: personalInfo.firstName,
-          lastName: personalInfo.lastName,
-          jobRole: workInfo.jobRole,
-          reportingManager: 'admin',
-          employees: [],
-          createdAt: new Date().toISOString(),
-          status: 'active',
-        });
-      }
+    // Clear local storage
+    localStorage.removeItem('personalInfo');
+    localStorage.removeItem('workInfo');
+    localStorage.removeItem('bankInfo');
 
-      // 5️⃣ If employee has a reporting manager → add to manager's employees array
-      if (workInfo.reportingManager) {
-        const managerDocRef = doc(db, 'adminstaff', workInfo.reportingManager);
-        const managerDoc = await getDoc(managerDocRef);
+    alert('Employee registered successfully!');
+    navigate('/employee');
 
-        if (managerDoc.exists()) {
-          await updateDoc(managerDocRef, {
-            employees: arrayUnion({
-              uid,
-              badgeId: personalInfo.badgeId,
-              firstName: personalInfo.firstName,
-              lastName: personalInfo.lastName,
-              jobRole: workInfo.jobRole,
-            }),
-          });
-        }
-      }
+  } catch (error) {
+    console.error('Error saving employee:', error);
+    alert(`Failed to save employee data: ${error.message}`);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
-      // 6️⃣ Save badge ID
-      const badgeNumber = parseInt(personalInfo.badgeId.replace('BADGE', ''));
-      await addDoc(collection(db, 'badgeIds'), {
-        badgeId: personalInfo.badgeId,
-        badgeNumber: badgeNumber,
-        userId: uid,
-        assignedAt: new Date().toISOString(),
-        status: 'assigned',
-      });
-
-      // Clear local storage
-      localStorage.removeItem('personalInfo');
-      localStorage.removeItem('workInfo');
-      localStorage.removeItem('bankInfo');
-
-      alert('Employee registered successfully!');
-      navigate('/employee');
-
-    } catch (error) {
-      console.error('Error saving employee:', error);
-      alert(`Failed to save employee data: ${error.message}`);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <>

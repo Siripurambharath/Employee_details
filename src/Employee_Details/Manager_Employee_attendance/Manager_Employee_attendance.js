@@ -27,6 +27,26 @@ const Manager_Employee_attendance = () => {
   const [reportPage, setReportPage] = useState(1);
   const rowsPerPage = 10;
 
+const saveAttendance = async (uid, attendanceArray) => {
+  const cleanAttendance = attendanceArray.map((item) => {
+    const cleaned = {};
+    Object.keys(item).forEach((key) => {
+      cleaned[key] = item[key] === undefined ? "" : item[key]; // replace undefined
+    });
+    return cleaned;
+  });
+
+  const docRef = doc(db, "employeeattendance", uid);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    await updateDoc(docRef, { attendance: cleanAttendance });
+  } else {
+    await setDoc(docRef, { attendance: cleanAttendance });
+  }
+};
+
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
@@ -34,7 +54,7 @@ const Manager_Employee_attendance = () => {
         await fetchUserInfo(currentUser.uid);
         await fetchAttendance(currentUser.uid);
         checkIfAlreadyCheckedIn(currentUser.uid);
-        markAbsentIfNoCheckIn(currentUser.uid); // 👈 Add Absent if no check-in today
+        markAbsentIfNoCheckIn(currentUser.uid);
       } else {
         setUser(null);
         setAttendance([]);
@@ -84,13 +104,11 @@ const Manager_Employee_attendance = () => {
 
   const fetchAllAttendance = async () => {
     const managerIdentifier = `${userInfo.firstName} (${userInfo.badgeId})`;
-
     const snapshot = await getDocs(collection(db, "users"));
     const allData = [];
 
     snapshot.forEach((docSnap) => {
       const data = docSnap.data();
-
       if (
         (data.reportingManager && data.reportingManager === managerIdentifier) ||
         docSnap.id === auth.currentUser.uid
@@ -105,7 +123,6 @@ const Manager_Employee_attendance = () => {
       }
     });
 
-    // Fetch attendance for each person
     const attendanceData = [];
     for (const emp of allData) {
       const attendanceDoc = await getDoc(doc(db, "employeeattendance", emp.uid));
@@ -134,20 +151,15 @@ const Manager_Employee_attendance = () => {
 
   const exportSelectedToExcel = () => {
     const selectedData = allAttendance.filter(emp => selectedEmployees.includes(emp.uid));
-
     const rows = selectedData.map(emp => {
       const recordObj = {};
       recordObj["Name"] = `${emp.firstName} (${emp.badgeId})`;
-
       emp.attendance.forEach(item => {
-        // Format date as DD-MM-YYYY
         const dateObj = new Date(item.date);
         const dateStr = `${dateObj.getDate().toString().padStart(2, '0')}-${(dateObj.getMonth() + 1)
           .toString().padStart(2, '0')}-${dateObj.getFullYear()}`;
-
         recordObj[dateStr] = item.status || (item.checkIn ? "P" : "A");
       });
-
       return recordObj;
     });
 
@@ -175,126 +187,119 @@ const Manager_Employee_attendance = () => {
     }
   };
 
-  // 👇 Add absent record if no check-in
   const markAbsentIfNoCheckIn = async (uid) => {
     const today = new Date().toISOString().split("T")[0];
     const docRef = doc(db, "employeeattendance", uid);
     const docSnap = await getDoc(docRef);
 
+    let attendanceArray = [];
     if (docSnap.exists()) {
-      const data = docSnap.data();
-      const attendanceArray = data.attendance || [];
-      const todayRecord = attendanceArray.find(a => a.date === today);
+      attendanceArray = docSnap.data().attendance || [];
+    }
 
-      if (!todayRecord) {
-        attendanceArray.push({
-          date: today,
-          checkIn: "",
-          checkOut: "",
-          status: "Absent",
-          departments: userInfo.departments,
-          shift: userInfo.shift,
-          workType: userInfo.workType,
-          reportingManager: userInfo.reportingManager,
-          jobRole: userInfo.jobRole,
-        });
-        await updateDoc(docRef, { attendance: attendanceArray });
-        fetchAttendance(uid);
-      }
+    const todayRecord = attendanceArray.find(a => a.date === today);
+    if (!todayRecord) {
+      attendanceArray.push({
+        date: today,
+        checkIn: "",
+        checkOut: "",
+        status: "Absent",
+        departments: userInfo.departments,
+        shift: userInfo.shift,
+        workType: userInfo.workType,
+        reportingManager: userInfo.reportingManager,
+        jobRole: userInfo.jobRole,
+      });
+      await saveAttendance(uid, attendanceArray);
+      fetchAttendance(uid);
     }
   };
 
- const handleCheckInOut = async () => {
-  if (!user) return;
+  const handleCheckInOut = async () => {
+    if (!user) return;
 
-  const now = new Date();
-  const dateStr = now.toISOString().split("T")[0];
-  const timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const now = new Date();
+    const dateStr = now.toISOString().split("T")[0];
+    const timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-  const docRef = doc(db, "employeeattendance", user.uid);
-  const docSnap = await getDoc(docRef);
+    const docRef = doc(db, "employeeattendance", user.uid);
+    const docSnap = await getDoc(docRef);
 
-  const userData = {
-    firstName: userInfo.firstName || "Unknown",
-    badgeId: userInfo.badgeId || "",
-    departments: userInfo.departments || "General",
-    shift: userInfo.shift || "Morning",
-    workType: userInfo.workType || "On-Site",
-    reportingManager: userInfo.reportingManager || "",
-    jobRole: userInfo.jobRole || "",
-  };
+    const userData = {
+      firstName: userInfo.firstName || "Unknown",
+      badgeId: userInfo.badgeId || "",
+      departments: userInfo.departments || "General",
+      shift: userInfo.shift || "Morning",
+      workType: userInfo.workType || "On-Site",
+      reportingManager: userInfo.reportingManager || "",
+      jobRole: userInfo.jobRole || "",
+    };
 
-  let attendanceArray = [];
+    let attendanceArray = [];
+    if (docSnap.exists()) {
+      attendanceArray = docSnap.data().attendance || [];
+    }
 
-  if (docSnap.exists()) {
-    attendanceArray = docSnap.data().attendance || [];
-  }
+    let todayIndex = attendanceArray.findIndex(item => item.date === dateStr);
 
-  let todayIndex = attendanceArray.findIndex(item => item.date === dateStr);
-
-  if (!isRunning) {
-    // Check-In
-    if (todayIndex === -1) {
-      // No record for today, create one
-      attendanceArray.push({
-        date: dateStr,
-        checkIn: timeStr,
-        checkOut: "",
-        status: "Pending",
-        ...userData
-      });
-      await updateDoc(docRef, { attendance: attendanceArray });
-      setIsRunning(true);
-      setSeconds(0);
-      fetchAttendance(user.uid);
-    } else {
-      // Already checked in
-      if (!attendanceArray[todayIndex].checkIn) {
-        attendanceArray[todayIndex].checkIn = timeStr;
-        attendanceArray[todayIndex].status = "Pending";
-        await updateDoc(docRef, { attendance: attendanceArray });
+    if (!isRunning) {
+      // Check-In
+      if (todayIndex === -1) {
+        attendanceArray.push({
+          date: dateStr,
+          checkIn: timeStr,
+          checkOut: "",
+          status: "Pending",
+          ...userData
+        });
+        await saveAttendance(user.uid, attendanceArray);
         setIsRunning(true);
         setSeconds(0);
         fetchAttendance(user.uid);
       } else {
-        // Already checked in, do nothing
+        if (!attendanceArray[todayIndex].checkIn) {
+          attendanceArray[todayIndex].checkIn = timeStr;
+          attendanceArray[todayIndex].status = "Pending";
+          await saveAttendance(user.uid, attendanceArray);
+          setIsRunning(true);
+          setSeconds(0);
+          fetchAttendance(user.uid);
+        }
+      }
+    } else {
+      // Check-Out
+      if (todayIndex !== -1 && !attendanceArray[todayIndex].checkOut) {
+        const checkInTime = attendanceArray[todayIndex].checkIn || timeStr;
+        const diffMs = now - new Date(`${dateStr} ${checkInTime}`);
+        const diffHrs = Math.floor(diffMs / 3600000);
+        const diffMins = Math.floor((diffMs % 3600000) / 60000);
+
+        attendanceArray[todayIndex].checkOut = timeStr;
+        attendanceArray[todayIndex].overtime = `${diffHrs} hr ${diffMins} min`;
+        attendanceArray[todayIndex].status = "Present";
+
+        await saveAttendance(user.uid, attendanceArray);
+        setIsRunning(false);
+        fetchAttendance(user.uid);
+      } else {
+        setIsRunning(false);
       }
     }
-  } else {
-    // Check-Out
-    if (todayIndex !== -1 && !attendanceArray[todayIndex].checkOut) {
-      const checkInTime = attendanceArray[todayIndex].checkIn || timeStr;
-      const diffMs = now - new Date(`${dateStr} ${checkInTime}`);
-      const diffHrs = Math.floor(diffMs / 3600000);
-      const diffMins = Math.floor((diffMs % 3600000) / 60000);
-
-      attendanceArray[todayIndex].checkOut = timeStr;
-      attendanceArray[todayIndex].overtime = `${diffHrs} hr ${diffMins} min`;
-      attendanceArray[todayIndex].status = "Present";
-
-      await updateDoc(docRef, { attendance: attendanceArray });
-      setIsRunning(false);
-      fetchAttendance(user.uid);
-    } else {
-      // Already checked out, do nothing
-      setIsRunning(false);
-    }
-  }
-};
-
+  };
 
   const handleDelete = async (date) => {
     if (!user) return;
     const docRef = doc(db, "employeeattendance", user.uid);
     const docSnap = await getDoc(docRef);
 
+    let attendanceArray = [];
     if (docSnap.exists()) {
-      const data = docSnap.data();
-      const attendanceArray = data.attendance || [];
-      const updatedAttendance = attendanceArray.filter(item => item.date !== date);
-      await updateDoc(docRef, { attendance: updatedAttendance });
-      fetchAttendance(user.uid);
+      attendanceArray = docSnap.data().attendance || [];
     }
+
+    const updatedAttendance = attendanceArray.filter(item => item.date !== date);
+    await saveAttendance(user.uid, updatedAttendance);
+    fetchAttendance(user.uid);
   };
 
   const formatTimer = (sec) => {
@@ -320,7 +325,6 @@ const Manager_Employee_attendance = () => {
     (reportPage - 1) * rowsPerPage,
     reportPage * rowsPerPage
   );
-
   return (
     <>
       <NavbarTopbar />
@@ -357,6 +361,7 @@ const Manager_Employee_attendance = () => {
                 <table className="table table-hover text-center">
                   <thead className="employee-attendance-head">
                     <tr>
+                      <th>S.No</th>
                       <th>Employee</th>
                       <th>Department</th>
                       <th>Date</th>
@@ -371,6 +376,7 @@ const Manager_Employee_attendance = () => {
                   <tbody>
                     {attendanceToShow.length > 0 ? attendanceToShow.map((row, index) => (
                       <tr key={index}>
+                           <td>{index + 1}</td>  
                         <td>{userInfo.firstName}</td>
                         <td>{row.departments}</td>
                         <td>{new Date(row.date).toLocaleDateString("en-GB")}</td>
@@ -483,67 +489,80 @@ const Manager_Employee_attendance = () => {
 
               <div className="table-responsive">
                 <table className="table table-bordered text-center monthly-attendance-table">
-                  <thead className="manager-employee-attendance-head">
-                    <tr>
-                      <th></th>
-                      <th>Name</th>
-                      {Array.from({ length: new Date(selectedYear, selectedMonth, 0).getDate() }, (_, i) => (
-                        <th key={i + 1}>{i + 1}</th>
-                      ))}
-                      <th>Total P</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {reportToShow.length > 0
-                      ? reportToShow.map((emp, idx) => (
-                        <tr key={idx}>
-                          <td>
-                            <input
-                              type="checkbox"
-                              checked={selectedEmployees.includes(emp.uid)}
-                              onChange={() => toggleEmployeeSelection(emp.uid)}
-                            />
-                          </td>
-                          <td>{emp.firstName} ({emp.badgeId})</td>
-                          {Array.from({ length: new Date(selectedYear, selectedMonth, 0).getDate() }, (_, i) => {
-                            const day = i + 1;
-                            const record = emp.attendance.find((item) => {
-                              const dateObj = new Date(item.date);
-                              return (
-                                dateObj.getDate() === day &&
-                                dateObj.getMonth() + 1 === Number(selectedMonth) &&
-                                dateObj.getFullYear() === Number(selectedYear)
-                              );
-                            });
-return (
-  <td
-    key={day}
-    className={record?.checkIn ? "attendance-present" : "attendance-absent"}
-  >
-    {record?.checkIn ? "P" : "A"}
-  </td>
-);
-                          })}
-                          <td>
-                            {emp.attendance.filter((item) => {
-                              const dateObj = new Date(item.date);
-                              return (
-                                dateObj.getMonth() + 1 === Number(selectedMonth) &&
-                                dateObj.getFullYear() === Number(selectedYear) &&
-                                item.checkIn
-                              );
-                            }).length}
-                          </td>
-                        </tr>
-                      ))
-                      : (
-                        <tr>
-                          <td colSpan={new Date(selectedYear, selectedMonth, 0).getDate() + 2} className="text-center text-muted">
-                            No employees found under you
-                          </td>
-                        </tr>
-                      )}
-                  </tbody>
+           <thead className="manager-employee-attendance-head">
+  <tr>
+    <th></th>
+    <th>Name</th>
+    {Array.from({ length: new Date(selectedYear, selectedMonth, 0).getDate() }, (_, i) => (
+      <th key={i + 1}>{i + 1}</th>
+    ))}
+    <th>Total Presents</th>
+    <th>Total Absents</th> {/* ✅ Add this */}
+  </tr>
+</thead>
+
+              <tbody>
+  {reportToShow.length > 0
+    ? reportToShow.map((emp, idx) => {
+        const totalDays = new Date(selectedYear, selectedMonth, 0).getDate();
+
+        const totalPresents = emp.attendance.filter((item) => {
+          const dateObj = new Date(item.date);
+          return (
+            dateObj.getMonth() + 1 === Number(selectedMonth) &&
+            dateObj.getFullYear() === Number(selectedYear) &&
+            item.checkIn
+          );
+        }).length;
+
+        const totalAbsents = totalDays - totalPresents;
+
+        return (
+          <tr key={idx}>
+            <td>
+              <input
+                type="checkbox"
+                checked={selectedEmployees.includes(emp.uid)}
+                onChange={() => toggleEmployeeSelection(emp.uid)}
+              />
+            </td>
+            <td>{emp.firstName} ({emp.badgeId})</td>
+            {Array.from({ length: totalDays }, (_, i) => {
+              const day = i + 1;
+              const record = emp.attendance.find((item) => {
+                const dateObj = new Date(item.date);
+                return (
+                  dateObj.getDate() === day &&
+                  dateObj.getMonth() + 1 === Number(selectedMonth) &&
+                  dateObj.getFullYear() === Number(selectedYear)
+                );
+              });
+              return (
+                <td
+                  key={day}
+                  className={record?.checkIn ? "attendance-present" : "attendance-absent"}
+                >
+                  {record?.checkIn ? "P" : "A"}
+                </td>
+              );
+            })}
+            <td>{totalPresents}</td>
+            <td>{totalAbsents}</td> 
+          </tr>
+        );
+      })
+    : (
+      <tr>
+        <td
+          colSpan={new Date(selectedYear, selectedMonth, 0).getDate() + 3}
+          className="text-center text-muted"
+        >
+          No employees found under you
+        </td>
+      </tr>
+    )}
+</tbody>
+
                 </table>
               </div>
 

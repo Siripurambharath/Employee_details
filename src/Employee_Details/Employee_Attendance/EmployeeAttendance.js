@@ -378,42 +378,43 @@ const EmployeeAttendance = () => {
             <div className="card-sm">
               <div className="card-body p-0">
                 <div className="table-responsive">
-                  <table className="table table-bordered mb-0 text-center">
-                    <thead className="employee-attendance-head">
-                      <tr>
-                        <th>Date</th>
-                        {Array.from({ length: daysInMonth }, (_, i) => (
-                          <th key={i}>{i + 1}</th>
-                        ))}
-                        <th>Total Present</th>
-                        <th>Total Absent</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Status</td>
-                        {Array.from({ length: daysInMonth }, (_, i) => {
-                          const dayStr = `${selectedYear}-${selectedMonth.toString().padStart(2, "0")}-${(i + 1).toString().padStart(2, "0")}`;
-                          const record = attendance.find((item) => item.date === dayStr);
-                          return (
-                            <td key={i}>
-                              {record ? (
-                                record.status === "Present" ? (
-                                  <span className="present">P</span>
-                                ) : (
-                                  <span className="pending">Pending</span>
-                                )
-                              ) : (
-                                <span className="absent">A</span>
-                              )}
-                            </td>
-                          );
-                        })}
-                        <td><strong>{totalPresent}</strong></td>
-                        <td><strong>{totalAbsent}</strong></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                 <table className="table table-bordered mb-0 text-center">
+  <thead className="employee-attendance-head">
+    <tr>
+      <th>Name</th> {/* ✅ Add Name column */}
+      {Array.from({ length: daysInMonth }, (_, i) => (
+        <th key={i}>{i + 1}</th>
+      ))}
+      <th>Total Present</th>
+      <th>Total Absent</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{userInfo.firstName} ({userInfo.badgeId})</td> {/* ✅ Show name + badgeId */}
+      {Array.from({ length: daysInMonth }, (_, i) => {
+        const dayStr = `${selectedYear}-${selectedMonth.toString().padStart(2, "0")}-${(i + 1).toString().padStart(2, "0")}`;
+        const record = attendance.find((item) => item.date === dayStr);
+        return (
+          <td key={i}>
+            {record ? (
+              record.status === "Present" ? (
+                <span className="present">P</span>
+              ) : (
+                <span className="pending">Pending</span>
+              )
+            ) : (
+              <span className="absent">A</span>
+            )}
+          </td>
+        );
+      })}
+      <td><strong>{totalPresent}</strong></td>
+      <td><strong>{totalAbsent}</strong></td>
+    </tr>
+  </tbody>
+</table>
+
                 </div>
               </div>
             </div>
